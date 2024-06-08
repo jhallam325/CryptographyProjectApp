@@ -27,11 +27,12 @@ namespace Algorithms
             StreamWriter writer = null;
 
             ShiftCipher shiftCipher = new ShiftCipher();
+            SubstitutionCipher substitutionCipher = new SubstitutionCipher();
             
             try
             {
                 // This is the key and should be an number of how many letters to shift.
-                Console.Write("Input a number: ");
+                Console.Write("Input a substitution ciper key: ");
                 string key = Console.ReadLine();
 
                 if (!Directory.Exists(Globals.FilePath))
@@ -40,7 +41,7 @@ namespace Algorithms
                 }
 
 
-                
+
                 //-------------------Encrypt--------------------------//
                 // Opens text files where we will read and write.
                 reader = new StreamReader(Globals.PlainTextFullPath);
@@ -51,7 +52,7 @@ namespace Algorithms
                 //ciphertext = reader.ReadToEnd();
 
                 // Use the Shift Cipher to Encrypy the plaintext.
-                ciphertext = shiftCipher.Encrypt(plaintext, key);
+                ciphertext = substitutionCipher.Encrypt(plaintext, key);
                 //plaintext = shiftCipher.Decrypt(ciphertext, key);
 
                 // Write the ciphertext to the ciphertext file.

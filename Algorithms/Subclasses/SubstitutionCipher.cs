@@ -15,13 +15,19 @@ namespace Algorithms.Subclasses
         string ciphertext;
         string trimmedText;
         string filteredText;
-        int intKey;
+        string upperKey;
+        char[] ciphertextCharacters;
+        char[] plaintextCharacters;
+        string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 
         public string Encrypt(string plaintext, string key)
         {
             bool keyIsCorrect = KeyIsCorrect(key);
             if (keyIsCorrect)
             {
+                upperKey = key.ToUpper();
+
                 // This takes out all of the spaces in the plaintext.
                 trimmedText = TrimText(plaintext);
 
@@ -29,15 +35,14 @@ namespace Algorithms.Subclasses
                 // letter a capital letter
                 filteredText = FilterText(trimmedText);
 
-                // This takes the filtered text with no spaces, and shifts the ascii
-                // values by the key value. I've included numbers so this is all mod
-                // 35, 10 numerical digits and 26 letters, giving 36 symbols or 0-35
-                // I redefine the values, shift them, and then return them to the
-                // standard values so the ciphertext only contains numbers and
-                // letters
-                // I've since removed letters for the affine cipher
-                ciphertext = ShiftASCIIValuesByKey(filteredText, intKey);
+                // This makes a character array the size of the plaintext because 
+                ciphertextCharacters = new char[filteredText.Length];
 
+                for (int i = 0; i < filteredText.Length; i++)
+                {
+                    ciphertextCharacters[i] = SubstituteCharacterEncrypt(filteredText[i]);
+                    ciphertext += ciphertextCharacters[i];
+                }
 
                 return ciphertext;
             }
@@ -53,22 +58,23 @@ namespace Algorithms.Subclasses
             bool keyIsCorrect = KeyIsCorrect(key);
             if (keyIsCorrect)
             {
+                upperKey = key.ToUpper();
+
                 // This takes out all of the spaces in the plaintext.
                 trimmedText = TrimText(ciphertext);
 
                 // This removes all of the symbols from the text and makes every
                 // letter a capital letter
                 filteredText = FilterText(trimmedText);
+                
+                // This makes a character array the size of the plaintext because 
+                plaintextCharacters = new char[filteredText.Length];
 
-                // This takes the filtered text with no spaces, and shifts the ascii
-                // values by the key value. I've included numbers so this is all mod
-                // 35, 10 numerical digits and 26 letters, giving 36 symbols or 0-35
-                // I redefine the values, shift them, and then return them to the
-                // standard values so the ciphertext only contains numbers and
-                // letters
-                // I've since removed letters for the affine cipher
-                plaintext = ShiftASCIIValuesByKey(filteredText, intKey);
-
+                for (int i = 0; i < filteredText.Length; i++)
+                {
+                    plaintextCharacters[i] = SubstituteCharacterDecrypt(filteredText[i]);
+                    plaintext += plaintextCharacters[i];
+                }
 
                 return plaintext;
             }
@@ -77,29 +83,6 @@ namespace Algorithms.Subclasses
                 // throw an exception
                 return "The key you used is invalid.";
             }
-
-            // The Writer (or reader, I forget which), was introducing /r and /n
-            // to the file so I need to filter that stuff out.
-            trimmedText = TrimText(ciphertext);
-            filteredText = FilterText(trimmedText);
-
-            return ShiftASCIIValuesByKey(filteredText, -intKey);
-        }
-
-        private string ShiftASCIIValuesByKey(string text, int key)
-        {
-            int intPlaceHolder;
-            char charPlaceHolder;
-            string newText = "";
-            foreach (char character in text)
-            {
-                intPlaceHolder = BringASCIINumberToZero(character);
-                intPlaceHolder += key;
-                intPlaceHolder = intPlaceHolder % Globals.modulus;
-                charPlaceHolder = ReturnASCIINumberToOriginal(intPlaceHolder);
-                newText += charPlaceHolder;
-            }
-            return newText;
         }
 
         public bool KeyIsCorrect(string key)
@@ -243,6 +226,18 @@ namespace Algorithms.Subclasses
                 }
             }
             return true;
+        }
+
+        private char SubstituteCharacterEncrypt(char c)
+        {
+            int indexOfChar = alphabet.IndexOf(c);
+            return upperKey[indexOfChar];
+        }
+
+        private char SubstituteCharacterDecrypt(char c)
+        {
+            int indexOfChar = upperKey.IndexOf(c);
+            return alphabet[indexOfChar];
         }
     }
 }

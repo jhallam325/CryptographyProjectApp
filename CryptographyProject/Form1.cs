@@ -118,6 +118,25 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 1)
             {
                 // Substitution Cipher
+                // Can this be a generic method that does this for each cipher?
+                // Maybe I could put a requirement that it must implement ICipher?
+                SubstitutionCipher substitutionCipher = new SubstitutionCipher();
+
+                if (encryptRadioButton.Checked)
+                {
+                    // run Encrypt method
+                    outputText = substitutionCipher.Encrypt(inputText, key);
+
+                }
+                else if (decryptRadioButton.Checked)
+                {
+                    //run decrypy method
+                    outputText = substitutionCipher.Decrypt(inputText, key);
+                }
+                else
+                {
+                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                }
             }
             else if (methodComboBox.SelectedIndex == 2)
             {

@@ -31,52 +31,68 @@ namespace Algorithms.Subclasses
              * Now I just need to figure out how to map the letters and use the key.
              */
 
-            if (int.TryParse(key, out intKey))
+            //if (int.TryParse(key, out intKey))
+            //{
+            //    intKey = int.Parse(key) % Globals.modulus;
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Need to convert letters to numbers");
+            //}
+
+            if (KeyIsCorrect(key))
             {
-                intKey = int.Parse(key) % Globals.modulus;
+                // This takes out all of the spaces in the plaintext.
+                trimmedText = TrimText(plaintext);
+
+                // This removes all of the symbols from the text and makes every
+                // letter a capital letter
+                filteredText = FilterText(trimmedText);
+
+                // This takes the filtered text with no spaces, and shifts the ascii
+                // values by the key value. I've included numbers so this is all mod
+                // 35, 10 numerical digits and 26 letters, giving 36 symbols or 0-35
+                // I redefine the values, shift them, and then return them to the
+                // standard values so the ciphertext only contains numbers and
+                // letters
+                // I've since removed letters for the affine cipher
+                ciphertext = ShiftASCIIValuesByKey(filteredText, intKey);
+
+                return ciphertext;
             }
             else
             {
-                Console.WriteLine("Need to convert letters to numbers");
+                return "The key is invalid. Please choose a whole number as your key.";
             }
-
-            // This takes out all of the spaces in the plaintext.
-            trimmedText = TrimText(plaintext);
-
-            // This removes all of the symbols from the text and makes every
-            // letter a capital letter
-            filteredText = FilterText(trimmedText);
-
-            // This takes the filtered text with no spaces, and shifts the ascii
-            // values by the key value. I've included numbers so this is all mod
-            // 35, 10 numerical digits and 26 letters, giving 36 symbols or 0-35
-            // I redefine the values, shift them, and then return them to the
-            // standard values so the ciphertext only contains numbers and
-            // letters
-            // I've since removed letters for the affine cipher
-            ciphertext = ShiftASCIIValuesByKey(filteredText, intKey);
-
-            return ciphertext;
+            
         }
 
         public string Decrypt(string ciphertext, string key)
         {
-            if (int.TryParse(key, out intKey))
+            //if (int.TryParse(key, out intKey))
+            //{
+            //    intKey = int.Parse(key) % Globals.modulus;
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Need to convert letters to numbers");
+            //}
+
+            if (KeyIsCorrect(key))
             {
-                intKey = int.Parse(key) % Globals.modulus;
+                // The Writer (or reader, I forget which), was introducing /r and /n
+                // to the file so I need to filter that stuff out.
+                trimmedText = TrimText(ciphertext);
+                filteredText = FilterText(trimmedText);
+
+                plaintext = ShiftASCIIValuesByKey(filteredText, -intKey);
+                return plaintext;
             }
             else
             {
-                Console.WriteLine("Need to convert letters to numbers");
+                return "The key is invalid. Please choose a whole number as your key.";
             }
-
-            // The Writer (or reader, I forget which), was introducing /r and /n
-            // to the file so I need to filter that stuff out.
-            trimmedText = TrimText(ciphertext);
-            filteredText = FilterText(trimmedText);
-
-            plaintext = ShiftASCIIValuesByKey(filteredText, -intKey);
-            return plaintext;
+            
         }
 
         private string ShiftASCIIValuesByKey(string text, int key)
@@ -107,7 +123,6 @@ namespace Algorithms.Subclasses
                 Console.WriteLine("Need to convert letters to numbers");
                 return false;
             }
-            //throw new NotImplementedException();
         }
     }
 }
