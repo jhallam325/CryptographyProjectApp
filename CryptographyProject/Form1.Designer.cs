@@ -35,6 +35,7 @@
             inputFileTextBox = new TextBox();
             inputFileRadioButton = new RadioButton();
             selectorGroupBox = new GroupBox();
+            methodSelectLabel = new Label();
             keyCheckBox = new CheckBox();
             keyTextBox = new TextBox();
             keyLabel = new Label();
@@ -49,7 +50,6 @@
             outputFileTextBox = new TextBox();
             outputFileRadioButton = new RadioButton();
             runButton = new Button();
-            methodSelectLabel = new Label();
             inputGroupBox.SuspendLayout();
             selectorGroupBox.SuspendLayout();
             outputGroupBox.SuspendLayout();
@@ -57,6 +57,7 @@
             // 
             // inputGroupBox
             // 
+            inputGroupBox.Anchor = AnchorStyles.None;
             inputGroupBox.Controls.Add(inputTextBox);
             inputGroupBox.Controls.Add(inputTextRadioButton);
             inputGroupBox.Controls.Add(inputFileBrowseButton);
@@ -77,6 +78,7 @@
             inputTextBox.Name = "inputTextBox";
             inputTextBox.Size = new Size(719, 107);
             inputTextBox.TabIndex = 4;
+            inputTextBox.TextChanged += inputTextBox_TextChanged;
             // 
             // inputTextRadioButton
             // 
@@ -120,6 +122,7 @@
             // 
             // selectorGroupBox
             // 
+            selectorGroupBox.Anchor = AnchorStyles.None;
             selectorGroupBox.Controls.Add(methodSelectLabel);
             selectorGroupBox.Controls.Add(keyCheckBox);
             selectorGroupBox.Controls.Add(keyTextBox);
@@ -134,6 +137,15 @@
             selectorGroupBox.TabIndex = 2;
             selectorGroupBox.TabStop = false;
             selectorGroupBox.Text = "Select a function:";
+            // 
+            // methodSelectLabel
+            // 
+            methodSelectLabel.AutoSize = true;
+            methodSelectLabel.Location = new Point(6, 119);
+            methodSelectLabel.Name = "methodSelectLabel";
+            methodSelectLabel.Size = new Size(95, 15);
+            methodSelectLabel.TabIndex = 6;
+            methodSelectLabel.Text = "Key Information:";
             // 
             // keyCheckBox
             // 
@@ -205,6 +217,7 @@
             // 
             // outputGroupBox
             // 
+            outputGroupBox.Anchor = AnchorStyles.None;
             outputGroupBox.Controls.Add(outputTextBox);
             outputGroupBox.Controls.Add(outputTextRadioButton);
             outputGroupBox.Controls.Add(outputFileBrowseButton);
@@ -245,6 +258,7 @@
             outputFileBrowseButton.TabIndex = 2;
             outputFileBrowseButton.Text = "Browse";
             outputFileBrowseButton.UseVisualStyleBackColor = true;
+            outputFileBrowseButton.Click += outputFileBrowseButton_Click;
             // 
             // outputFileTextBox
             // 
@@ -267,6 +281,7 @@
             // 
             // runButton
             // 
+            runButton.Anchor = AnchorStyles.None;
             runButton.Location = new Point(347, 669);
             runButton.Name = "runButton";
             runButton.Size = new Size(75, 23);
@@ -275,21 +290,12 @@
             runButton.UseVisualStyleBackColor = true;
             runButton.Click += runButton_Click;
             // 
-            // methodSelectLabel
-            // 
-            methodSelectLabel.AutoSize = true;
-            methodSelectLabel.Location = new Point(6, 119);
-            methodSelectLabel.Name = "methodSelectLabel";
-            methodSelectLabel.Size = new Size(95, 15);
-            methodSelectLabel.TabIndex = 6;
-            methodSelectLabel.Text = "Key Information:";
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(800, 701);
+            ClientSize = new Size(760, 701);
             Controls.Add(runButton);
             Controls.Add(outputGroupBox);
             Controls.Add(selectorGroupBox);

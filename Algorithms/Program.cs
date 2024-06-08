@@ -89,7 +89,7 @@ namespace Algorithms
             }
             
 
-            // DEcrypt
+            // Decrypt
 
             try
             {

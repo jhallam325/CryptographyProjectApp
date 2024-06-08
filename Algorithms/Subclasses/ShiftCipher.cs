@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Algorithms.GlobalVariables;
+using Algorithms.Interfaces;
 using Algorithms.MainClasses;
 
 namespace Algorithms.Subclasses
 {
-    public class ShiftCipher : Cipher
+    public class ShiftCipher : Cipher, ICipher
     {
+        string plaintext;
         string ciphertext;
         string trimmedText;
         string filteredText;
@@ -73,7 +75,8 @@ namespace Algorithms.Subclasses
             trimmedText = TrimText(ciphertext);
             filteredText = FilterText(trimmedText);
 
-            return ShiftASCIIValuesByKey(filteredText, -intKey);
+            plaintext = ShiftASCIIValuesByKey(filteredText, -intKey);
+            return plaintext;
         }
 
         private string ShiftASCIIValuesByKey(string text, int key)
@@ -90,6 +93,21 @@ namespace Algorithms.Subclasses
                 newText += charPlaceHolder;
             }
             return newText;
+        }
+
+        public bool KeyIsCorrect(string key)
+        {
+            if (int.TryParse((string)key, out intKey))
+            {
+                intKey = int.Parse(key) % Globals.modulus;
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Need to convert letters to numbers");
+                return false;
+            }
+            //throw new NotImplementedException();
         }
     }
 }

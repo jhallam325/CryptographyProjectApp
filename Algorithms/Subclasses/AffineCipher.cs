@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Algorithms.GlobalVariables;
+using Algorithms.Interfaces;
 using Algorithms.MainClasses;
 
 namespace Algorithms.Subclasses
 {
-    public class AffineCipher : Cipher
+    public class AffineCipher : Cipher, ICipher
     {
         string plaintext;
         string ciphertext;
@@ -105,6 +106,11 @@ namespace Algorithms.Subclasses
                 newText += charPlaceHolder;
             }
             return newText;
+        }
+
+        public bool KeyIsCorrect(string key)
+        {
+            throw new NotImplementedException();
         }
     }
 }
