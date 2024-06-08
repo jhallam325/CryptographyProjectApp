@@ -141,6 +141,23 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 2)
             {
                 // Affine Cipher
+                AffineCipher affineCipher = new AffineCipher();
+
+                if (encryptRadioButton.Checked)
+                {
+                    // run Encrypt method
+                    outputText = affineCipher.Encrypt(inputText, key);
+
+                }
+                else if (decryptRadioButton.Checked)
+                {
+                    //run decrypy method
+                    outputText = affineCipher.Decrypt(inputText, key);
+                }
+                else
+                {
+                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                }
             }
             else if (methodComboBox.SelectedIndex == 3)
             {
@@ -222,7 +239,8 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 2)
             {
                 // Affine Cipher
-                methodSelectLabel.Text = $"Key Information: Choose an integer such that GCD(key, {Globals.modulus}) = 1";
+                methodSelectLabel.Text = $"Key Information: Choose 2 integers \"a\" and \"b\" such that GCD(a, {Globals.modulus}) = 1 and a and b are between 0-25 inclusive.\n" +
+                    "\t\tEnter the numbers as a,b like 3,10";
             }
             else if (methodComboBox.SelectedIndex == 3)
             {
