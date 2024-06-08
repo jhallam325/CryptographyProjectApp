@@ -19,7 +19,6 @@ namespace Algorithms.Subclasses
 
         public string Encrypt(string plaintext, string key)
         {
-            // This is a test to find the correct project in git
             /*
              * For the key, I need to add each letter of the string to a List using a 
              * foreach (char c in key) loop. Then I can see if keyList.Contains(a)
