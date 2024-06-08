@@ -80,8 +80,8 @@ namespace Algorithms.Subclasses
                 // I redefine the values, shift them, and then return them to the
                 // standard values so the ciphertext only contains numbers and
                 // letters
-                ciphertext = ShiftASCIIValuesByKeysDecrypt(filteredText, firstKey, secondKey);
-                return ciphertext;
+                plaintext = ShiftASCIIValuesByKeysDecrypt(filteredText, firstKey, secondKey);
+                return plaintext;
             }
             else
             {
@@ -166,7 +166,6 @@ namespace Algorithms.Subclasses
 
         private int MultiplicativeInverse(int modulus, int wantedInverse)
         {
-            // a is the modulus and b is the number that you want the inverse of.
             int a0 = modulus;
             int b0 = wantedInverse;
             int t0 = 0;
