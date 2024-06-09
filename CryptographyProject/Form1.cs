@@ -161,7 +161,24 @@ namespace CryptographyProject
             }
             else if (methodComboBox.SelectedIndex == 3)
             {
-                // Vignere Cipher
+                // Vigenere Cipher
+                VigenereCipher vigenereCipher = new VigenereCipher();
+
+                if (encryptRadioButton.Checked)
+                {
+                    // run Encrypt method
+                    outputText = vigenereCipher.Encrypt(inputText, key);
+
+                }
+                else if (decryptRadioButton.Checked)
+                {
+                    //run decrypy method
+                    outputText = vigenereCipher.Decrypt(inputText, key);
+                }
+                else
+                {
+                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                }
             }
             else if (methodComboBox.SelectedIndex == 4)
             {
@@ -182,6 +199,10 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 8)
             {
                 // Autokey Cipher
+            }
+            else
+            {
+                MessageBox.Show("Don't forget to choose an encryption/decryption algorithm!");
             }
 
             //**************************************************************************************************************
