@@ -19,12 +19,57 @@ namespace Algorithms.Subclasses
         string[] keys;
         int firstKey;
         int secondKey;
-        Matrix<double> matrix;
+        Matrix<double> keyMatrix;
 
         public string Encrypt(string plaintext, string key)
         {
-            throw new NotImplementedException();
+            if (KeyIsCorrect(key))
+            {
+                //string keyMatrix = key;
+
+                // Add letters to the plaintext
+                trimmedText = TrimText(plaintext);
+                filteredText = FilterText(trimmedText);
+
+
+                ciphertext = string.Empty;
+                string[] blocks = Split(filteredText, keyMatrix.ColumnCount);
+                foreach (string block in blocks)
+                {
+                    double[] charValue = new double[block.Length];
+                    for (int i = 0; i < block.Length; i++)
+                    {
+                        // get the numeric value of the char and turn it into a double and assign it the the array
+                        charValue[i] = BringASCIINumberToZero(block[i]);
+                    }
+
+                    // Build the vector with the numerical values of the char array so we can do matrix arithmetic
+                    Vector<double> charVector = Vector<double>.Build.DenseOfArray(charValue);
+
+                    // Encrypt the character values mod the modulus
+                    Vector<double> ciphertextVector = (charVector * keyMatrix) % Globals.modulus;
+
+                    //for (int i = 0; i < ciphertextVector.Count; i++)
+                    //{
+                    //    ciphertextVector[i] = ciphertextVector[i] % Globals.modulus;
+                    //}
+
+                    for (int i = 0; i < block.Length; i++)
+                    {
+                        // return the encrypted ascii value back to the text value
+                        charValue[i] = ReturnASCIINumberToOriginal((char)(int)ciphertextVector[i]);
+                        ciphertext += (char)charValue[i];
+                    }
+
+                }
+                return ciphertext;
+            }
+            else
+            {
+                return "Key is invalid";
+            }
         }
+
         public string Decrypt(string ciphertext, string key)
         {
             throw new NotImplementedException();
@@ -72,9 +117,9 @@ namespace Algorithms.Subclasses
             }
 
             // I now have the elements of the matrix and need to build a real matrix.
-            matrix = Matrix<double>.Build.DenseOfArray(doubleArray);
+            keyMatrix = Matrix<double>.Build.DenseOfArray(doubleArray);
 
-            if (matrix.ColumnCount != matrix.RowCount)
+            if (keyMatrix.ColumnCount != keyMatrix.RowCount)
             {
                 // Throw exception
                 Console.WriteLine("The matrix must be a square matrix, meaning the number of rows " +
@@ -82,7 +127,7 @@ namespace Algorithms.Subclasses
                 return false;
             }
 
-            double determinant = matrix.Determinant();
+            double determinant = keyMatrix.Determinant();
             int intDeterminant = (int)determinant;
 
             if (GCD(intDeterminant, Globals.modulus) != 1)

@@ -44,7 +44,8 @@ namespace Algorithms.MainClasses
             return filteredText;
         }
 
-        public static int BringASCIINumberToZero(char character)
+        //removed static from Bring...  and Return... to test in Program.cs
+        public int BringASCIINumberToZero(char character)
         {
             int characterValue = (int)character;
 
@@ -82,7 +83,7 @@ namespace Algorithms.MainClasses
             return characterValue;
         }
         
-        public static char ReturnASCIINumberToOriginal(int number)
+        public char ReturnASCIINumberToOriginal(int number)
         {
             // C# does not perform modular arithmetic correctly and will return a negative number
             // if the number is negative. This will force number to be an element in [0,35]
@@ -131,6 +132,21 @@ namespace Algorithms.MainClasses
             }
 
             return number1;
+        }
+
+        public string[] Split(string str, int chunkSize)
+        {
+            int numberOfStrings = (int)MathF.Ceiling(str.Length / chunkSize);
+            string[] strings = new string[numberOfStrings];
+            for (int i = 0; i < strings.Length; i++)
+            {
+                for (int j = i * chunkSize; j < chunkSize * (i + 1); j++)
+                {
+                    strings[i] += str[j];
+                }
+
+            }
+            return strings;
         }
     }
 }
