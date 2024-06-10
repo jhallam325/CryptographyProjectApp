@@ -118,5 +118,19 @@ namespace Algorithms.MainClasses
             */
             return (char)number;
         }
+
+        public int GCD(int number1, int number2)
+        {
+            int remainder;
+
+            while (number2 != 0)
+            {
+                remainder = number1 % number2;
+                number1 = number2;
+                number2 = remainder;
+            }
+
+            return number1;
+        }
     }
 }

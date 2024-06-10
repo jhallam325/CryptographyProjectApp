@@ -183,6 +183,23 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 4)
             {
                 // Hill Cipher
+                HillCipher hillCipher = new HillCipher();
+
+                if (encryptRadioButton.Checked)
+                {
+                    // run Encrypt method
+                    outputText = hillCipher.Encrypt(inputText, key);
+
+                }
+                else if (decryptRadioButton.Checked)
+                {
+                    //run decrypy method
+                    outputText = hillCipher.Decrypt(inputText, key);
+                }
+                else
+                {
+                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                }
             }
             else if (methodComboBox.SelectedIndex == 5)
             {
@@ -271,7 +288,8 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 4)
             {
                 // Hill Cipher
-                methodSelectLabel.Text = "Key Information: Hill Cipher";
+                methodSelectLabel.Text = "Enter a square Matrix in the form: 1,2,3;4,5,6;7,8,9 where individual " +
+                "elements are seperated by commas and rows are seperated by semi-colons";
             }
             else if (methodComboBox.SelectedIndex == 5)
             {

@@ -118,7 +118,7 @@ namespace Algorithms.Subclasses
             {
                 intPlaceHolder = BringASCIINumberToZero(character);
                 intPlaceHolder -= secondKey;
-                intPlaceHolder *= MultiplicativeInverse(Globals.modulus, firstkey);
+                intPlaceHolder *= MultiplicativeInverse(firstkey, Globals.modulus);
                 intPlaceHolder = intPlaceHolder % Globals.modulus;
                 charPlaceHolder = ReturnASCIINumberToOriginal(intPlaceHolder);
                 newText += charPlaceHolder;
@@ -128,7 +128,7 @@ namespace Algorithms.Subclasses
 
         public bool KeyIsCorrect(string key)
         {
-            if (int.TryParse((string)key, out firstKey))
+            if (int.TryParse(key, out firstKey))
             {
                 firstKey = int.Parse(key) % Globals.modulus;
                 if (GCD(firstKey, Globals.modulus) == 1)
@@ -150,22 +150,12 @@ namespace Algorithms.Subclasses
             }
         }
 
-        private int GCD(int number1, int number2)
+        // Moved GCD function from here to Cipher so if can be inherited in HillCipher
+
+        // I'm reversing the order of inputs
+        private int MultiplicativeInverse(int wantedInverse, int modulus)
         {
-            int remainder;
-
-            while (number2 != 0)
-            {
-                remainder = number1 % number2;
-                number1 = number2;
-                number2 = remainder;
-            }
-
-            return number1;
-        }
-
-        private int MultiplicativeInverse(int modulus, int wantedInverse)
-        {
+            // Try to find the inverse of b, b^(-1), of b mod a such that b*b^(-1) mod a = 1
             int a0 = modulus;
             int b0 = wantedInverse;
             int t0 = 0;
@@ -190,6 +180,8 @@ namespace Algorithms.Subclasses
             else
             {
                 // There is no b^(-1) mod a
+                // We shouldn't reach this in this class since I already checked the GCD of the
+                // key and the modulus
                 return -1;
             }
         }

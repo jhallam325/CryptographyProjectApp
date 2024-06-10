@@ -1,5 +1,7 @@
-﻿using Algorithms.Interfaces;
+﻿using Algorithms.GlobalVariables;
+using Algorithms.Interfaces;
 using Algorithms.MainClasses;
+using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +10,17 @@ using System.Threading.Tasks;
 
 namespace Algorithms.Subclasses
 {
-    internal class HillCipher : Cipher, ICipher
+    public class HillCipher : Cipher, ICipher
     {
+        string plaintext;
+        string ciphertext;
+        string trimmedText;
+        string filteredText;
+        string[] keys;
+        int firstKey;
+        int secondKey;
+        Matrix<double> matrix;
+
         public string Encrypt(string plaintext, string key)
         {
             throw new NotImplementedException();
@@ -21,7 +32,68 @@ namespace Algorithms.Subclasses
 
         public bool KeyIsCorrect(string key)
         {
-            throw new NotImplementedException();
+            key = key.Trim(); // Just in case somebody input ', '
+
+            // I need to convert the string to a matrix now
+
+            // This has all of the rows of the matrix
+            string[] rows = key.Split(';');
+            string[] columns = rows[0].Split(",");
+
+            if (columns.Length != rows.Length)
+            {
+                //throw an exception
+                Console.WriteLine("The matrix must be a square matrix, meaning the number of rows " +
+                    "must be equal to the number of columns.");
+                return false;
+            }
+
+            // I need an integer array to do modular arithmetic but a double array for matrix arithmetic
+            //int[,] intArray = new int[rows.Length, columns.Length];
+            double[,] doubleArray = new double[rows.Length, columns.Length];
+
+            
+
+            //string[] temp = new string[rows.Length];
+            for (int i = 0; i < rows.Length; i++)
+            {
+                string[] temp = rows[i].Split(',');
+                for (int j = 0; j < temp.Length; j++)
+                {
+                    // if (!double.TryParse(temp[j], out intArray[i, j]))
+                    if (!double.TryParse(temp[j], out doubleArray[i, j]))
+                    {
+                        // throw an exception
+                        Console.WriteLine("Elements of the matrix must be whole numbers");
+                        return false;
+                    }
+                    //doubleArray[i, j] = intArray[i, j];
+                }
+            }
+
+            // I now have the elements of the matrix and need to build a real matrix.
+            matrix = Matrix<double>.Build.DenseOfArray(doubleArray);
+
+            if (matrix.ColumnCount != matrix.RowCount)
+            {
+                // Throw exception
+                Console.WriteLine("The matrix must be a square matrix, meaning the number of rows " +
+                    "must be equal to the number of columns.");
+                return false;
+            }
+
+            double determinant = matrix.Determinant();
+            int intDeterminant = (int)determinant;
+
+            if (GCD(intDeterminant, Globals.modulus) != 1)
+            {
+                // throw exception
+                Console.WriteLine($"The GCD of the determinant of the key and {Globals.modulus} must = 1");
+                return false;
+            }
+
+            // We passed all the checks and the key is good
+            return true;
         }
     }
 }

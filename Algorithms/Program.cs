@@ -1,6 +1,11 @@
 ﻿using Algorithms.Subclasses;
 using Algorithms.GlobalVariables;
 using System.ComponentModel;
+using MathNet.Numerics.LinearAlgebra;
+using Algorithms.MainClasses;
+using MathNet.Numerics.Optimization;
+using System.Reflection.Metadata.Ecma335;
+using System.Linq.Expressions;
 
 namespace Algorithms
 {
@@ -40,34 +45,72 @@ namespace Algorithms
              */
 
 
-            Console.WriteLine("Enter a square Matrix in the form: {1,2,3;4,5,6;7,8,9} where individual elements are seperated by commas and rows are seperated by semi-colons");
+            Console.WriteLine("Enter a square Matrix in the form: 1,2,3;4,5,6;7,8,9 where individual " +
+                "elements are seperated by commas and rows are seperated by semi-colons");
             string input = Console.ReadLine();
-            List<int> elementsOfMatrix = new List<int>();
+            input = input.Trim(); // Just in case somebody input ', '
 
             // I need to convert the string to a matrix now
 
             // This has all of the rows of the matrix
             string[] rows = input.Split(';');
+            string[] columns = rows[0].Split(",");
 
-            int[,] elements = new int[rows.Length, rows.Length];
+            // I need an integer array to do modular arithmetic but a double array for matrix arithmetic
+            int[,] intArray = new int[rows.Length, columns.Length];
+            double[,] doubleArray = new double[rows.Length, columns.Length];
+
             //string[] temp = new string[rows.Length];
             for (int i = 0; i < rows.Length; i++)
             {
                 string[] temp = rows[i].Split(',');
                 for (int j = 0; j < temp.Length; j++)
                 {
-                    if (!int.TryParse(temp[j], out elements[i,j]))
+                    if (!int.TryParse(temp[j], out intArray[i,j]))
                     {
                         // throw an exception
-                        Console.WriteLine("elements of the matrix must be whole numbers");
+                        Console.WriteLine("Elements of the matrix must be whole numbers");
+                        Environment.Exit(0);
                     }
-                    Console.WriteLine(elements[i,j]);
+                    doubleArray[i,j] = intArray[i,j];
                 }
             }
 
             // I now have the elements of the matrix and need to build a real matrix.
+            Matrix<double> matrix = Matrix<double>.Build.DenseOfArray(doubleArray);
 
-            
+            if (matrix.ColumnCount != matrix.RowCount)
+            {
+                // Throw exception
+                Console.WriteLine("The matrix must be a square matrix, meaning the number of rows " +
+                    "must be equal to the number of columns.");
+                Environment.Exit(0);
+            }
+
+            double determinant = matrix.Determinant();
+            int intDeterminant = (int)determinant;
+
+            Cipher cipher = new Cipher();
+            if (cipher.GCD(intDeterminant, Globals.modulus) != 1)
+            {
+                // throw exception
+                Console.WriteLine($"The GCD of the determinant of the key and {Globals.modulus} must = 1");
+                Environment.Exit(0);
+            }
+
+            // The key check should be done and I can begin to encrypt the message
+            Console.Write("\nEnter a messagge to encrypt: ");
+
+            string plaintext = Console.ReadLine();
+            string[] blocks = Split(plaintext, 5);
+            foreach (string block in blocks)
+            {
+                Console.WriteLine(block);
+            }
+            Console.WriteLine(blocks);
+
+
+
 
 
 
@@ -189,5 +232,21 @@ namespace Algorithms
             //}
             //
         }
+
+        static string[] Split(string str, int chunkSize)
+        {
+            int numberOfStrings = (int) MathF.Ceiling(str.Length / chunkSize);
+            string[] strings = new string[numberOfStrings];
+            for (int i = 0; i < strings.Length; i++)
+            {
+                for (int j = i * chunkSize; j < chunkSize * (i + 1); j++)
+                {
+                    strings[i] += str[j];
+                }
+                
+            }
+            return strings;
+        }
+        
     }
 }
