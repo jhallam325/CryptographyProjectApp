@@ -148,5 +148,20 @@ namespace Algorithms.MainClasses
             }
             return strings;
         }
+
+        public string PadString(string text, int blockSize)
+        {
+            Random random = new Random();
+
+            // The each letter of the key needs to encrypt a character during it's cycle 
+            while (text.Length % blockSize != 0)
+            {
+                // Choose a random character between A and Z
+                int randomChar = random.Next(65, 91);
+                text += (char)randomChar;
+            }
+
+            return text;
+        }
     }
 }
