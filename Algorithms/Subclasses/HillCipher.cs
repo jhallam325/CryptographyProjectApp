@@ -184,5 +184,96 @@ namespace Algorithms.Subclasses
             // We passed all the checks and the key is good
             return true;
         }
+
+        public Matrix<double> InvertMatrixWithModulus(Matrix<double> A, int modulus)
+        {
+            // A is the key matrix that we want to invert.
+            int numRows = A.RowCount;
+            int numCols = A.ColumnCount;
+
+            if (numRows != numCols)
+            {
+                // throw exception
+                Console.WriteLine("The input matrix must be a square matrix or you can't take an inverse");
+                return A;
+            }
+
+            if (A.Determinant() == 0)
+            {
+                // throw exception
+                Console.WriteLine("det(A) must not equal 0 or the inverse doesn't exist");
+                //return A;
+            }
+
+            // I'm creating the Identity matrix to test A*A^(-1) = I
+            Matrix<double> I = CreateMatrix.DenseIdentity<double>(numRows*numCols);
+
+            // Now I will make Matrix B where the elements Bx = Columns of I stacked into a vector
+            // and the vector x will be the columns of A^(-1) stacked in a vector
+
+            // Thry and buil B to debog:
+            Matrix<double> B = CreateMatrix.Dense<double>(numRows*numRows, numCols*numCols);
+            // I will assign the numbers a=1 and try to make B look like the one on my paper
+            int rowIndex = 0;
+            int columnIndex = 0;
+            double[] valuesOfA = new double[numRows * numCols];
+            int arrayIndex = 0;
+
+            for (int i  = 0; i < numRows; i++)
+            {
+                for (int j = 0;j< numCols; j++)
+                {
+                    valuesOfA[arrayIndex] = A[i, j];
+                    arrayIndex++;
+                }
+            }
+
+            arrayIndex = 0;
+
+            // This will go from 0 to the last row
+            while (rowIndex < numRows * numRows)
+            {
+                // This will go from 0 to the last column
+                while (columnIndex < numCols * numCols)
+                {
+                    // This loops through rows, by the number of rows of A at a time
+                    for (int i = 0 + rowIndex; i < numRows + rowIndex; i++)
+                    {
+                        // This loops through the columns, by the number of columns of A at a time
+                        for (int j = 0 + columnIndex; j < numCols + columnIndex; j++)
+                        {
+                            // This builds diagonals in the chunks the size of the no. rows of A x no of cols of A
+                            if (i == j % numCols || i % numRows == j || i == j || i + numRows == j || i == j + numCols)
+                            {
+                                B[i, j] = valuesOfA[arrayIndex];
+                            }
+
+                        } 
+                    }
+                    // We jump ahead in the column indices, but the rows stay the same
+                    columnIndex += numCols;
+                    arrayIndex++;
+                }
+                // We jump ahead in the row indices and reset the columns back to 0 as a new line, almost
+                columnIndex = 0;
+                rowIndex += numRows;
+            }
+            Console.WriteLine(B.ToString());
+            double[] ones = new double[numRows * numCols];
+            int congruence = 0;
+            for (int i = 0; i < ones.Length; i++)
+            {
+                if (i % numRows == congruence)
+                {
+                    ones[i] = 1;
+                    congruence += 1;
+                }
+                Console.WriteLine($"{i}: {ones[i]}");
+            }
+
+            Vector<double> values = Vector<double>.Build.DenseOfArray(ones);
+
+            return B;
+        }
     }
 }

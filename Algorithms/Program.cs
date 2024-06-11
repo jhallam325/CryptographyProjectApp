@@ -44,104 +44,154 @@ namespace Algorithms
              * [^x] - Anything but x (where x is whatever character you want)
              */
 
-
-            Console.WriteLine("Enter a square Matrix in the form: 1,2,3;4,5,6;7,8,9 where individual " +
-                "elements are seperated by commas and rows are seperated by semi-colons");
-            string input = Console.ReadLine();
-            input = input.Trim(); // Just in case somebody input ', '
-
-            // I need to convert the string to a matrix now
-
-            // This has all of the rows of the matrix
-            string[] rows = input.Split(';');
-            string[] columns = rows[0].Split(",");
-
-            // I need an integer array to do modular arithmetic but a double array for matrix arithmetic
-            int[,] intArray = new int[rows.Length, columns.Length];
-            double[,] doubleArray = new double[rows.Length, columns.Length];
-
-            //string[] temp = new string[rows.Length];
-            for (int i = 0; i < rows.Length; i++)
+            HillCipher hill = new HillCipher();
+            int size = 3;
+            double[,] array = new double[size, size];
+            int number = 1;
+            for (int i = 0; i < size; i++)
             {
-                string[] temp = rows[i].Split(',');
-                for (int j = 0; j < temp.Length; j++)
+                for (int j = 0; j < size; j++)
                 {
-                    if (!int.TryParse(temp[j], out intArray[i,j]))
+                    array[i,j] = number;
+                    number++;
+                }
+            }
+            Matrix<double> A = Matrix<double>.Build.DenseOfArray(array);
+            // A is the key matrix that we want to invert.
+            int numRows = A.RowCount;
+            int numCols = A.ColumnCount;
+            hill.InvertMatrixWithModulus(A, Globals.modulus);
+
+            /*
+
+            // I'm creating the Identity matrix to test A*A^(-1) = I
+            Matrix<double> I = CreateMatrix.DenseIdentity<double>(numRows);
+
+            // Now I will make Matrix B where the elements Bx = Columns of I stacked into a vector
+            // and the vector x will be the columns of A^(-1) stacked in a vector
+
+            // Thry and buil B to debog:
+            Matrix<double> B = CreateMatrix.Dense<double>(numRows * numRows, numCols * numCols);
+            // I will assign the numbers a=1 and try to make B look like the one on my paper
+            int rowIndex = 0;
+            int columnIndex = 0;
+            while (rowIndex < numRows)
+            {
+
+            }
+            for (int i = 0; i < numRows; i++)
+            {
+                for (int j = 0; j < numCols; j++)
+                {
+                    if (i == j)
                     {
-                        // throw an exception
-                        Console.WriteLine("Elements of the matrix must be whole numbers");
-                        Environment.Exit(0);
+                        B[i, j] = 1;
                     }
-                    doubleArray[i,j] = intArray[i,j];
+
                 }
             }
-
-            // I now have the elements of the matrix and need to build a real matrix.
-            Matrix<double> keyMatrix = Matrix<double>.Build.DenseOfArray(doubleArray);
-
-            if (keyMatrix.ColumnCount != keyMatrix.RowCount)
-            {
-                // Throw exception
-                Console.WriteLine("The matrix must be a square matrix, meaning the number of rows " +
-                    "must be equal to the number of columns.");
-                Environment.Exit(0);
-            }
-
-            double determinant = keyMatrix.Determinant();
-            int intDeterminant = (int)determinant;
-
-            Cipher cipher = new Cipher();
-            if (cipher.GCD(intDeterminant, Globals.modulus) != 1)
-            {
-                // throw exception
-                Console.WriteLine($"The GCD of the determinant of the key and {Globals.modulus} must = 1");
-                Environment.Exit(0);
-            }
-            //==================================================================================================
-
-            // The key check should be done and I can begin to encrypt the message
-            Console.Write("\nEnter a messagge to encrypt: ");
-
-            string plaintext = Console.ReadLine();
-            plaintext = plaintext.ToUpper();
-            // Here I need to add extra characters to the message so that the 
-
-            string ciphertext = string.Empty;
-            string[] blocks = Split(plaintext, keyMatrix.ColumnCount);
-            foreach (string block in blocks)
-            {
-                double[] charValue = new double[block.Length];
-                for (int i = 0; i < block.Length; i++)
-                {
-                    // get the numeric value of the char and turn it into a double and assign it the the array
-                    charValue[i] = cipher.BringASCIINumberToZero(block[i]);
-                }
-                
-                // Build the vector with the numerical values of the char array so we can do matrix arithmetic
-                Vector<double> charVector = Vector<double>.Build.DenseOfArray(charValue);
-
-                // Encrypt the character values mod the modulus
-                Vector<double> ciphertextVector = (charVector * keyMatrix) % Globals.modulus;
-
-                //for (int i = 0; i < ciphertextVector.Count; i++)
-                //{
-                //    ciphertextVector[i] = ciphertextVector[i] % Globals.modulus;
-                //}
-
-                for (int i = 0; i < block.Length; i++)
-                {
-                    // return the encrypted ascii value back to the text value
-                    charValue[i] = cipher.ReturnASCIINumberToOriginal((char)(int)ciphertextVector[i]);
-                    ciphertext += (char) charValue[i];
-                }
-                
-            }
-            Console.WriteLine($"Ciphertext = {ciphertext}");
+            */
 
 
-            //=========================================================================================================
-            // Decrypt
-            Matrix<double> inverseKeyMatrix = keyMatrix.Inverse();
+
+
+            //Console.WriteLine("Enter a square Matrix in the form: 1,2,3;4,5,6;7,8,9 where individual " +
+            //    "elements are seperated by commas and rows are seperated by semi-colons");
+            //string input = Console.ReadLine();
+            //input = input.Trim(); // Just in case somebody input ', '
+
+            //// I need to convert the string to a matrix now
+
+            //// This has all of the rows of the matrix
+            //string[] rows = input.Split(';');
+            //string[] columns = rows[0].Split(",");
+
+            //// I need an integer array to do modular arithmetic but a double array for matrix arithmetic
+            //int[,] intArray = new int[rows.Length, columns.Length];
+            //double[,] doubleArray = new double[rows.Length, columns.Length];
+
+            ////string[] temp = new string[rows.Length];
+            //for (int i = 0; i < rows.Length; i++)
+            //{
+            //    string[] temp = rows[i].Split(',');
+            //    for (int j = 0; j < temp.Length; j++)
+            //    {
+            //        if (!int.TryParse(temp[j], out intArray[i,j]))
+            //        {
+            //            // throw an exception
+            //            Console.WriteLine("Elements of the matrix must be whole numbers");
+            //            Environment.Exit(0);
+            //        }
+            //        doubleArray[i,j] = intArray[i,j];
+            //    }
+            //}
+
+            //// I now have the elements of the matrix and need to build a real matrix.
+            //Matrix<double> keyMatrix = Matrix<double>.Build.DenseOfArray(doubleArray);
+
+            //if (keyMatrix.ColumnCount != keyMatrix.RowCount)
+            //{
+            //    // Throw exception
+            //    Console.WriteLine("The matrix must be a square matrix, meaning the number of rows " +
+            //        "must be equal to the number of columns.");
+            //    Environment.Exit(0);
+            //}
+
+            //double determinant = keyMatrix.Determinant();
+            //int intDeterminant = (int)determinant;
+
+            //Cipher cipher = new Cipher();
+            //if (cipher.GCD(intDeterminant, Globals.modulus) != 1)
+            //{
+            //    // throw exception
+            //    Console.WriteLine($"The GCD of the determinant of the key and {Globals.modulus} must = 1");
+            //    Environment.Exit(0);
+            //}
+            ////==================================================================================================
+
+            //// The key check should be done and I can begin to encrypt the message
+            //Console.Write("\nEnter a messagge to encrypt: ");
+
+            //string plaintext = Console.ReadLine();
+            //plaintext = plaintext.ToUpper();
+            //// Here I need to add extra characters to the message so that the 
+
+            //string ciphertext = string.Empty;
+            //string[] blocks = Split(plaintext, keyMatrix.ColumnCount);
+            //foreach (string block in blocks)
+            //{
+            //    double[] charValue = new double[block.Length];
+            //    for (int i = 0; i < block.Length; i++)
+            //    {
+            //        // get the numeric value of the char and turn it into a double and assign it the the array
+            //        charValue[i] = cipher.BringASCIINumberToZero(block[i]);
+            //    }
+
+            //    // Build the vector with the numerical values of the char array so we can do matrix arithmetic
+            //    Vector<double> charVector = Vector<double>.Build.DenseOfArray(charValue);
+
+            //    // Encrypt the character values mod the modulus
+            //    Vector<double> ciphertextVector = (charVector * keyMatrix) % Globals.modulus;
+
+            //    //for (int i = 0; i < ciphertextVector.Count; i++)
+            //    //{
+            //    //    ciphertextVector[i] = ciphertextVector[i] % Globals.modulus;
+            //    //}
+
+            //    for (int i = 0; i < block.Length; i++)
+            //    {
+            //        // return the encrypted ascii value back to the text value
+            //        charValue[i] = cipher.ReturnASCIINumberToOriginal((char)(int)ciphertextVector[i]);
+            //        ciphertext += (char) charValue[i];
+            //    }
+
+            //}
+            //Console.WriteLine($"Ciphertext = {ciphertext}");
+
+
+            ////=========================================================================================================
+            //// Decrypt
+            //Matrix<double> inverseKeyMatrix = keyMatrix.Inverse();
 
 
 
