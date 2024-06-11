@@ -206,7 +206,7 @@ namespace Algorithms.Subclasses
             }
 
             // I'm creating the Identity matrix to test A*A^(-1) = I
-            Matrix<double> I = CreateMatrix.DenseIdentity<double>(numRows*numCols);
+            Matrix<double> I = CreateMatrix.DenseIdentity<double>(numRows);
 
             // Now I will make Matrix B where the elements Bx = Columns of I stacked into a vector
             // and the vector x will be the columns of A^(-1) stacked in a vector
@@ -259,19 +259,34 @@ namespace Algorithms.Subclasses
                 rowIndex += numRows;
             }
             Console.WriteLine(B.ToString());
-            double[] ones = new double[numRows * numCols];
+
+            // This will take the Identity matrix and pivot each row to a column and put all those column into a vector
+            // to solve Bx = I
+            // x will contain the elements of the inverseKeyMatrix and we will have to take that vector and put it into
+            // a square matrix
+
+            double[] identityMatrixAsArray = new double[numRows * numCols];
             int congruence = 0;
-            for (int i = 0; i < ones.Length; i++)
+            int startIndex = 0;
+            for (int i = 0; i < identityMatrixAsArray.Length; i++)
             {
-                if (i % numRows == congruence)
+                if (i % numRows == congruence && i >= startIndex)
                 {
-                    ones[i] = 1;
+                    identityMatrixAsArray[i] = 1;
                     congruence += 1;
+                    startIndex += numRows;
                 }
-                Console.WriteLine($"{i}: {ones[i]}");
+                Console.WriteLine($"{i}: {identityMatrixAsArray[i]}");
             }
 
-            Vector<double> values = Vector<double>.Build.DenseOfArray(ones);
+            Vector<double> identityMatrixAsVector = Vector<double>.Build.DenseOfArray(identityMatrixAsArray);
+
+            // Solve for x
+            Vector<double> x = B.Solve(identityMatrixAsVector);
+            Console.WriteLine(x.ToString());
+
+            var C = A.Solve(I);
+            Console.WriteLine(C.ToString());
 
             return B;
         }

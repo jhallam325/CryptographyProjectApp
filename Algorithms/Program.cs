@@ -45,17 +45,21 @@ namespace Algorithms
              */
 
             HillCipher hill = new HillCipher();
-            int size = 3;
+            int size = 2;
             double[,] array = new double[size, size];
-            int number = 1;
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    array[i,j] = number;
-                    number++;
-                }
-            }
+            array[0, 0] = 11;
+            array[0, 1] = 8;
+            array[1, 0] = 3;
+            array[1, 1] = 7;
+            //int number = 1;
+            //for (int i = 0; i < size; i++)
+            //{
+            //    for (int j = 0; j < size; j++)
+            //    {
+            //        array[i,j] = number;
+            //        number++;
+            //    }
+            //}
             Matrix<double> A = Matrix<double>.Build.DenseOfArray(array);
             // A is the key matrix that we want to invert.
             int numRows = A.RowCount;
