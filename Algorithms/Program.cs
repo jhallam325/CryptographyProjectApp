@@ -46,11 +46,16 @@ namespace Algorithms
 
 
             PermutationCipher permutationCipher = new PermutationCipher();
-            string plaintext = "Hellog";
+            string plaintext = "Well listen up fella I'm going to tell you a tale that will scare you to death";
 
-            string key = "3,5,1,6,4,2";
+            string key = "3,5,1,6,4,2,8";
 
-            Console.Write(permutationCipher.Encrypt(plaintext, key));
+            string cipertext = permutationCipher.Encrypt(plaintext, key);
+
+            plaintext = permutationCipher.Decrypt(cipertext, key);
+
+            Console.WriteLine(cipertext);
+            Console.WriteLine(plaintext);
 
 
 

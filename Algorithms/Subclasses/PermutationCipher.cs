@@ -17,13 +17,14 @@ namespace Algorithms.Subclasses
         string ciphertext;
         string trimmedText;
         string filteredText;
+        string blockOfPlaintext;
         string blockOfCipertext;
-        //string upperKey;
-        //string[] blocks;
         string[] keyValues;
         int[] intKeyValues;
-        char[] ciphertextCharacters;
+        int[] inverseKeyValues;
         char[] plaintextCharacters;
+        char[] ciphertextCharacters;
+        
         int keySize;
         string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -51,44 +52,19 @@ namespace Algorithms.Subclasses
                 }
                 intKeyValues[i] = (intKeyValues[i] - 1) % Globals.modulus;
             }
-                       
-
 
             ciphertext = string.Empty;
             string[] blocksOfPlaintext = Split(paddedFilteredText, keySize);
 
-            /*
-             * I don't think that I can input a single character and a single key value
-             * I think I need to input a string of characters the size of the the key
-             * and the entire key.
-             */
-            // This makes a character array the size of the plaintext because 
-            //ciphertextCharacters = new char[paddedFilteredText.Length];
-            //int counter = 0;
-            //
-            //while (counter < paddedFilteredText.Length)
-            //{
-            //    for (int i = 0; i < blocksOfPlaintext.Length; i++)
-            //    {
-            //        blockOfCipertext = SubstituteCharacterEncrypt(blocksOfPlaintext[counter + i], intKeyValues);
-            //        ciphertext += blockOfCipertext;
-            //    }
-            //    counter += intKeyValues.Length;
-            //}
-
             for (int i = 0; i < blocksOfPlaintext.Length; i++)
             {
-                blockOfCipertext = SubstituteCharacterEncrypt(blocksOfPlaintext[i], intKeyValues);
+                blockOfCipertext = SubstituteCharactersEncrypt(blocksOfPlaintext[i], intKeyValues);
                 ciphertext += blockOfCipertext;
             }
-
-
-
-
             return ciphertext;
         }
 
-        private string SubstituteCharacterEncrypt(string blockOfText, int[] key)
+        private string SubstituteCharactersEncrypt(string blockOfText, int[] key)
         {
             // I need to work on this to find the correct algorithm
             
@@ -112,7 +88,52 @@ namespace Algorithms.Subclasses
 
         public string Decrypt(string ciphertext, string key)
         {
-            throw new NotImplementedException();
+            if (!KeyIsCorrect(key))
+            {
+                return "Key is incorrect";
+            }
+
+            trimmedText = TrimText(ciphertext);
+            filteredText = FilterText(trimmedText);
+            keySize = keyValues.Length;
+
+            // I might not need this. This just adds characters to the end of the string so that the key and plaintext fit perfectly.
+            string paddedFilteredText = PadString(filteredText, keySize);
+
+            // Now I need to center the key at 0 to match indices and make it mod 26
+            intKeyValues = new int[keySize];
+            for (int i = 0; i < keySize; i++)
+            {
+                if (!int.TryParse(keyValues[i], out intKeyValues[i]))
+                {
+                    return "Even though I checked, there was still an error in the key";
+                }
+                intKeyValues[i] = (intKeyValues[i] - 1) % Globals.modulus;
+            }
+
+            // Now I need to fiind the inverse of the key to decrypt the ciphertext.
+            inverseKeyValues = new int[keySize];
+
+
+            for (int i = 0; i < keySize; i++)
+            {
+
+                inverseKeyValues[i] = GetIndexOfChar(intKeyValues, i);
+            }
+
+
+
+
+            //============================================================================================================================================
+            plaintext = string.Empty;
+            string[] blocksOfCiphertext = Split(paddedFilteredText, keySize);
+
+            for (int i = 0; i < blocksOfCiphertext.Length; i++)
+            {
+                blockOfPlaintext = SubstituteCharactersEncrypt(blocksOfCiphertext[i], inverseKeyValues);
+                plaintext += blockOfPlaintext;
+            }
+            return plaintext;
         }
 
         
@@ -133,6 +154,7 @@ namespace Algorithms.Subclasses
             }
             
             // Every character in each of the elemenets of blocks is a number
+            // now I need to see if it contains sequential numbers starting at 1 and going to the length of the keys
             return true;
         }
 
