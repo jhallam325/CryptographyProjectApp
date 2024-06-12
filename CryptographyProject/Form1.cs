@@ -288,14 +288,14 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 4)
             {
                 // Hill Cipher
-                methodSelectLabel.Text = "Enter a square Matrix in the form: 1,2,3;4,5,6;7,8,9 where individual " +
+                methodSelectLabel.Text = "Key Information: Enter a square Matrix in the form: 1,2,3;4,5,6;7,8,9 where individual " +
                 "elements are seperated by commas and rows are seperated by " +
                 "\nsemi-colons";
             }
             else if (methodComboBox.SelectedIndex == 5)
             {
                 // Permutation Cipher
-                methodSelectLabel.Text = "Key Information: Permutation Cipher";
+                methodSelectLabel.Text = "Key Information: Enter a list of numbers, seperated by a comma. If you chose 5 numbers, they need to be the numbers 1-5 but rearranged however you like. ex: 3,2,5,4,1";
             }
             else if (methodComboBox.SelectedIndex == 6)
             {

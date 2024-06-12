@@ -24,14 +24,15 @@ namespace Algorithms.Subclasses
         {
             if (KeyIsCorrect(key))
             {
-                string paddedPlaintext = PadString(plaintext, blockSize);
                 ciphertext = string.Empty;
-
-                // Add letters to the plaintext
-                trimmedText = TrimText(paddedPlaintext);
+                
+                trimmedText = TrimText(plaintext);
                 filteredText = FilterText(trimmedText);
 
-                string[] blocks = Split(filteredText, keyMatrix.ColumnCount);
+                // Add letters to the plaintext
+                string paddedFilteredText = PadString(filteredText, blockSize);
+
+                string[] blocks = Split(paddedFilteredText, keyMatrix.ColumnCount);
                 foreach (string block in blocks)
                 {
                     double[] charValue = new double[block.Length];
@@ -72,13 +73,16 @@ namespace Algorithms.Subclasses
         {
             if (KeyIsCorrect(key))
             {
-                string paddedCiphertext = PadString(ciphertext, blockSize);
                 plaintext = string.Empty;
+                trimmedText = TrimText(plaintext);
+                filteredText = FilterText(trimmedText);
+                string paddedFilteredText = PadString(filteredText, blockSize);
+                
                 invertedKeyMatrix = keyMatrix.Inverse();
                 return invertedKeyMatrix.Multiply(keyMatrix).ToString();
 
                 // Add letters to the plaintext
-                trimmedText = TrimText(paddedCiphertext);
+                trimmedText = TrimText(paddedFilteredText);
                 filteredText = FilterText(trimmedText);
 
                 string[] blocks = Split(filteredText, keyMatrix.ColumnCount);
