@@ -44,6 +44,19 @@ namespace Algorithms
              * [^x] - Anything but x (where x is whatever character you want)
              */
 
+
+            PermutationCipher permutationCipher = new PermutationCipher();
+            string plaintext = "Hellog";
+
+            string key = "3,5,1,6,4,2";
+
+            Console.Write(permutationCipher.Encrypt(plaintext, key));
+
+
+
+
+            /*
+             * Hill Cipher debugging
             HillCipher hill = new HillCipher();
             int size = 2;
             double[,] array = new double[size, size];
@@ -65,7 +78,7 @@ namespace Algorithms
             int numRows = A.RowCount;
             int numCols = A.ColumnCount;
             hill.InvertMatrixWithModulus(A, Globals.modulus);
-
+            */
             /*
 
             // I'm creating the Identity matrix to test A*A^(-1) = I
