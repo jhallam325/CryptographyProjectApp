@@ -17,8 +17,14 @@ namespace Algorithms.Subclasses
         string trimmedText;
         string filteredText;
         int blockSize;
+        int numRows;
+        int numCols;
         Matrix<double> keyMatrix;
         Matrix<double> invertedKeyMatrix;
+
+        // invertiblae 4x4 matrix: "1,0,0,1;0,1,0,1;0,0,1,1;1,1,1,0"
+        // invertiblae 3x3 matrix: "1,2,4;3,5,7;2,4,5"
+        // invertiblae 2x2 matrix: "11,8;3,7"
 
         public string Encrypt(string plaintext, string key)
         {
@@ -32,7 +38,7 @@ namespace Algorithms.Subclasses
             trimmedText = TrimText(plaintext);
             filteredText = FilterText(trimmedText);
 
-            // Add letters to the plaintext
+            // Add letters to the plaintext so the vector and matrix will always be the correct size
             string paddedFilteredText = PadString(filteredText, blockSize);
 
             string[] blocks = Split(paddedFilteredText, keyMatrix.ColumnCount);
@@ -50,11 +56,6 @@ namespace Algorithms.Subclasses
 
                 // Encrypt the character values mod the modulus
                 Vector<double> ciphertextVector = (charVector * keyMatrix) % Globals.modulus;
-
-                //for (int i = 0; i < ciphertextVector.Count; i++)
-                //{
-                //    ciphertextVector[i] = ciphertextVector[i] % Globals.modulus;
-                //}
 
                 for (int i = 0; i < block.Length; i++)
                 {
@@ -94,17 +95,12 @@ namespace Algorithms.Subclasses
                 // Build the vector with the numerical values of the char array so we can do matrix arithmetic
                 Vector<double> charVector = Vector<double>.Build.DenseOfArray(charValue);
 
-                // Encrypt the character values mod the modulus
+                // Decrypt the character values mod the modulus
                 Vector<double> plaintextVector = (charVector * invertedKeyMatrix) % Globals.modulus;
-
-                //for (int i = 0; i < ciphertextVector.Count; i++)
-                //{
-                //    ciphertextVector[i] = ciphertextVector[i] % Globals.modulus;
-                //}
 
                 for (int i = 0; i < block.Length; i++)
                 {
-                    // return the encrypted ascii value back to the text value
+                    // return the decrypted ascii value back to the text value
                     charValue[i] = ReturnASCIINumberToOriginal((char)(int)plaintextVector[i]);
                     plaintext += (char)charValue[i];
                 }
@@ -131,33 +127,29 @@ namespace Algorithms.Subclasses
                 return false;
             }
 
-            // I need an integer array to do modular arithmetic but a double array for matrix arithmetic
-            //int[,] intArray = new int[rows.Length, columns.Length];
+            // I need an array to build the matrix
             double[,] doubleArray = new double[rows.Length, columns.Length];
-
             
-
-            //string[] temp = new string[rows.Length];
             for (int i = 0; i < rows.Length; i++)
             {
                 string[] temp = rows[i].Split(',');
                 for (int j = 0; j < temp.Length; j++)
                 {
-                    // if (!double.TryParse(temp[j], out intArray[i, j]))
                     if (!double.TryParse(temp[j], out doubleArray[i, j]))
                     {
                         // throw an exception
                         Console.WriteLine("Elements of the matrix must be whole numbers");
                         return false;
                     }
-                    //doubleArray[i, j] = intArray[i, j];
                 }
             }
 
-            // I now have the elements of the matrix and need to build a real matrix.
+            // I now have the elements of the matrix assigned to an array and need to build a real matrix.
             keyMatrix = Matrix<double>.Build.DenseOfArray(doubleArray);
+            numRows = keyMatrix.RowCount;
+            numCols = keyMatrix.ColumnCount;
 
-            if (keyMatrix.ColumnCount != keyMatrix.RowCount)
+            if (numRows != numCols)
             {
                 // Throw exception
                 Console.WriteLine("The matrix must be a square matrix, meaning the number of rows " +
@@ -165,7 +157,7 @@ namespace Algorithms.Subclasses
                 return false;
             }
 
-            blockSize = keyMatrix.RowCount;
+            blockSize = numRows;
             double determinant = keyMatrix.Determinant();
             int intDeterminant = (int)determinant;
 
@@ -334,15 +326,13 @@ namespace Algorithms.Subclasses
             {
                 for (int j = 0; j < numCols; j++)
                 {
-                    // Can I build TempMatrix here?
+                    // The determinant of the tempMatrix is the value of the minor matrix
                     tempMatrix = A.RemoveRow(i).RemoveColumn(j);
                     M[i, j] = (int) Math.Round(tempMatrix.Determinant()) % modulus;
                     M[i, j] = PositiveCongruence((int)M[i, j]);
                 }
             }
 
-            Console.WriteLine("Minor");
-            Console.WriteLine(M.ToString());
             return M;
         }
 
@@ -370,9 +360,6 @@ namespace Algorithms.Subclasses
                 }
             }
 
-            Console.WriteLine("Cofactor");
-            Console.WriteLine(C.ToString());
-
             return C;
         }
 
@@ -397,8 +384,6 @@ namespace Algorithms.Subclasses
 
             temp = temp.Transpose();
 
-            Console.WriteLine("Adjoint");
-            Console.WriteLine(temp.ToString());
             return temp;
         }
     }

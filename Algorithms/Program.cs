@@ -117,9 +117,7 @@ namespace Algorithms
             //Console.WriteLine(C.ToString());
 
 
-            // invertile 4x4 matrix: "1,0,0,1;0,1,0,1;0,0,1,1;1,1,1,0"
-            // invertiblae 3x3 matrix: "1,2,4;3,5,7;2,4,5"
-            // invertiblae 2x2 matrix: "11,8;3,7"
+            
 
             Console.WriteLine(hill.Decrypt("this is a test", "1,0,0,1;0,1,0,1;0,0,1,1;1,1,1,0"));
 
