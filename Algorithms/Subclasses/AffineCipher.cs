@@ -28,7 +28,7 @@ namespace Algorithms.Subclasses
             // Check the GCD of teh two numbers in the key
             if (KeyIsCorrect(keys[0]) && int.TryParse(keys[1], out secondKey))
             {
-                // This ensures the second key is between 0-25
+                // This ensures the second key is between 0-Global.modulus
                 secondKey = secondKey % Globals.modulus;
 
                 // This takes out all of the spaces in the plaintext.
@@ -39,11 +39,7 @@ namespace Algorithms.Subclasses
                 filteredText = FilterText(trimmedText);
 
                 // This takes the filtered text with no spaces, and shifts the ascii
-                // values by the key value. I've included numbers so this is all mod
-                // 35, 10 numerical digits and 26 letters, giving 36 symbols or 0-35
-                // I redefine the values, shift them, and then return them to the
-                // standard values so the ciphertext only contains numbers and
-                // letters
+                // values by the key value.
                 ciphertext = ShiftASCIIValuesByKeysEncrypt(filteredText, firstKey, secondKey);
                 return ciphertext;
             }
@@ -61,7 +57,7 @@ namespace Algorithms.Subclasses
             // Here I need to split key = 3,10 into a = 3 and b = 10
             keys = key.Split(',', 2);
 
-            // Check the GCD of teh two numbers in the key
+            // Check the GCD of the two numbers in the key
             if (KeyIsCorrect(keys[0]) && int.TryParse(keys[1], out secondKey))
             {
                 // This ensures the second key is between 0-25
@@ -75,11 +71,7 @@ namespace Algorithms.Subclasses
                 filteredText = FilterText(trimmedText);
 
                 // This takes the filtered text with no spaces, and shifts the ascii
-                // values by the key value. I've included numbers so this is all mod
-                // 35, 10 numerical digits and 26 letters, giving 36 symbols or 0-35
-                // I redefine the values, shift them, and then return them to the
-                // standard values so the ciphertext only contains numbers and
-                // letters
+                // values by the key value.
                 plaintext = ShiftASCIIValuesByKeysDecrypt(filteredText, firstKey, secondKey);
                 return plaintext;
             }
@@ -147,42 +139,6 @@ namespace Algorithms.Subclasses
             {
                 Console.WriteLine("Invalid key.");
                 return false;
-            }
-        }
-
-        // Moved GCD function from here to Cipher so if can be inherited in HillCipher
-
-        // I'm reversing the order of inputs
-        private int MultiplicativeInverse(int wantedInverse, int modulus)
-        {
-            // Try to find the inverse of b, b^(-1), of b mod a such that b*b^(-1) mod a = 1
-            int a0 = modulus;
-            int b0 = wantedInverse;
-            int t0 = 0;
-            int t = 1;
-            int quotient = (int) MathF.Floor((float) a0 / b0);
-            int remainder = a0 - quotient * b0;
-            while (remainder > 0)
-            {
-                int temp = (t0 - quotient * t) % modulus;
-                t0 = t;
-                t = temp;
-                a0 = b0;
-                b0 = remainder;
-                quotient = (int)MathF.Floor((float)a0 / b0);
-                remainder = a0 - quotient * b0;
-            }
-            if (b0 == 1)
-            {
-                // b^(-1) mod a = t
-                return t;
-            }
-            else
-            {
-                // There is no b^(-1) mod a
-                // We shouldn't reach this in this class since I already checked the GCD of the
-                // key and the modulus
-                return -1;
             }
         }
     }

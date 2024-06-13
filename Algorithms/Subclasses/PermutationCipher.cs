@@ -22,11 +22,9 @@ namespace Algorithms.Subclasses
         string[] keyValues;
         int[] intKeyValues;
         int[] inverseKeyValues;
-        char[] plaintextCharacters;
-        char[] ciphertextCharacters;
+        char[] charactersOfText;
         
         int keySize;
-        string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         public string Encrypt(string plaintext, string key)
         {
@@ -42,7 +40,7 @@ namespace Algorithms.Subclasses
             // I might not need this. This just adds characters to the end of the string so that the key and plaintext fit perfectly.
             string paddedFilteredText = PadString(filteredText, keySize);
 
-            // Now I need to center the key at 0 to match indices and make it mod 26
+            // Now I need to center the key at 0 to match indices and make it mod Globals.modulus
             intKeyValues = new int[keySize];
             for (int i = 0; i < keySize; i++)
             {
@@ -58,32 +56,10 @@ namespace Algorithms.Subclasses
 
             for (int i = 0; i < blocksOfPlaintext.Length; i++)
             {
-                blockOfCipertext = SubstituteCharactersEncrypt(blocksOfPlaintext[i], intKeyValues);
+                blockOfCipertext = SubstituteCharacters(blocksOfPlaintext[i], intKeyValues);
                 ciphertext += blockOfCipertext;
             }
             return ciphertext;
-        }
-
-        private string SubstituteCharactersEncrypt(string blockOfText, int[] key)
-        {
-            // I need to work on this to find the correct algorithm
-            
-            //int characterValue = BringASCIINumberToZero(c);
-            ciphertextCharacters = new char[blockOfText.Length];
-            for (int i = 0; i < blockOfText.Length; i++)
-            {
-                
-                int indexOfChar = GetIndexOfChar(key, i);
-                ciphertextCharacters[indexOfChar] = blockOfText[i];
-            }
-
-            string result = string.Empty;
-            for (int i = 0; i < ciphertextCharacters.Length; i++)
-            {
-                result += ciphertextCharacters[i];
-            }
-
-            return result;
         }
 
         public string Decrypt(string ciphertext, string key)
@@ -100,7 +76,7 @@ namespace Algorithms.Subclasses
             // I might not need this. This just adds characters to the end of the string so that the key and plaintext fit perfectly.
             string paddedFilteredText = PadString(filteredText, keySize);
 
-            // Now I need to center the key at 0 to match indices and make it mod 26
+            // Now I need to center the key at 0 to match indices and make it mod Globasl.modulus
             intKeyValues = new int[keySize];
             for (int i = 0; i < keySize; i++)
             {
@@ -113,24 +89,18 @@ namespace Algorithms.Subclasses
 
             // Now I need to fiind the inverse of the key to decrypt the ciphertext.
             inverseKeyValues = new int[keySize];
-
-
             for (int i = 0; i < keySize; i++)
             {
 
                 inverseKeyValues[i] = GetIndexOfChar(intKeyValues, i);
             }
 
-
-
-
-            //============================================================================================================================================
             plaintext = string.Empty;
             string[] blocksOfCiphertext = Split(paddedFilteredText, keySize);
 
             for (int i = 0; i < blocksOfCiphertext.Length; i++)
             {
-                blockOfPlaintext = SubstituteCharactersEncrypt(blocksOfCiphertext[i], inverseKeyValues);
+                blockOfPlaintext = SubstituteCharacters(blocksOfCiphertext[i], inverseKeyValues);
                 plaintext += blockOfPlaintext;
             }
             return plaintext;
@@ -180,6 +150,25 @@ namespace Algorithms.Subclasses
                 }
             }
             return true;
+        }
+
+        private string SubstituteCharacters(string blockOfText, int[] key)
+        {
+            charactersOfText = new char[blockOfText.Length];
+            for (int i = 0; i < blockOfText.Length; i++)
+            {
+
+                int indexOfChar = GetIndexOfChar(key, i);
+                charactersOfText[indexOfChar] = blockOfText[i];
+            }
+
+            string result = string.Empty;
+            for (int i = 0; i < charactersOfText.Length; i++)
+            {
+                result += charactersOfText[i];
+            }
+
+            return result;
         }
 
         public int GetIndexOfChar(int[] key, int indexToFind)

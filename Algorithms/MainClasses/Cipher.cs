@@ -27,10 +27,6 @@ namespace Algorithms.MainClasses
                     filteredText += Char.ToUpper(character);
                 }
                 /*
-                 * This was going to retain the numbers, but I think it will be too 
-                 * hard to figure out how to do it. And, the Affine Cipher key has 
-                 * to have a GCD of 0 with 26 and I don't know how changing it to 36
-                 * will affect it
                 if (Char.IsDigit(character))
                 {
                     filteredText += character;
@@ -60,9 +56,6 @@ namespace Algorithms.MainClasses
                 Console.WriteLine("Invalid character in string");
             }
             /*
-             * Trying to use numbers seems too hard with the affine cipher and
-             * something is broken anyways so I'll try and narrow it down by only
-             * allowing letters
             if (Char.IsDigit(character))
             {
                 //Console.WriteLine($"Char in filtered string is number: {character}");
@@ -72,7 +65,7 @@ namespace Algorithms.MainClasses
             else if (Char.IsLetter(character))
             {
                 //Console.WriteLine($"Char in filtered string is letter: {character}");
-                characterValue = characterValue - 55;
+                characterValue = characterValue - 65;
                 //Console.WriteLine($"It's new index is: {characterValue}");
             }
             else
@@ -85,7 +78,6 @@ namespace Algorithms.MainClasses
         
         public char ReturnASCIINumberToOriginal(int number)
         {
-            // C# does not perform modular arithmetic correctly and will return a negative number
             // if the number is negative. This will force number to be an element in [0,35]
             while (number < 0)
             {
@@ -98,10 +90,6 @@ namespace Algorithms.MainClasses
             
 
             /*
-             * Trying to use numbers seems too hard with the affine cipher and
-             * something is broken anyways so I'll try and narrow it down by only
-             * allowing letters
-            //Console.WriteLine("The Return input is : " + number);
             if (number >= 0 && number <= 9)
             {
                 number = number + 48;
@@ -109,7 +97,7 @@ namespace Algorithms.MainClasses
             }
             else if (number >= 10 && number <= 35)
             {
-                number = number + 55;
+                number = number + 65;
                 // Console.WriteLine($"The number in [10,35] is now: {number}\n");
             }
             else
@@ -162,6 +150,48 @@ namespace Algorithms.MainClasses
             }
 
             return text;
+        }
+
+        public int MultiplicativeInverse(int wantedInverse, int modulus)
+        {
+            // Try to find the inverse of b, b^(-1), of b mod a such that b*b^(-1) mod a = 1
+            int a0 = modulus;
+            int b0 = wantedInverse;
+            int t0 = 0;
+            int t = 1;
+            int quotient = (int)MathF.Floor((float)a0 / b0);
+            int remainder = a0 - quotient * b0;
+            while (remainder > 0)
+            {
+                int temp = (t0 - quotient * t) % modulus;
+                t0 = t;
+                t = temp;
+                a0 = b0;
+                b0 = remainder;
+                quotient = (int)MathF.Floor((float)a0 / b0);
+                remainder = a0 - quotient * b0;
+            }
+            if (b0 == 1)
+            {
+                // b^(-1) mod a = t
+                return t;
+            }
+            else
+            {
+                // There is no b^(-1) mod a
+                // We shouldn't reach this in this class since I already checked the GCD of the
+                // key and the modulus
+                return -1;
+            }
+        }
+
+        public int PositiveCongruence(int number)
+        {
+            while (number < 0)
+            {
+                number += Globals.modulus;
+            }
+            return number;
         }
     }
 }

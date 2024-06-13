@@ -45,55 +45,60 @@ namespace Algorithms
              */
 
 
-            string plaintext;
-            string ciphertext;
-            string trimmedText;
-            string filteredText;
-            string[] binaryOfASCII;
-            int[] intOfASCII;
-            int intKey;
+            //string plaintext;
+            //string ciphertext;
+            //string trimmedText;
+            //string filteredText;
+            //string[] binaryOfASCII;
+            //int[] intOfASCII;
+            //int intKey;
 
-            Cipher cipher = new Cipher();
-            plaintext = "This is the end my friend";
-            trimmedText = plaintext.Trim();
-            filteredText = cipher.FilterText(trimmedText);
-
-
-
-            // I can convert back and forth from binary to decimal
-            binaryOfASCII = new string[filteredText.Length];
-            intOfASCII = new int[filteredText.Length];
-            for (int i = 0; i < filteredText.Length; i++) 
-            {
-                binaryOfASCII[i] = Convert.ToString(filteredText[i], 2);
-                Console.WriteLine(binaryOfASCII[i]);
-            }
-            Console.WriteLine("==============================================================================");
-            for (int i = 0;i < binaryOfASCII.Length; i++)
-            {
-                intOfASCII[i] = Convert.ToInt32(binaryOfASCII[i], 2);
-                Console.WriteLine(i + " " + intOfASCII[i]);
-            }
-            Console.WriteLine("==============================================================================");
-
-            // XOR operator
-            Console.WriteLine(true ^ true);    // output: False
-            Console.WriteLine(true ^ false);   // output: True
-            Console.WriteLine(false ^ true);   // output: True
-            Console.WriteLine(false ^ false);  // output: False
+            //Cipher cipher = new Cipher();
+            //plaintext = "This is the end my friend";
+            //trimmedText = plaintext.Trim();
+            //filteredText = cipher.FilterText(trimmedText);
 
 
 
+            //// I can convert back and forth from binary to decimal
+            //binaryOfASCII = new string[filteredText.Length];
+            //intOfASCII = new int[filteredText.Length];
+            //for (int i = 0; i < filteredText.Length; i++) 
+            //{
+            //    binaryOfASCII[i] = Convert.ToString(filteredText[i], 2);
+            //    Console.WriteLine(binaryOfASCII[i]);
+            //}
+            //Console.WriteLine("==============================================================================");
+            //for (int i = 0;i < binaryOfASCII.Length; i++)
+            //{
+            //    intOfASCII[i] = Convert.ToInt32(binaryOfASCII[i], 2);
+            //    Console.WriteLine(i + " " + intOfASCII[i]);
+            //}
+            //Console.WriteLine("==============================================================================");
 
-            /*
-             * Hill Cipher debugging
+            //// XOR operator
+            //Console.WriteLine(true ^ true);    // output: False
+            //Console.WriteLine(true ^ false);   // output: True
+            //Console.WriteLine(false ^ true);   // output: True
+            //Console.WriteLine(false ^ false);  // output: False
+
+
+
+            
+             //* Hill Cipher debugging
+             Cipher cipher = new Cipher();
             HillCipher hill = new HillCipher();
-            int size = 2;
+            int size = 3;
             double[,] array = new double[size, size];
             array[0, 0] = 11;
             array[0, 1] = 8;
+            array[0, 2] = 7;
             array[1, 0] = 3;
             array[1, 1] = 7;
+            array[1, 2] = 5;
+            array[2, 0] = 13;
+            array[2, 1] = 9;
+            array[2, 2] = 25;
             //int number = 1;
             //for (int i = 0; i < size; i++)
             //{
@@ -103,11 +108,54 @@ namespace Algorithms
             //        number++;
             //    }
             //}
-            Matrix<double> A = Matrix<double>.Build.DenseOfArray(array);
+            //Console.WriteLine(array.ToString());
+            //Matrix<double> A = Matrix<double>.Build.DenseOfArray(array);
+            //Console.WriteLine(A.ToString());
+            //var M = hill.MinorMatrixModN(A, Globals.modulus);
+            //Console.WriteLine(M.ToString());
+            //var C = hill.CofactorMatrixModN(M, Globals.modulus);
+            //Console.WriteLine(C.ToString());
+
+
+
+            // invertiblae 3x3 matrix: "1,2,4;3,5,7;2,4,5"
+            // invertiblae 2x2 matrix: "11,8;3,7"
+
+            Console.WriteLine(hill.Decrypt("this is a test", "1,2,4;3,5,7;2,4,5"));
+
+
+            /*
+            Console.WriteLine($"Determinant = {A.Determinant() % Globals.modulus}");
+            Console.WriteLine($"GCD({A.Determinant() % Globals.modulus},{Globals.modulus}) = {cipher.GCD((int)A.Determinant(), Globals.modulus)}");
+            Console.WriteLine();
             // A is the key matrix that we want to invert.
             int numRows = A.RowCount;
             int numCols = A.ColumnCount;
-            hill.InvertMatrixWithModulus(A, Globals.modulus);
+            //hill.InvertMatrixModN(A, Globals.modulus);
+
+
+            if (numRows != numCols)
+            {
+                // throw exception
+                Console.WriteLine("The input matrix must be a square matrix or you can't find a Minor Matrix");
+            }
+
+            Matrix<double> M = CreateMatrix.Dense<double>(numRows, numCols);
+            Matrix<double> tempMatrix = CreateMatrix.Dense<double>(numRows - 1, numCols - 1);
+
+            for (int i = 0; i < numRows; i++)
+            {
+                for (int j = 0; j < numCols; j++)
+                {
+                    // Can I build TempMatrix here?
+                    tempMatrix = A.RemoveRow(i).RemoveColumn(j);
+                    Console.WriteLine(tempMatrix.ToString());
+
+                    Console.WriteLine($"Determinant = {tempMatrix.Determinant()}");
+                    M[i, j] = (int)tempMatrix.Determinant() % Globals.modulus;
+                }
+            }
+            Console.WriteLine(M.ToString());
             */
             /*
 
@@ -365,21 +413,5 @@ namespace Algorithms
             //}
             //
         }
-
-        static string[] Split(string str, int chunkSize)
-        {
-            int numberOfStrings = (int) MathF.Ceiling(str.Length / chunkSize);
-            string[] strings = new string[numberOfStrings];
-            for (int i = 0; i < strings.Length; i++)
-            {
-                for (int j = i * chunkSize; j < chunkSize * (i + 1); j++)
-                {
-                    strings[i] += str[j];
-                }
-                
-            }
-            return strings;
-        }
-        
     }
 }

@@ -30,12 +30,7 @@ namespace Algorithms.Subclasses
                 filteredText = FilterText(trimmedText);
 
                 // This takes the filtered text with no spaces, and shifts the ascii
-                // values by the key value. I've included numbers so this is all mod
-                // 35, 10 numerical digits and 26 letters, giving 36 symbols or 0-35
-                // I redefine the values, shift them, and then return them to the
-                // standard values so the ciphertext only contains numbers and
-                // letters
-                // I've since removed letters for the affine cipher
+                // values by the key value
                 ciphertext = ShiftASCIIValuesByKeyEncrypt(filteredText, key);
 
                 return ciphertext;
@@ -60,12 +55,7 @@ namespace Algorithms.Subclasses
                 filteredText = FilterText(trimmedText);
 
                 // This takes the filtered text with no spaces, and shifts the ascii
-                // values by the key value. I've included numbers so this is all mod
-                // 35, 10 numerical digits and 26 letters, giving 36 symbols or 0-35
-                // I redefine the values, shift them, and then return them to the
-                // standard values so the ciphertext only contains numbers and
-                // letters
-                // I've since removed letters for the affine cipher
+                // values by the key value.
                 plaintext = ShiftASCIIValuesByKeyDecrypt(filteredText, key);
 
                 return plaintext;
@@ -97,14 +87,6 @@ namespace Algorithms.Subclasses
             char charPlaceHolder;
             string newText = string.Empty;
             int count = 0;
-
-            // The each letter of the key needs to encrypt a character during it's cycle 
-            //while (text.Length % key.Length != 0)
-            //{
-            //    // Choose a random character between A and Z
-            //    int randomChar = random.Next(65, 91);
-            //    text += (char)randomChar;
-            //}
 
             while (count < text.Length)
             {
@@ -147,14 +129,6 @@ namespace Algorithms.Subclasses
             char charPlaceHolder;
             string newText = string.Empty;
             int count = 0;
-
-            // The each letter of the key needs to encrypt a character during it's cycle 
-            //while (text.Length % key.Length != 0)
-            //{
-            //    // Choose a random character between A and Z
-            //    int randomChar = random.Next(65, 91);
-            //    text += (char)randomChar;
-            //}
 
             while (count < text.Length)
             {

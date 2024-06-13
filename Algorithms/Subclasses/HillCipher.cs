@@ -78,8 +78,18 @@ namespace Algorithms.Subclasses
                 filteredText = FilterText(trimmedText);
                 string paddedFilteredText = PadString(filteredText, blockSize);
                 
-                invertedKeyMatrix = keyMatrix.Inverse();
-                return invertedKeyMatrix.Multiply(keyMatrix).ToString();
+                invertedKeyMatrix = InvertMatrixModN(keyMatrix, Globals.modulus);
+                var identity =  invertedKeyMatrix.Multiply(keyMatrix);
+
+                for (int i = 0; i < identity.RowCount; i++)
+                {
+                    for (int j = 0; j < identity.ColumnCount; j++)
+                    {
+                        identity[i, j] = identity[i, j] % Globals.modulus;
+                    }
+                }
+
+                return identity.ToString();
 
                 // Add letters to the plaintext
                 trimmedText = TrimText(paddedFilteredText);
@@ -189,7 +199,7 @@ namespace Algorithms.Subclasses
             return true;
         }
 
-        public Matrix<double> InvertMatrixWithModulus(Matrix<double> A, int modulus)
+        public Matrix<double> InvertMatrixModN(Matrix<double> A, int modulus)
         {
             // A is the key matrix that we want to invert.
             int numRows = A.RowCount;
@@ -202,13 +212,38 @@ namespace Algorithms.Subclasses
                 return A;
             }
 
-            if (A.Determinant() == 0)
+            int determinant = (int)A.Determinant();
+            determinant = determinant % modulus;
+
+            if (GCD(determinant, modulus) != 1)
             {
                 // throw exception
-                Console.WriteLine("det(A) must not equal 0 or the inverse doesn't exist");
-                //return A;
+                Console.WriteLine("GCD(A, modulus) must not equal 1 or the inverse doesn't exist\n" +
+                    "This means the determinant and the modulus must be coprime");
+                return A;
             }
 
+            int inverseOfDeterminant = MultiplicativeInverse(determinant, modulus);
+
+            var adjoint = AdjointMatrixModN(A, modulus);
+            var inverse = inverseOfDeterminant * adjoint;
+
+            for (int i = 0; i < numRows; i++)
+            {
+                for (int j = 0; j < numCols; j++)
+                {
+                    inverse[i, j] = inverse[i, j] % modulus;
+                }
+            }
+
+            Console.WriteLine($"Determinate = {determinant}");
+            Console.WriteLine($"Inverse det = {inverseOfDeterminant}");
+            Console.WriteLine("Inverse Matrix");
+
+            Console.WriteLine(inverse.ToString());
+
+            return inverse;
+            /*
             // I'm creating the Identity matrix to test A*A^(-1) = I
             Matrix<double> I = CreateMatrix.DenseIdentity<double>(numRows);
 
@@ -246,7 +281,7 @@ namespace Algorithms.Subclasses
                         // This loops through the columns, by the number of columns of A at a time
                         for (int j = 0 + columnIndex; j < numCols + columnIndex; j++)
                         {
-                            // This builds diagonals in the chunks the size of the no. rows of A x no of cols of A
+                            // This builds diagonals in the chunks the size of the no. rows of A x no. of cols of A
                             if (i == j % numCols || i % numRows == j || i == j || i + numRows == j || i == j + numCols)
                             {
                                 B[i, j] = valuesOfA[arrayIndex];
@@ -291,8 +326,97 @@ namespace Algorithms.Subclasses
 
             var C = A.Solve(I);
             Console.WriteLine(C.ToString());
-
+            
             return B;
+            */
+        }
+
+        public Matrix<double> MinorMatrixModN(Matrix<double> A, int modulus)
+        {
+            // A is the key matrix that we want to invert.
+            int numRows = A.RowCount;
+            int numCols = A.ColumnCount;
+
+            if (numRows != numCols)
+            {
+                // throw exception
+                Console.WriteLine("The input matrix must be a square matrix or you can't find a Minor Matrix");
+                return A;
+            }
+
+            Matrix<double> M = CreateMatrix.Dense<double>(numRows, numCols);
+            Matrix<double> tempMatrix = CreateMatrix.Dense<double>(numRows - 1, numCols - 1);
+
+            for (int i = 0; i < numRows; i++)
+            {
+                for (int j = 0; j < numCols; j++)
+                {
+                    // Can I build TempMatrix here?
+                    tempMatrix = A.RemoveRow(i).RemoveColumn(j);
+                    M[i, j] = (int)tempMatrix.Determinant() % modulus;
+                    M[i, j] = PositiveCongruence((int)M[i, j]);
+                }
+            }
+
+            Console.WriteLine("Minor");
+            Console.WriteLine(M.ToString());
+            return M;
+        }
+
+        public Matrix<double> CofactorMatrixModN(Matrix<double> M, int modulus)
+        {
+            // M is the minor matrix of the key matrix that we want to invert.
+            int numRows = M.RowCount;
+            int numCols = M.ColumnCount;
+
+            if (numRows != numCols)
+            {
+                // throw exception
+                Console.WriteLine("The input matrix must be a square matrix or you can't find a Cofactor Matrix");
+                return M;
+            }
+
+            Matrix<double> C = CreateMatrix.Dense<double>(numRows, numCols);
+            
+            for (int i = 0; i < numRows; i++) 
+            {
+                for (int j = 0;j < numCols; j++)
+                {
+                    C[i,j] = (int)( (Math.Pow(-1, i+j)) * M[i,j] ) % modulus;
+                    C[i,j] = PositiveCongruence((int)C[i, j]);
+                }
+            }
+
+            Console.WriteLine("Cofactor");
+            Console.WriteLine(C.ToString());
+
+            return C;
+        }
+
+        public Matrix<double> AdjointMatrixModN( Matrix<double> A, int modulus )
+        {
+            // A is the key matrix that we want to invert.
+            int numRows = A.RowCount;
+            int numCols = A.ColumnCount;
+
+            if (numRows != numCols)
+            {
+                // throw exception
+                Console.WriteLine("The input matrix must be a square matrix or you can't find an Adjoint Matrix");
+                return A;
+            }
+
+            // Make the minor matrix
+            Matrix<double> temp = MinorMatrixModN(A, modulus);
+
+            // Make the Cofactor Matrix
+            temp = CofactorMatrixModN(temp, modulus);
+
+            temp = temp.Transpose();
+
+            Console.WriteLine("Adjoint");
+            Console.WriteLine(temp.ToString());
+            return temp;
         }
     }
 }
