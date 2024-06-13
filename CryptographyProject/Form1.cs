@@ -107,7 +107,7 @@ namespace CryptographyProject
                 }
                 else if (decryptRadioButton.Checked)
                 {
-                    //run decrypy method
+                    // run Decrypt method
                     outputText = shiftCipher.Decrypt(inputText, key);
                 }
                 else
@@ -118,19 +118,16 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 1)
             {
                 // Substitution Cipher
-                // Can this be a generic method that does this for each cipher?
-                // Maybe I could put a requirement that it must implement ICipher?
+
                 SubstitutionCipher substitutionCipher = new SubstitutionCipher();
 
                 if (encryptRadioButton.Checked)
                 {
-                    // run Encrypt method
                     outputText = substitutionCipher.Encrypt(inputText, key);
 
                 }
                 else if (decryptRadioButton.Checked)
                 {
-                    //run decrypy method
                     outputText = substitutionCipher.Decrypt(inputText, key);
                 }
                 else
@@ -145,13 +142,11 @@ namespace CryptographyProject
 
                 if (encryptRadioButton.Checked)
                 {
-                    // run Encrypt method
                     outputText = affineCipher.Encrypt(inputText, key);
 
                 }
                 else if (decryptRadioButton.Checked)
                 {
-                    //run decrypy method
                     outputText = affineCipher.Decrypt(inputText, key);
                 }
                 else
@@ -166,13 +161,11 @@ namespace CryptographyProject
 
                 if (encryptRadioButton.Checked)
                 {
-                    // run Encrypt method
                     outputText = vigenereCipher.Encrypt(inputText, key);
 
                 }
                 else if (decryptRadioButton.Checked)
                 {
-                    //run decrypy method
                     outputText = vigenereCipher.Decrypt(inputText, key);
                 }
                 else
@@ -187,13 +180,11 @@ namespace CryptographyProject
 
                 if (encryptRadioButton.Checked)
                 {
-                    // run Encrypt method
                     outputText = hillCipher.Encrypt(inputText, key);
 
                 }
                 else if (decryptRadioButton.Checked)
                 {
-                    //run decrypy method
                     outputText = hillCipher.Decrypt(inputText, key);
                 }
                 else
@@ -204,6 +195,23 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 5)
             {
                 // Permutation Cipher
+                PermutationCipher permutationCipher = new PermutationCipher();
+
+
+                if (encryptRadioButton.Checked)
+                {
+                    outputText = permutationCipher.Encrypt(inputText, key);
+
+                }
+                else if (decryptRadioButton.Checked)
+                {
+                    outputText = permutationCipher.Decrypt(inputText, key);
+                }
+                else
+                {
+                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                }
+
             }
             else if (methodComboBox.SelectedIndex == 6)
             {
@@ -295,7 +303,8 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 5)
             {
                 // Permutation Cipher
-                methodSelectLabel.Text = "Key Information: Enter a list of numbers, seperated by a comma. If you chose 5 numbers, they need to be the numbers 1-5 but rearranged however you like. ex: 3,2,5,4,1";
+                methodSelectLabel.Text = "Key Information: Enter a list of numbers, seperated by a comma. If you chose 5 numbers, they need to be the numbers 1-5 but \n" +
+                    "rearranged however you like. ex: 3,2,5,4,1";
             }
             else if (methodComboBox.SelectedIndex == 6)
             {

@@ -113,110 +113,111 @@ namespace Algorithms.Subclasses
             {
                 if (upperCaseKey[i] == 'A')
                 {
-                    counts[i]++;
+                    counts[0]++;
                 }
                 else if (upperCaseKey[i] == 'B')
                 {
-                    counts[i]++;
+                    counts[1]++;
                 }
                 else if (upperCaseKey[i] == 'C')
                 {
-                    counts[i]++;
+                    counts[2]++;
                 }
                 else if (upperCaseKey[i] == 'D')
                 {
-                    counts[i]++;
+                    counts[3]++;
                 }
                 else if (upperCaseKey[i] == 'E')
                 {
-                    counts[i]++;
+                    counts[4]++;
                 }
                 else if (upperCaseKey[i] == 'F')
                 {
-                    counts[i]++;
+                    counts[5]++;
                 }
                 else if (upperCaseKey[i] == 'G')
                 {
-                    counts[i]++;
+                    counts[6]++;
                 }
                 else if (upperCaseKey[i] == 'H')
                 {
-                    counts[i]++;
+                    counts[7]++;
                 }
                 else if (upperCaseKey[i] == 'I')
                 {
-                    counts[i]++;
+                    counts[8]++;
                 }
                 else if (upperCaseKey[i] == 'J')
                 {
-                    counts[i]++;
+                    counts[9]++;
                 }
                 else if (upperCaseKey[i] == 'K')
                 {
-                    counts[i]++;
+                    counts[10]++;
                 }
                 else if (upperCaseKey[i] == 'L')
                 {
-                    counts[i]++;
+                    counts[11]++;
                 }
                 else if (upperCaseKey[i] == 'M')
                 {
-                    counts[i]++;
+                    counts[12]++;
                 }
                 else if (upperCaseKey[i] == 'N')
                 {
-                    counts[i]++;
+                    counts[13]++;
                 }
                 else if (upperCaseKey[i] == 'O')
                 {
-                    counts[i]++;
+                    counts[14]++;
                 }
                 else if (upperCaseKey[i] == 'P')
                 {
-                    counts[i]++;
+                    counts[15]++;
                 }
                 else if (upperCaseKey[i] == 'Q')
                 {
-                    counts[i]++;
+                    counts[16]++;
                 }
                 else if (upperCaseKey[i] == 'R')
                 {
-                    counts[i]++;
+                    counts[17]++;
                 }
                 else if (upperCaseKey[i] == 'S')
                 {
-                    counts[i]++;
+                    counts[18]++;
                 }
                 else if (upperCaseKey[i] == 'T')
                 {
-                    counts[i]++;
+                    counts[19]++;
                 }
                 else if (upperCaseKey[i] == 'U')
                 {
-                    counts[i]++;
+                    counts[20]++;
                 }
                 else if (upperCaseKey[i] == 'V')
                 {
-                    counts[i]++;
+                    counts[21]++;
                 }
                 else if (upperCaseKey[i] == 'W')
                 {
-                    counts[i]++;
+                    counts[22]++;
                 }
                 else if (upperCaseKey[i] == 'X')
                 {
-                    counts[i]++;
+                    counts[23]++;
                 }
                 else if (upperCaseKey[i] == 'Y')
                 {
-                    counts[i]++;
+                    counts[24]++;
                 }
                 else if (upperCaseKey[i] == 'Z')
                 {
-                    counts[i]++;
+                    counts[25]++;
                 }
             }
 
+            // Check for duplicates of the same character
             for (int i = 0; i < counts.Length; i++)
             {
                 if (counts[i] != 1)

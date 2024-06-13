@@ -142,6 +142,9 @@ namespace Algorithms.Subclasses
         {
             key = key.Trim();
             keyValues = key.Split(',');
+            keySize = keyValues.Length;
+
+            // First check to make sure every element of keyValues is a number
             for (int i = 0; i < keyValues.Length; i++)
             {
                 foreach (char c in keyValues[i])
@@ -152,9 +155,30 @@ namespace Algorithms.Subclasses
                     }
                 }
             }
-            
+
+            // Now I need to center the key at 0 to match indices and make it mod Globals.modulus
+            intKeyValues = new int[keySize];
+            for (int i = 0; i < keySize; i++)
+            {
+                if (!int.TryParse(keyValues[i], out intKeyValues[i]))
+                {
+                    return false;
+                }
+                intKeyValues[i] = (intKeyValues[i] - 1) % Globals.modulus;
+            }
+
             // Every character in each of the elemenets of blocks is a number
-            // now I need to see if it contains sequential numbers starting at 1 and going to the length of the keys
+            // now I need to see if it contains sequential numbers starting at 0 and going to the length of the keys
+            // This starts at 0 since I centered the keys at 0 by subtracting 1
+            for (int i = 0; i < keySize; i++ )
+            {
+                if (!intKeyValues.Contains(i))
+                {
+                    // throw exception
+                    // The key doesn't contain every number between 1 and keySize, inclusive
+                    return false;
+                }
+            }
             return true;
         }
 
