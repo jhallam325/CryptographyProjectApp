@@ -22,114 +22,95 @@ namespace Algorithms.Subclasses
 
         public string Encrypt(string plaintext, string key)
         {
-            if (KeyIsCorrect(key))
-            {
-                ciphertext = string.Empty;
-                
-                trimmedText = TrimText(plaintext);
-                filteredText = FilterText(trimmedText);
-
-                // Add letters to the plaintext
-                string paddedFilteredText = PadString(filteredText, blockSize);
-
-                string[] blocks = Split(paddedFilteredText, keyMatrix.ColumnCount);
-                foreach (string block in blocks)
-                {
-                    double[] charValue = new double[block.Length];
-                    for (int i = 0; i < block.Length; i++)
-                    {
-                        // get the numeric value of the char and turn it into a double and assign it the the array
-                        charValue[i] = BringASCIINumberToZero(block[i]);
-                    }
-
-                    // Build the vector with the numerical values of the char array so we can do matrix arithmetic
-                    Vector<double> charVector = Vector<double>.Build.DenseOfArray(charValue);
-
-                    // Encrypt the character values mod the modulus
-                    Vector<double> ciphertextVector = (charVector * keyMatrix) % Globals.modulus;
-
-                    //for (int i = 0; i < ciphertextVector.Count; i++)
-                    //{
-                    //    ciphertextVector[i] = ciphertextVector[i] % Globals.modulus;
-                    //}
-
-                    for (int i = 0; i < block.Length; i++)
-                    {
-                        // return the encrypted ascii value back to the text value
-                        charValue[i] = ReturnASCIINumberToOriginal((char)(int)ciphertextVector[i]);
-                        ciphertext += (char)charValue[i];
-                    }
-
-                }
-                return ciphertext;
-            }
-            else
+            if (!KeyIsCorrect(key))
             {
                 return "Key is invalid";
             }
+
+            ciphertext = string.Empty;
+
+            trimmedText = TrimText(plaintext);
+            filteredText = FilterText(trimmedText);
+
+            // Add letters to the plaintext
+            string paddedFilteredText = PadString(filteredText, blockSize);
+
+            string[] blocks = Split(paddedFilteredText, keyMatrix.ColumnCount);
+            foreach (string block in blocks)
+            {
+                double[] charValue = new double[block.Length];
+                for (int i = 0; i < block.Length; i++)
+                {
+                    // get the numeric value of the char and turn it into a double and assign it the the array
+                    charValue[i] = BringASCIINumberToZero(block[i]);
+                }
+
+                // Build the vector with the numerical values of the char array so we can do matrix arithmetic
+                Vector<double> charVector = Vector<double>.Build.DenseOfArray(charValue);
+
+                // Encrypt the character values mod the modulus
+                Vector<double> ciphertextVector = (charVector * keyMatrix) % Globals.modulus;
+
+                //for (int i = 0; i < ciphertextVector.Count; i++)
+                //{
+                //    ciphertextVector[i] = ciphertextVector[i] % Globals.modulus;
+                //}
+
+                for (int i = 0; i < block.Length; i++)
+                {
+                    // return the encrypted ascii value back to the text value
+                    charValue[i] = ReturnASCIINumberToOriginal((char)(int)ciphertextVector[i]);
+                    ciphertext += (char)charValue[i];
+                }
+
+            }
+            return ciphertext;
         }
 
         public string Decrypt(string ciphertext, string key)
         {
-            if (KeyIsCorrect(key))
-            {
-                plaintext = string.Empty;
-                trimmedText = TrimText(plaintext);
-                filteredText = FilterText(trimmedText);
-                string paddedFilteredText = PadString(filteredText, blockSize);
-                
-                invertedKeyMatrix = InvertMatrixModN(keyMatrix, Globals.modulus);
-                var identity =  invertedKeyMatrix.Multiply(keyMatrix);
-
-                for (int i = 0; i < identity.RowCount; i++)
-                {
-                    for (int j = 0; j < identity.ColumnCount; j++)
-                    {
-                        identity[i, j] = identity[i, j] % Globals.modulus;
-                    }
-                }
-
-                return identity.ToString();
-
-                // Add letters to the plaintext
-                trimmedText = TrimText(paddedFilteredText);
-                filteredText = FilterText(trimmedText);
-
-                string[] blocks = Split(filteredText, keyMatrix.ColumnCount);
-                foreach (string block in blocks)
-                {
-                    double[] charValue = new double[block.Length];
-                    for (int i = 0; i < block.Length; i++)
-                    {
-                        // get the numeric value of the char and turn it into a double and assign it the the array
-                        charValue[i] = BringASCIINumberToZero(block[i]);
-                    }
-
-                    // Build the vector with the numerical values of the char array so we can do matrix arithmetic
-                    Vector<double> charVector = Vector<double>.Build.DenseOfArray(charValue);
-
-                    // Encrypt the character values mod the modulus
-                    Vector<double> plaintextVector = (charVector * invertedKeyMatrix) % Globals.modulus;
-
-                    //for (int i = 0; i < ciphertextVector.Count; i++)
-                    //{
-                    //    ciphertextVector[i] = ciphertextVector[i] % Globals.modulus;
-                    //}
-
-                    for (int i = 0; i < block.Length; i++)
-                    {
-                        // return the encrypted ascii value back to the text value
-                        charValue[i] = ReturnASCIINumberToOriginal((char)(int)plaintextVector[i]);
-                        plaintext += (char)charValue[i];
-                    }
-
-                }
-                return plaintext;
-            }
-            else
+            if (!KeyIsCorrect(key))
             {
                 return "Key is invalid";
             }
+
+            plaintext = string.Empty;
+            trimmedText = TrimText(ciphertext);
+            filteredText = FilterText(trimmedText);
+            string paddedFilteredText = PadString(filteredText, blockSize);
+
+            invertedKeyMatrix = InvertMatrixModN(keyMatrix, Globals.modulus);
+
+            string[] blocks = Split(paddedFilteredText, keyMatrix.ColumnCount);
+            foreach (string block in blocks)
+            {
+                double[] charValue = new double[block.Length];
+                for (int i = 0; i < block.Length; i++)
+                {
+                    // get the numeric value of the char and turn it into a double and assign it the the array
+                    charValue[i] = BringASCIINumberToZero(block[i]);
+                }
+
+                // Build the vector with the numerical values of the char array so we can do matrix arithmetic
+                Vector<double> charVector = Vector<double>.Build.DenseOfArray(charValue);
+
+                // Encrypt the character values mod the modulus
+                Vector<double> plaintextVector = (charVector * invertedKeyMatrix) % Globals.modulus;
+
+                //for (int i = 0; i < ciphertextVector.Count; i++)
+                //{
+                //    ciphertextVector[i] = ciphertextVector[i] % Globals.modulus;
+                //}
+
+                for (int i = 0; i < block.Length; i++)
+                {
+                    // return the encrypted ascii value back to the text value
+                    charValue[i] = ReturnASCIINumberToOriginal((char)(int)plaintextVector[i]);
+                    plaintext += (char)charValue[i];
+                }
+
+            }
+            return plaintext;
         }
 
         public bool KeyIsCorrect(string key)
@@ -239,11 +220,10 @@ namespace Algorithms.Subclasses
                 }
             }
 
-            Console.WriteLine($"Determinate = {determinant}");
-            Console.WriteLine($"Inverse det = {inverseOfDeterminant}");
-            Console.WriteLine("Inverse Matrix");
-
-            Console.WriteLine(inverse.ToString());
+            //Console.WriteLine($"Determinate = {determinant}");
+            //Console.WriteLine($"Inverse det = {inverseOfDeterminant}");
+            //Console.WriteLine("Inverse Matrix");
+            //Console.WriteLine(inverse.ToString());
 
             return inverse;
             /*
