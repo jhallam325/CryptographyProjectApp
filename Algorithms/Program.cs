@@ -45,17 +45,42 @@ namespace Algorithms
              */
 
 
-            PermutationCipher permutationCipher = new PermutationCipher();
-            string plaintext = "Well listen up fella I'm going to tell you a tale that will scare you to death";
+            string plaintext;
+            string ciphertext;
+            string trimmedText;
+            string filteredText;
+            string[] binaryOfASCII;
+            int[] intOfASCII;
+            int intKey;
 
-            string key = "3,5,1,6,4,2,8";
+            Cipher cipher = new Cipher();
+            plaintext = "This is the end my friend";
+            trimmedText = plaintext.Trim();
+            filteredText = cipher.FilterText(trimmedText);
 
-            string cipertext = permutationCipher.Encrypt(plaintext, key);
 
-            plaintext = permutationCipher.Decrypt(cipertext, key);
 
-            Console.WriteLine(cipertext);
-            Console.WriteLine(plaintext);
+            // I can convert back and forth from binary to decimal
+            binaryOfASCII = new string[filteredText.Length];
+            intOfASCII = new int[filteredText.Length];
+            for (int i = 0; i < filteredText.Length; i++) 
+            {
+                binaryOfASCII[i] = Convert.ToString(filteredText[i], 2);
+                Console.WriteLine(binaryOfASCII[i]);
+            }
+            Console.WriteLine("==============================================================================");
+            for (int i = 0;i < binaryOfASCII.Length; i++)
+            {
+                intOfASCII[i] = Convert.ToInt32(binaryOfASCII[i], 2);
+                Console.WriteLine(i + " " + intOfASCII[i]);
+            }
+            Console.WriteLine("==============================================================================");
+
+            // XOR operator
+            Console.WriteLine(true ^ true);    // output: False
+            Console.WriteLine(true ^ false);   // output: True
+            Console.WriteLine(false ^ true);   // output: True
+            Console.WriteLine(false ^ false);  // output: False
 
 
 

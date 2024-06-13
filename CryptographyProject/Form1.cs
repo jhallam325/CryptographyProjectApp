@@ -297,8 +297,8 @@ namespace CryptographyProject
             {
                 // Hill Cipher
                 methodSelectLabel.Text = "Key Information: Enter a square Matrix in the form: 1,2,3;4,5,6;7,8,9 where individual " +
-                "elements are seperated by commas and rows are seperated by " +
-                "\nsemi-colons";
+                "elements are seperated by commas and rows \n" +
+                "are seperated by semi-colons";
             }
             else if (methodComboBox.SelectedIndex == 5)
             {
