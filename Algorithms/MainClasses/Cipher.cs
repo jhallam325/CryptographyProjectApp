@@ -111,6 +111,8 @@ namespace Algorithms.MainClasses
         public int GCD(int number1, int number2)
         {
             int remainder;
+            number1 = PositiveCongruence(number1);
+            number2 = PositiveCongruence(number2);
 
             while (number2 != 0)
             {

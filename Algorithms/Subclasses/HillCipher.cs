@@ -214,6 +214,7 @@ namespace Algorithms.Subclasses
 
             int determinant = (int)A.Determinant();
             determinant = determinant % modulus;
+            determinant = PositiveCongruence(determinant);
 
             if (GCD(determinant, modulus) != 1)
             {
@@ -224,6 +225,7 @@ namespace Algorithms.Subclasses
             }
 
             int inverseOfDeterminant = MultiplicativeInverse(determinant, modulus);
+            inverseOfDeterminant = PositiveCongruence(inverseOfDeterminant);
 
             var adjoint = AdjointMatrixModN(A, modulus);
             var inverse = inverseOfDeterminant * adjoint;
@@ -233,6 +235,7 @@ namespace Algorithms.Subclasses
                 for (int j = 0; j < numCols; j++)
                 {
                     inverse[i, j] = inverse[i, j] % modulus;
+                    inverse[i, j] = PositiveCongruence((int) Math.Round(inverse[i, j]));
                 }
             }
 
@@ -353,7 +356,7 @@ namespace Algorithms.Subclasses
                 {
                     // Can I build TempMatrix here?
                     tempMatrix = A.RemoveRow(i).RemoveColumn(j);
-                    M[i, j] = (int)tempMatrix.Determinant() % modulus;
+                    M[i, j] = (int) Math.Round(tempMatrix.Determinant()) % modulus;
                     M[i, j] = PositiveCongruence((int)M[i, j]);
                 }
             }
