@@ -23,66 +23,60 @@ namespace Algorithms.Subclasses
 
         public string Encrypt(string plaintext, string key)
         {
-            bool keyIsCorrect = KeyIsCorrect(key);
-            if (keyIsCorrect)
-            {
-                upperKey = key.ToUpper();
-
-                // This takes out all of the spaces in the plaintext.
-                trimmedText = TrimText(plaintext);
-
-                // This removes all of the symbols from the text and makes every
-                // letter a capital letter
-                filteredText = FilterText(trimmedText);
-
-                // This makes a character array the size of the plaintext because 
-                ciphertextCharacters = new char[filteredText.Length];
-
-                for (int i = 0; i < filteredText.Length; i++)
-                {
-                    ciphertextCharacters[i] = SubstituteCharacterEncrypt(filteredText[i]);
-                    ciphertext += ciphertextCharacters[i];
-                }
-
-                return ciphertext;
-            }
-            else
+            if (!KeyIsCorrect(key))
             {
                 // throw an exception
                 return "The key you used is invalid.";
             }
+
+            upperKey = key.ToUpper();
+
+            // This takes out all of the spaces in the plaintext.
+            trimmedText = TrimText(plaintext);
+
+            // This removes all of the symbols from the text and makes every
+            // letter a capital letter
+            filteredText = FilterText(trimmedText);
+
+            // This makes a character array the size of the plaintext because 
+            ciphertextCharacters = new char[filteredText.Length];
+
+            for (int i = 0; i < filteredText.Length; i++)
+            {
+                ciphertextCharacters[i] = SubstituteCharacterEncrypt(filteredText[i]);
+                ciphertext += ciphertextCharacters[i];
+            }
+
+            return ciphertext;
         }
 
         public string Decrypt(string ciphertext, string key)
         {
-            bool keyIsCorrect = KeyIsCorrect(key);
-            if (keyIsCorrect)
-            {
-                upperKey = key.ToUpper();
-
-                // This takes out all of the spaces in the plaintext.
-                trimmedText = TrimText(ciphertext);
-
-                // This removes all of the symbols from the text and makes every
-                // letter a capital letter
-                filteredText = FilterText(trimmedText);
-                
-                // This makes a character array the size of the plaintext because 
-                plaintextCharacters = new char[filteredText.Length];
-
-                for (int i = 0; i < filteredText.Length; i++)
-                {
-                    plaintextCharacters[i] = SubstituteCharacterDecrypt(filteredText[i]);
-                    plaintext += plaintextCharacters[i];
-                }
-
-                return plaintext;
-            }
-            else
+            if (!KeyIsCorrect(key))
             {
                 // throw an exception
                 return "The key you used is invalid.";
             }
+
+            upperKey = key.ToUpper();
+
+            // This takes out all of the spaces in the plaintext.
+            trimmedText = TrimText(ciphertext);
+
+            // This removes all of the symbols from the text and makes every
+            // letter a capital letter
+            filteredText = FilterText(trimmedText);
+
+            // This makes a character array the size of the plaintext because 
+            plaintextCharacters = new char[filteredText.Length];
+
+            for (int i = 0; i < filteredText.Length; i++)
+            {
+                plaintextCharacters[i] = SubstituteCharacterDecrypt(filteredText[i]);
+                plaintext += plaintextCharacters[i];
+            }
+
+            return plaintext;
         }
 
         public bool KeyIsCorrect(string key)

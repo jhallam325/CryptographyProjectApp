@@ -20,50 +20,46 @@ namespace Algorithms.Subclasses
 
         public string Encrypt(string plaintext, string key)
         {
-            if (KeyIsCorrect(key))
-            {
-                // This takes out all of the spaces in the plaintext.
-                trimmedText = TrimText(plaintext);
-
-                // This removes all of the symbols from the text and makes every
-                // letter a capital letter
-                filteredText = FilterText(trimmedText);
-
-                // This takes the filtered text with no spaces, and shifts the ascii
-                // values by the key value
-                ciphertext = ShiftASCIIValuesByKeyEncrypt(filteredText, key);
-
-                return ciphertext;
-            }
-            else
+            if (!KeyIsCorrect(key))
             {
                 return "Your key is invalid";
             }
+
+            // This takes out all of the spaces in the plaintext.
+            trimmedText = TrimText(plaintext);
+
+            // This removes all of the symbols from the text and makes every
+            // letter a capital letter
+            filteredText = FilterText(trimmedText);
+
+            // This takes the filtered text with no spaces, and shifts the ascii
+            // values by the key value
+            ciphertext = ShiftASCIIValuesByKeyEncrypt(filteredText, key);
+
+            return ciphertext;
         }
 
         
 
         public string Decrypt(string ciphertext, string key)
         {
-            if (KeyIsCorrect(key))
-            {
-                // This takes out all of the spaces in the plaintext.
-                trimmedText = TrimText(ciphertext);
-
-                // This removes all of the symbols from the text and makes every
-                // letter a capital letter
-                filteredText = FilterText(trimmedText);
-
-                // This takes the filtered text with no spaces, and shifts the ascii
-                // values by the key value.
-                plaintext = ShiftASCIIValuesByKeyDecrypt(filteredText, key);
-
-                return plaintext;
-            }
-            else
+            if (!KeyIsCorrect(key))
             {
                 return "Your key is invalid";
             }
+            
+            // This takes out all of the spaces in the plaintext.
+            trimmedText = TrimText(ciphertext);
+
+            // This removes all of the symbols from the text and makes every
+            // letter a capital letter
+            filteredText = FilterText(trimmedText);
+
+            // This takes the filtered text with no spaces, and shifts the ascii
+            // values by the key value.
+            plaintext = ShiftASCIIValuesByKeyDecrypt(filteredText, key);
+
+            return plaintext;
         }
         
         public bool KeyIsCorrect(string key)
@@ -72,6 +68,7 @@ namespace Algorithms.Subclasses
             {
                 if (Char.IsDigit(c) || Char.IsWhiteSpace(c) || Char.IsPunctuation(c) || Char.IsSymbol(c))
                 {
+                    Console.WriteLine("The key must be a string of letters, usually a word.");
                     return false;
                 }
             }

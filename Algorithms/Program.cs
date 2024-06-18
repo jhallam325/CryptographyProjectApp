@@ -6,6 +6,7 @@ using Algorithms.MainClasses;
 using MathNet.Numerics.Optimization;
 using System.Reflection.Metadata.Ecma335;
 using System.Linq.Expressions;
+using System.Transactions;
 
 namespace Algorithms
 {
@@ -45,36 +46,117 @@ namespace Algorithms
              */
 
 
-            //string plaintext;
-            //string ciphertext;
-            //string trimmedText;
-            //string filteredText;
-            //string[] binaryOfASCII;
-            //int[] intOfASCII;
-            //int intKey;
+            string plaintext;
+            string ciphertext;
+            string trimmedText;
+            string filteredText;
+            string[] binaryOfASCII;
+            int[] intOfASCII;
+            int intKey;
 
-            //Cipher cipher = new Cipher();
-            //plaintext = "This is the end my friend";
-            //trimmedText = plaintext.Trim();
-            //filteredText = cipher.FilterText(trimmedText);
+            Cipher cipher = new Cipher();
+            plaintext = "This is the end my friend";
+            trimmedText = plaintext.Trim();
+            filteredText = cipher.FilterText(trimmedText);
 
 
 
-            //// I can convert back and forth from binary to decimal
-            //binaryOfASCII = new string[filteredText.Length];
-            //intOfASCII = new int[filteredText.Length];
-            //for (int i = 0; i < filteredText.Length; i++) 
-            //{
-            //    binaryOfASCII[i] = Convert.ToString(filteredText[i], 2);
-            //    Console.WriteLine(binaryOfASCII[i]);
-            //}
-            //Console.WriteLine("==============================================================================");
-            //for (int i = 0;i < binaryOfASCII.Length; i++)
-            //{
-            //    intOfASCII[i] = Convert.ToInt32(binaryOfASCII[i], 2);
-            //    Console.WriteLine(i + " " + intOfASCII[i]);
-            //}
-            //Console.WriteLine("==============================================================================");
+            // I can convert back and forth from binary to decimal
+            binaryOfASCII = new string[filteredText.Length];
+            intOfASCII = new int[filteredText.Length];
+            for (int i = 0; i < filteredText.Length; i++)
+            {
+                binaryOfASCII[i] = Convert.ToString(filteredText[i], 2);
+                Console.WriteLine(binaryOfASCII[i]);
+            }
+            Console.WriteLine("==============================================================================");
+            for (int i = 0; i < binaryOfASCII.Length; i++)
+            {
+                intOfASCII[i] = Convert.ToInt32(binaryOfASCII[i], 2);
+                Console.WriteLine(i + " " + intOfASCII[i]);
+            }
+            Console.WriteLine("==============================================================================");
+
+
+            // Key Generator algorithm
+            Console.Write("Enter a whole number as your key: ");
+            string key = Console.ReadLine();
+            if (int.TryParse(key, out intKey))
+            {
+                // Do key validation here
+
+            }
+            else
+            {
+                Console.WriteLine("Invalid key");
+                return;
+            }
+
+            // build an array of ones
+            int[] ones = new int[intKey];
+            for (int i = 0; i < ones.Length; i++)
+            {
+                ones[i] = 1;
+            }
+
+            // the intKey is the seed for the random numbers so it can be decrypted
+            Random random = new Random(intKey);
+            int[] keyArray = new int[intKey];
+            int countOf0 = 0;
+            for (int i = 0;i < keyArray.Length; i++)
+            {
+                
+                keyArray[i] = random.Next(0, 2);
+                Console.WriteLine(keyArray[i]);
+                if (keyArray[i] == 0)
+                {
+                    countOf0++;
+                }
+            }
+
+            if (countOf0 == keyArray.Length)
+            {
+                // The key generated was all 0's and we need to regenerate the key
+            }
+
+            Console.WriteLine("=========================New Practice =============================");
+            int[] init = { 0, 0, 1, 0 };
+
+            int[,] streamArray = new int[init.Length, 12];
+            int[] randomBitstream = new int[streamArray.GetLength(1)];
+
+            for (int j = 0; j < streamArray.GetLength(1); j++)
+            {
+                for (int i = 0; i < init.Length; i++)
+                {
+                    streamArray[i, j] = init[i];
+                    Console.Write(streamArray[i, j] + ", ");
+                }
+                Console.WriteLine();
+                int fallOffDigit = init[0];
+                init[0] = (init[2] + init[3]) % 2;
+                for (int i = init.Length - 1; i > 0; i--)
+                {
+                    if (i > 1)
+                    {
+                        init[i] = init[i - 1];
+                    }
+                    else
+                    {
+                        init[i] = fallOffDigit;
+                    }
+                    
+                }
+                randomBitstream[j] = streamArray[init.Length - 1, j];
+            }
+            // matched https://www.youtube.com/watch?v=Y0DlCM4iKeA&list=PLE6ty64ouo1M7Xz6Qj5bgXZOoEE0qilX6&index=25
+
+            for (int i = 0;i < randomBitstream.Length; i++)
+            {
+                Console.Write(randomBitstream[i] + ", ");
+            }
+            
+
 
             //// XOR operator
             //Console.WriteLine(true ^ true);    // output: False
@@ -84,21 +166,21 @@ namespace Algorithms
 
 
 
-            
-             //* Hill Cipher debugging
-             Cipher cipher = new Cipher();
-            HillCipher hill = new HillCipher();
-            int size = 3;
-            double[,] array = new double[size, size];
-            array[0, 0] = 11;
-            array[0, 1] = 8;
-            array[0, 2] = 7;
-            array[1, 0] = 3;
-            array[1, 1] = 7;
-            array[1, 2] = 5;
-            array[2, 0] = 13;
-            array[2, 1] = 9;
-            array[2, 2] = 25;
+
+            //* Hill Cipher debugging
+            //Cipher cipher = new Cipher();
+            //HillCipher hill = new HillCipher();
+            //int size = 3;
+            //double[,] array = new double[size, size];
+            //array[0, 0] = 11;
+            //array[0, 1] = 8;
+            //array[0, 2] = 7;
+            //array[1, 0] = 3;
+            //array[1, 1] = 7;
+            //array[1, 2] = 5;
+            //array[2, 0] = 13;
+            //array[2, 1] = 9;
+            //array[2, 2] = 25;
             //int number = 1;
             //for (int i = 0; i < size; i++)
             //{
@@ -119,7 +201,7 @@ namespace Algorithms
 
             
 
-            Console.WriteLine(hill.Decrypt("this is a test", "1,0,0,1;0,1,0,1;0,0,1,1;1,1,1,0"));
+            //Console.WriteLine(hill.Decrypt("this is a test", "1,0,0,1;0,1,0,1;0,0,1,1;1,1,1,0"));
 
 
             /*

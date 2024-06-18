@@ -19,43 +19,39 @@ namespace Algorithms.Subclasses
 
         public string Encrypt(string plaintext, string key)
         {
-            if (KeyIsCorrect(key))
-            {
-                // This takes out all of the spaces in the plaintext.
-                trimmedText = TrimText(plaintext);
-
-                // This removes all of the symbols from the text and makes every
-                // letter a capital letter
-                filteredText = FilterText(trimmedText);
-
-                // This takes the filtered text with no spaces, and shifts the ascii
-                // values by the key value.
-                ciphertext = ShiftASCIIValuesByKey(filteredText, intKey);
-
-                return ciphertext;
-            }
-            else
+            if (!KeyIsCorrect(key))
             {
                 return "The key is invalid. Please choose a whole number as your key.";
             }
-            
+
+            // This takes out all of the spaces in the plaintext.
+            trimmedText = TrimText(plaintext);
+
+            // This removes all of the symbols from the text and makes every
+            // letter a capital letter
+            filteredText = FilterText(trimmedText);
+
+            // This takes the filtered text with no spaces, and shifts the ascii
+            // values by the key value.
+            ciphertext = ShiftASCIIValuesByKey(filteredText, intKey);
+
+            return ciphertext;
+
         }
 
         public string Decrypt(string ciphertext, string key)
         {
             if (KeyIsCorrect(key))
             {
-                trimmedText = TrimText(ciphertext);
-                filteredText = FilterText(trimmedText);
-
-                plaintext = ShiftASCIIValuesByKey(filteredText, -intKey);
-                return plaintext;
-            }
-            else
-            {
                 return "The key is invalid. Please choose a whole number as your key.";
             }
-            
+
+            trimmedText = TrimText(ciphertext);
+            filteredText = FilterText(trimmedText);
+
+            plaintext = ShiftASCIIValuesByKey(filteredText, -intKey);
+            return plaintext;
+
         }
 
         private string ShiftASCIIValuesByKey(string text, int key)
