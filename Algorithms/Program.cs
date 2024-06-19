@@ -157,9 +157,9 @@ namespace Algorithms
                 for (int i = 0; i < keyArray.Length; i++)
                 {
                     streamArray[i, j] = keyArray[i];
-                    Console.Write(streamArray[i, j] + ", ");
+                    //Console.Write(streamArray[i, j] + ", ");
                 }
-                Console.WriteLine();
+                //Console.WriteLine();
                 int fallOffDigit = keyArray[0];
                 keyArray[0] = (keyArray[2] + keyArray[3] + keyArray[6] + keyArray[7]) % 2;
                 for (int i = keyArray.Length - 1; i > 0; i--)
@@ -181,10 +181,10 @@ namespace Algorithms
             }
             // matched https://www.youtube.com/watch?v=Y0DlCM4iKeA&list=PLE6ty64ouo1M7Xz6Qj5bgXZOoEE0qilX6&index=25
 
-            for (int i = 0;i < randomBitstream.Length; i++)
-            {
-                Console.Write(randomBitstream[i] + ", ");
-            }
+            //for (int i = 0;i < randomBitstream.Length; i++)
+            //{
+            //    Console.Write(randomBitstream[i] + ", ");
+            //}
 
 
             Console.WriteLine();
@@ -208,10 +208,26 @@ namespace Algorithms
             for (int i = 0; i < encrypedBits.Length; i++)
             {
                 encrypedBits[i] = (arrayOfBinaryDigits[i] + randomBitstream[i % randomBitStringLength]) % 2;
-                ciphertext += encrypedBits[i];
+                //ciphertext += encrypedBits[i];
             }
-            Console.WriteLine("\n\nCipher Text:");
-            Console.WriteLine(ciphertext);
+            //Console.WriteLine("\n\nCipher Text:");
+            //Console.WriteLine(ciphertext);
+
+            Console.WriteLine("\n\nCipher Text as binary:");
+            string[] ciphertextBinary = new string[(int)MathF.Ceiling(encrypedBits.Length / 8)];
+            int count = 0;
+            for (int i = 0; i < ciphertextBinary.Length; i++)
+            {
+                for (int j = 0 + count; j < 8 + count; j++)
+                {
+                    ciphertextBinary[i] += encrypedBits[j];
+                }
+                Console.WriteLine(ciphertextBinary[i]);
+                count += 8;
+            }
+
+
+
 
             // Now I take the random bit stream and encode the plaintext
             //string[] blocks = cipher.Split(binaryOfASCII, intKey);
@@ -257,7 +273,7 @@ namespace Algorithms
             //Console.WriteLine(C.ToString());
 
 
-            
+
 
             //Console.WriteLine(hill.Decrypt("this is a test", "1,0,0,1;0,1,0,1;0,0,1,1;1,1,1,0"));
 

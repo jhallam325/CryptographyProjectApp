@@ -15,6 +15,7 @@ namespace Algorithms.Subclasses
         string trimmedText;
         string filteredText;
         string[] binaryOfASCII;
+        string[] ciphertextBinary;
         int[] randomBits;
         int[] arrayOfBinaryDigits;
         int[] encrypedBits;
@@ -63,7 +64,7 @@ namespace Algorithms.Subclasses
             // These random bits will be used to encrypt the plaintext
             randomBits = LinearFeedbackShiftRegister(keyArray);
 
-            // muiltipled by 8 since each element of binaryOfASCII is a byte ie 8 bits
+            // muiltipled by 8 since each element of binaryOfASCII is a byte which is 8 bits
             arrayOfBinaryDigits = new int[binaryOfASCII.Length * 8];
             int index = 0;
             for (int i = 0; i < binaryOfASCII.Length; i++)
@@ -82,15 +83,20 @@ namespace Algorithms.Subclasses
             {
                 // The randomBits are added periodically by index mod randomBits.Length
                 encrypedBits[i] = (arrayOfBinaryDigits[i] + randomBits[i % randomBits.Length]) % 2;
-                ciphertext += encrypedBits[i];
+                //ciphertext += encrypedBits[i];
             }
 
-            Console.WriteLine("\n\nCipher Text:");
-            Console.WriteLine(ciphertext);
-
-
-
-
+            ciphertextBinary = new string[(int) MathF.Ceiling(encrypedBits.Length / 8)];
+            int count = 0;
+            for (int i = 0; i < ciphertextBinary.Length; i++)
+            {
+                for (int j = 0 + count; j < 8 + count; j++ )
+                {
+                    ciphertextBinary[i] += encrypedBits[j];
+                }
+                Console.WriteLine(ciphertextBinary[i]);
+                count += 8;
+            }
             return ciphertext;
         }
 
