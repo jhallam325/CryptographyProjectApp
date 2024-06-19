@@ -51,10 +51,13 @@ namespace Algorithms
             string trimmedText;
             string filteredText;
             string[] binaryOfASCII;
+            int[] arrayOfBinaryDigits;
+            int[] encrypedBits;
             int[] intOfASCII;
             int intKey;
 
             Cipher cipher = new Cipher();
+            ciphertext = String.Empty;
             plaintext = "This is the end my friend";
             trimmedText = plaintext.Trim();
             filteredText = cipher.FilterText(trimmedText);
@@ -182,6 +185,33 @@ namespace Algorithms
             {
                 Console.Write(randomBitstream[i] + ", ");
             }
+
+
+            Console.WriteLine();
+
+            // muiltipled by 8 since each element of binaryOfASCII is a byte ie 8 bits
+            arrayOfBinaryDigits = new int[binaryOfASCII.Length * 8];
+            int index = 0;
+            for (int i = 0; i < binaryOfASCII.Length; i++)
+            {
+                foreach (char c in binaryOfASCII[i])
+                {
+                    arrayOfBinaryDigits[index] = c - 48;
+                    Console.Write(arrayOfBinaryDigits[index]);
+                    index++;
+                }
+            }
+
+            // We have the plaintext as binary, and we have the random bit stream. We now add them together to get the ciphertext
+            encrypedBits = new int[arrayOfBinaryDigits.Length];
+            index = 0;
+            for (int i = 0; i < encrypedBits.Length; i++)
+            {
+                encrypedBits[i] = (arrayOfBinaryDigits[i] + randomBitstream[i % randomBitStringLength]) % 2;
+                ciphertext += encrypedBits[i];
+            }
+            Console.WriteLine("\n\nCipher Text:");
+            Console.WriteLine(ciphertext);
 
             // Now I take the random bit stream and encode the plaintext
             //string[] blocks = cipher.Split(binaryOfASCII, intKey);
