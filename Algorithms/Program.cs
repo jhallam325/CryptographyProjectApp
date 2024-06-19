@@ -58,18 +58,19 @@ namespace Algorithms
 
             Cipher cipher = new Cipher();
             ciphertext = String.Empty;
-            plaintext = "This is the end my friend";
+            //plaintext = "This is the end my friend";
+            plaintext = "This is the end my friend. The Quick Brown Fox Jumps Over the Lazy Dog and badaboom ahs fow8iyh asld;fero aosidyhy caiwejf asodfhjawe c;awe;ircvu aerofhvwaeooiuf ow48efhjaweoifjwa oefawofi jhasgijhasdg";
             trimmedText = plaintext.Trim();
             filteredText = cipher.FilterText(trimmedText);
 
-
+            string dummy = filteredText;
 
             // I can convert back and forth from binary to decimal
-            binaryOfASCII = new string[filteredText.Length];
-            intOfASCII = new int[filteredText.Length];
-            for (int i = 0; i < filteredText.Length; i++)
+            binaryOfASCII = new string[dummy.Length];
+            intOfASCII = new int[dummy.Length];
+            for (int i = 0; i < dummy.Length; i++)
             {
-                binaryOfASCII[i] = Convert.ToString(filteredText[i], 2);
+                binaryOfASCII[i] = Convert.ToString(dummy[i], 2);
                 Console.WriteLine(binaryOfASCII[i]);
             }
             Console.WriteLine("==============================================================================");
@@ -121,7 +122,7 @@ namespace Algorithms
 
             Console.WriteLine("=========================New Practice =============================");
             int[] init = { 0, 0, 1, 0 };
-            int randomBitStringLength = 1015;
+            int randomBitStringLength = 217;
 
             //int[,] streamArray = new int[init.Length, randomBitStringLength];
             int[,] streamArray = new int[keyArray.Length, randomBitStringLength];
@@ -189,8 +190,8 @@ namespace Algorithms
 
             Console.WriteLine();
 
-            // muiltipled by 8 since each element of binaryOfASCII is a byte ie 8 bits
-            arrayOfBinaryDigits = new int[binaryOfASCII.Length * 8];
+            // muiltipled by 7 since each element of binaryOfASCII is a 7 bits
+            arrayOfBinaryDigits = new int[binaryOfASCII.Length * 7];
             int index = 0;
             for (int i = 0; i < binaryOfASCII.Length; i++)
             {
@@ -212,22 +213,46 @@ namespace Algorithms
             }
             //Console.WriteLine("\n\nCipher Text:");
             //Console.WriteLine(ciphertext);
-
+            int asciiBinarySize = 7;
             Console.WriteLine("\n\nCipher Text as binary:");
-            string[] ciphertextBinary = new string[(int)MathF.Ceiling(encrypedBits.Length / 8)];
+            string[] ciphertextBinary = new string[(int)MathF.Ceiling(encrypedBits.Length / asciiBinarySize)];
             int count = 0;
             for (int i = 0; i < ciphertextBinary.Length; i++)
             {
-                for (int j = 0 + count; j < 8 + count; j++)
+                for (int j = 0 + count; j < asciiBinarySize + count; j++)
                 {
                     ciphertextBinary[i] += encrypedBits[j];
                 }
                 Console.WriteLine(ciphertextBinary[i]);
-                count += 8;
+                count += asciiBinarySize;
             }
 
+            int[] ciphertextInts = new int[ciphertextBinary.Length];
 
 
+
+
+
+            //for (int i = 0; i < 128; i++)
+            //{
+            //    Console.WriteLine("i = "+ i + ", -> "+ (char) i);
+            //}
+
+
+
+
+
+
+
+
+
+
+            for (int i = 0; i < ciphertextBinary.Length; i++)
+            {
+                ciphertextInts[i] = Convert.ToInt32(ciphertextBinary[i], 2);
+                Console.WriteLine(i + " " + ciphertextInts[i]);// + " mod 94 = " + ciphertextInts[i] % 94);
+                //Console.WriteLine((char)ciphertextInts[i] + "  " + (char)((ciphertextInts[i] % 94) + 33));
+            }
 
             // Now I take the random bit stream and encode the plaintext
             //string[] blocks = cipher.Split(binaryOfASCII, intKey);

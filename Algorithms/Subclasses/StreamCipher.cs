@@ -19,7 +19,10 @@ namespace Algorithms.Subclasses
         int[] randomBits;
         int[] arrayOfBinaryDigits;
         int[] encrypedBits;
+        int[] keyArray;
         int intKey;
+        int asciiBinarySize = 7;
+        int lengthOfKey = 8;
 
         public string Encrypt(string plaintext, string key)
         {
@@ -37,35 +40,14 @@ namespace Algorithms.Subclasses
 
 
             // Build the key that will generate a stream of random bits
-            Random random = new Random(intKey);
-            int lengthOfKey = 8;
-            int countOf0 = 0;
-
             // the keyArray will be the initial vector for the LSFR to find random bits that will be used to encrypt the plaintext
-            int[] keyArray = new int[lengthOfKey];
-
-            for (int i = 0; i < keyArray.Length; i++)
-            {
-
-                keyArray[i] = random.Next(0, 2);
-                Console.WriteLine(keyArray[i]);
-                if (keyArray[i] == 0)
-                {
-                    countOf0++;
-                }
-            }
-
-            if (countOf0 == keyArray.Length)
-            {
-                // The key generated was all 0's and we need to regenerate the key
-                //But how?
-            }
+            keyArray = BuildKeyArray(intKey, lengthOfKey);
 
             // These random bits will be used to encrypt the plaintext
             randomBits = LinearFeedbackShiftRegister(keyArray);
 
-            // muiltipled by 8 since each element of binaryOfASCII is a byte which is 8 bits
-            arrayOfBinaryDigits = new int[binaryOfASCII.Length * 8];
+            // muiltipled by 7 since each element of binaryOfASCII is 7 bits
+            arrayOfBinaryDigits = new int[binaryOfASCII.Length * asciiBinarySize];
             int index = 0;
             for (int i = 0; i < binaryOfASCII.Length; i++)
             {
@@ -83,20 +65,31 @@ namespace Algorithms.Subclasses
             {
                 // The randomBits are added periodically by index mod randomBits.Length
                 encrypedBits[i] = (arrayOfBinaryDigits[i] + randomBits[i % randomBits.Length]) % 2;
-                //ciphertext += encrypedBits[i];
+                ciphertext += encrypedBits[i];
             }
 
-            ciphertextBinary = new string[(int) MathF.Ceiling(encrypedBits.Length / 8)];
-            int count = 0;
-            for (int i = 0; i < ciphertextBinary.Length; i++)
-            {
-                for (int j = 0 + count; j < 8 + count; j++ )
-                {
-                    ciphertextBinary[i] += encrypedBits[j];
-                }
-                Console.WriteLine(ciphertextBinary[i]);
-                count += 8;
-            }
+            //ciphertextBinary = new string[(int)MathF.Ceiling(encrypedBits.Length / numberOfBitsInASCII)];
+            //int count = 0;
+            //for (int i = 0; i < ciphertextBinary.Length; i++)
+            //{
+            //    for (int j = 0 + count; j < numberOfBitsInASCII + count; j++)
+            //    {
+            //        ciphertextBinary[i] += encrypedBits[j];
+            //    }
+            //    Console.WriteLine(ciphertextBinary[i]);
+            //    count += numberOfBitsInASCII;
+            //}
+
+            //int[] ciphertextInts = new int[ciphertextBinary.Length];
+            //for (int i = 0; i < ciphertextBinary.Length; i++)
+            //{
+            //    ciphertextInts[i] = Convert.ToInt32(ciphertextBinary[i], 2);
+            //    ciphertext += (char)ciphertextInts[i];
+            //    //Console.WriteLine(i + " " + ciphertextInts[i]);// + " mod 94 = " + ciphertextInts[i] % 94);
+            //    //Console.WriteLine((char)ciphertextInts[i] + "  " + (char)((ciphertextInts[i] % 94) + 33));
+            //}
+
+            
             return ciphertext;
         }
 
@@ -104,7 +97,71 @@ namespace Algorithms.Subclasses
 
         public string Decrypt(string ciphertext, string key)
         {
-            throw new NotImplementedException();
+            if(!KeyIsCorrect(key))
+            {
+                return "Key is invalid";
+            }
+
+            plaintext = String.Empty;
+
+            // Each element of binaryOfASCII is the ASCII byte of each character as a string
+            binaryOfASCII = Split(ciphertext, asciiBinarySize);
+
+
+            // Build the key that will generate a stream of random bits
+            // the keyArray will be the initial vector for the LSFR to find random bits that will be used to encrypt the plaintext
+            
+            keyArray = BuildKeyArray(intKey, lengthOfKey);
+
+            // These random bits will be used to encrypt the plaintext
+            randomBits = LinearFeedbackShiftRegister(keyArray);
+
+            // muiltipled by 7 since each element of binaryOfASCII is a byte which is 7 bits
+            
+            arrayOfBinaryDigits = new int[binaryOfASCII.Length * asciiBinarySize];
+            int index = 0;
+            for (int i = 0; i < binaryOfASCII.Length; i++)
+            {
+                foreach (char c in binaryOfASCII[i])
+                {
+                    arrayOfBinaryDigits[index] = c - 48;
+                    Console.Write(arrayOfBinaryDigits[index]);
+                    index++;
+                }
+            }
+
+            // We have the plaintext as binary, and we have the random bit stream. We now add them together to get the ciphertext
+            encrypedBits = new int[arrayOfBinaryDigits.Length];
+            for (int i = 0; i < encrypedBits.Length; i++)
+            {
+                // The randomBits are added periodically by index mod randomBits.Length
+                encrypedBits[i] = (arrayOfBinaryDigits[i] + randomBits[i % randomBits.Length]) % 2;
+                //plaintext += encrypedBits[i];
+            }
+
+            string[] plaintextBinary = new string[(int)MathF.Ceiling(encrypedBits.Length / asciiBinarySize)];
+            int count = 0;
+            for (int i = 0; i < plaintextBinary.Length; i++)
+            {
+                for (int j = 0 + count; j < asciiBinarySize + count; j++)
+                {
+                    plaintextBinary[i] += encrypedBits[j];
+                }
+                Console.WriteLine(plaintextBinary[i]);
+                count += asciiBinarySize;
+            }
+
+            int[] plaintextInts = new int[plaintextBinary.Length];
+
+            for (int i = 0; i < plaintextBinary.Length; i++)
+            {
+                plaintextInts[i] = Convert.ToInt32(plaintextBinary[i], 2);
+                //Console.WriteLine(i + " " + plaintextInts[i]);// + " mod 94 = " + ciphertextInts[i] % 94);
+                //Console.WriteLine((char)ciphertextInts[i] + "  " + (char)((ciphertextInts[i] % 94) + 33));
+                plaintext += (char)plaintextInts[i];
+            }
+
+            return plaintext;
         }
 
         
@@ -173,6 +230,64 @@ namespace Algorithms.Subclasses
                 randomBitstream[j] = streamArray[initialVector.Length - 1, j];
             }
             return randomBitstream;
+        }
+
+        private int[] BuildKeyArray(int intKey, int lengthOfKey)
+        {
+            //Random random = new Random(intKey);
+            //int countOf0 = 0;
+
+            //// the keyArray will be the initial vector for the LSFR to find random bits that will be used to encrypt the plaintext
+            //int[] keyArray = new int[lengthOfKey];
+
+            //for (int i = 0; i < keyArray.Length; i++)
+            //{
+
+            //    keyArray[i] = random.Next(0, 2);
+            //    //Console.WriteLine(keyArray[i]);
+            //    if (keyArray[i] == 0)
+            //    {
+            //        countOf0++;
+            //    }
+            //}
+
+            //if (countOf0 == lengthOfKey)
+            //{
+            //    // The key generated was all 0's and we need to regenerate the key
+            //    keyArray[0] = 1;
+            //    keyArray[keyArray.Length - 1] = 1;
+            //}
+
+            Random random = new Random(intKey);
+
+            // the keyArray will be the initial vector for the LSFR to find random bits that will be used to encrypt the plaintext
+            int[] keyArray = new int[lengthOfKey];
+            int countOf0 = lengthOfKey;
+
+            while(countOf0 == lengthOfKey)
+            {
+                countOf0 = 0;
+
+                for (int i = 0; i < keyArray.Length; i++)
+                {
+
+                    keyArray[i] = random.Next(0, 2);
+                    if (keyArray[i] == 0)
+                    {
+                        countOf0++;
+                    }
+                }
+
+                // If the seed (input by the user) gives a keyArray of all zero's the plaintext won't be encrypted;
+                // We'll just increase the key by 1 and the same will happen during decryption so the key's will still
+                // match.
+                if (countOf0 == lengthOfKey)
+                {
+                    random = new Random(intKey + 1);
+                }
+            }
+
+            return keyArray;
         }
     }
 }

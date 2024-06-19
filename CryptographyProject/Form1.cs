@@ -216,6 +216,21 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 6)
             {
                 // Synchronous Stream Cipher
+                StreamCipher streamCipher = new StreamCipher();
+
+                if (encryptRadioButton.Checked)
+                {
+                    outputText = streamCipher.Encrypt(inputText, key);
+
+                }
+                else if (decryptRadioButton.Checked)
+                {
+                    outputText = streamCipher.Decrypt(inputText, key);
+                }
+                else
+                {
+                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                }
             }
             else if (methodComboBox.SelectedIndex == 7)
             {
