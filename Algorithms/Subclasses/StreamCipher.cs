@@ -16,13 +16,16 @@ namespace Algorithms.Subclasses
         string filteredText;
         string[] binaryOfASCII;
         string[] ciphertextBinary;
+        int[] ciphertextInts;
         int[] randomBits;
         int[] arrayOfBinaryDigits;
         int[] encrypedBits;
         int[] keyArray;
         int intKey;
         int asciiBinarySize = 7;
+        int sixBits = 6;
         int lengthOfKey = 8;
+        int characterShift = 122 - 63;
 
         public string Encrypt(string plaintext, string key)
         {
@@ -65,31 +68,35 @@ namespace Algorithms.Subclasses
             {
                 // The randomBits are added periodically by index mod randomBits.Length
                 encrypedBits[i] = (arrayOfBinaryDigits[i] + randomBits[i % randomBits.Length]) % 2;
-                ciphertext += encrypedBits[i];
+                //ciphertext += encrypedBits[i];
             }
 
-            //ciphertextBinary = new string[(int)MathF.Ceiling(encrypedBits.Length / numberOfBitsInASCII)];
-            //int count = 0;
-            //for (int i = 0; i < ciphertextBinary.Length; i++)
-            //{
-            //    for (int j = 0 + count; j < numberOfBitsInASCII + count; j++)
-            //    {
-            //        ciphertextBinary[i] += encrypedBits[j];
-            //    }
-            //    Console.WriteLine(ciphertextBinary[i]);
-            //    count += numberOfBitsInASCII;
-            //}
 
-            //int[] ciphertextInts = new int[ciphertextBinary.Length];
-            //for (int i = 0; i < ciphertextBinary.Length; i++)
-            //{
-            //    ciphertextInts[i] = Convert.ToInt32(ciphertextBinary[i], 2);
-            //    ciphertext += (char)ciphertextInts[i];
-            //    //Console.WriteLine(i + " " + ciphertextInts[i]);// + " mod 94 = " + ciphertextInts[i] % 94);
-            //    //Console.WriteLine((char)ciphertextInts[i] + "  " + (char)((ciphertextInts[i] % 94) + 33));
-            //}
+            ciphertextBinary = new string[(int)MathF.Ceiling((float) encrypedBits.Length / sixBits)];
+            int count = 0;
+            for (int i = 0; i < ciphertextBinary.Length; i++)
+            {
+                for (int j = 0 + count; j < sixBits + count && j < encrypedBits.Length; j++)
+                {
+                    ciphertextBinary[i] += encrypedBits[j];
+                }
+                Console.WriteLine(ciphertextBinary[i]);
+                count += sixBits;
+            }
 
-            
+            ciphertextInts = new int[ciphertextBinary.Length];
+            for (int i = 0; i < ciphertextBinary.Length; i++)
+            {
+                ciphertextInts[i] = Convert.ToInt32(ciphertextBinary[i], 2);
+
+                // 122 is the highest ascii value for a letter and 63 is the decimal number for 111111 on binary, the largest 6 bit number.
+                // so the character values can range from 59 to 122
+                ciphertext += (char)(ciphertextInts[i]+ characterShift);
+                //Console.WriteLine(i + " " + ciphertextInts[i]);// + " mod 94 = " + ciphertextInts[i] % 94);
+                //Console.WriteLine((char)ciphertextInts[i] + "  " + (char)((ciphertextInts[i] % 94) + 33));
+            }
+
+
             return ciphertext;
         }
 
@@ -104,13 +111,23 @@ namespace Algorithms.Subclasses
 
             plaintext = String.Empty;
 
+            // The ciphertext has been encoded with 6 bits
+            ciphertextInts = new int[ciphertext.Length];
+            int index = 0;
+            foreach (char c in ciphertext)
+            {
+                ciphertextInts[index++] = (int) (c - characterShift);
+            }
+
+
+
             // Each element of binaryOfASCII is the ASCII byte of each character as a string
-            binaryOfASCII = Split(ciphertext, asciiBinarySize);
+            binaryOfASCII = ConvertIntsToBinary(ciphertextInts);
 
 
             // Build the key that will generate a stream of random bits
             // the keyArray will be the initial vector for the LSFR to find random bits that will be used to encrypt the plaintext
-            
+
             keyArray = BuildKeyArray(intKey, lengthOfKey);
 
             // These random bits will be used to encrypt the plaintext
@@ -119,7 +136,7 @@ namespace Algorithms.Subclasses
             // muiltipled by 7 since each element of binaryOfASCII is a byte which is 7 bits
             
             arrayOfBinaryDigits = new int[binaryOfASCII.Length * asciiBinarySize];
-            int index = 0;
+            index = 0;
             for (int i = 0; i < binaryOfASCII.Length; i++)
             {
                 foreach (char c in binaryOfASCII[i])
@@ -135,7 +152,7 @@ namespace Algorithms.Subclasses
             for (int i = 0; i < encrypedBits.Length; i++)
             {
                 // The randomBits are added periodically by index mod randomBits.Length
-                encrypedBits[i] = (arrayOfBinaryDigits[i] + randomBits[i % randomBits.Length]) % 2;
+                encrypedBits[i] = (arrayOfBinaryDigits[i] + randomBits[i % randomBits.Length] +1) % 2;
                 //plaintext += encrypedBits[i];
             }
 
@@ -158,13 +175,21 @@ namespace Algorithms.Subclasses
                 plaintextInts[i] = Convert.ToInt32(plaintextBinary[i], 2);
                 //Console.WriteLine(i + " " + plaintextInts[i]);// + " mod 94 = " + ciphertextInts[i] % 94);
                 //Console.WriteLine((char)ciphertextInts[i] + "  " + (char)((ciphertextInts[i] % 94) + 33));
-                plaintext += (char)plaintextInts[i];
+                plaintext += (char)(plaintextInts[i] + characterShift);
             }
 
             return plaintext;
         }
 
-        
+        private string[] ConvertIntsToBinary(int[] ciphertextInts)
+        {
+            string[] binaryOfASCIICharacters = new string[ciphertextInts.Length];
+            for (int i = 0; i < ciphertextInts.Length; i++)
+            {
+                binaryOfASCIICharacters[i] = Convert.ToString(ciphertextInts[i], 2);
+            }
+            return binaryOfASCIICharacters;
+        }
 
         public bool KeyIsCorrect(string key)
         {
@@ -186,6 +211,16 @@ namespace Algorithms.Subclasses
             for (int i = 0; i < input.Length; i++)
             {
                 binaryOfASCIICharacters[i] = Convert.ToString(input[i], 2);
+            }
+            return binaryOfASCIICharacters;
+        }
+
+        private string[] ConvertStringToSixBitBinary(string input)
+        {
+            string[] binaryOfASCIICharacters = new string[input.Length];
+            for (int i = 0; i < input.Length; i++)
+            {
+                binaryOfASCIICharacters[i] = (Convert.ToString(input[i], 2));
             }
             return binaryOfASCIICharacters;
         }
