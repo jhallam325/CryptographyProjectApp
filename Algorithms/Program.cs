@@ -92,20 +92,15 @@ namespace Algorithms
                 return;
             }
 
-            // build an array of ones
-            int[] ones = new int[intKey];
-            for (int i = 0; i < ones.Length; i++)
-            {
-                ones[i] = 1;
-            }
-
             // the intKey is the seed for the random numbers so it can be decrypted
             Random random = new Random(intKey);
-            int[] keyArray = new int[intKey];
+            int lengthOfKey = 8;
             int countOf0 = 0;
-            for (int i = 0;i < keyArray.Length; i++)
+            int[] keyArray = new int[lengthOfKey];
+
+            for (int i = 0; i < keyArray.Length; i++)
             {
-                
+
                 keyArray[i] = random.Next(0, 2);
                 Console.WriteLine(keyArray[i]);
                 if (keyArray[i] == 0)
@@ -113,41 +108,73 @@ namespace Algorithms
                     countOf0++;
                 }
             }
+            
 
             if (countOf0 == keyArray.Length)
             {
                 // The key generated was all 0's and we need to regenerate the key
+                //But how?
             }
 
             Console.WriteLine("=========================New Practice =============================");
             int[] init = { 0, 0, 1, 0 };
+            int randomBitStringLength = 1015;
 
-            int[,] streamArray = new int[init.Length, 12];
+            //int[,] streamArray = new int[init.Length, randomBitStringLength];
+            int[,] streamArray = new int[keyArray.Length, randomBitStringLength];
+
             int[] randomBitstream = new int[streamArray.GetLength(1)];
 
             for (int j = 0; j < streamArray.GetLength(1); j++)
             {
-                for (int i = 0; i < init.Length; i++)
+                //for (int i = 0; i < init.Length; i++)
+                //{
+                //    streamArray[i, j] = init[i];
+                //    Console.Write(streamArray[i, j] + ", ");
+                //}
+                //Console.WriteLine();
+                //int fallOffDigit = init[0];
+                //init[0] = (init[2] + init[3]) % 2;
+                //for (int i = init.Length - 1; i > 0; i--)
+                //{
+                //    if (i > 1)
+                //    {
+                //        init[i] = init[i - 1];
+                //    }
+                //    else
+                //    {
+                //        init[i] = fallOffDigit;
+                //    }
+
+                //}
+                //randomBitstream[j] = streamArray[init.Length - 1, j];
+
+
+
+                for (int i = 0; i < keyArray.Length; i++)
                 {
-                    streamArray[i, j] = init[i];
+                    streamArray[i, j] = keyArray[i];
                     Console.Write(streamArray[i, j] + ", ");
                 }
                 Console.WriteLine();
-                int fallOffDigit = init[0];
-                init[0] = (init[2] + init[3]) % 2;
-                for (int i = init.Length - 1; i > 0; i--)
+                int fallOffDigit = keyArray[0];
+                keyArray[0] = (keyArray[2] + keyArray[3] + keyArray[6] + keyArray[7]) % 2;
+                for (int i = keyArray.Length - 1; i > 0; i--)
                 {
                     if (i > 1)
                     {
-                        init[i] = init[i - 1];
+                        keyArray[i] = keyArray[i - 1];
                     }
                     else
                     {
-                        init[i] = fallOffDigit;
+                        keyArray[i] = fallOffDigit;
                     }
-                    
+
                 }
-                randomBitstream[j] = streamArray[init.Length - 1, j];
+                randomBitstream[j] = streamArray[keyArray.Length - 1, j];
+
+
+
             }
             // matched https://www.youtube.com/watch?v=Y0DlCM4iKeA&list=PLE6ty64ouo1M7Xz6Qj5bgXZOoEE0qilX6&index=25
 
@@ -155,8 +182,9 @@ namespace Algorithms
             {
                 Console.Write(randomBitstream[i] + ", ");
             }
-            
 
+            // Now I take the random bit stream and encode the plaintext
+            //string[] blocks = cipher.Split(binaryOfASCII, intKey);
 
             //// XOR operator
             //Console.WriteLine(true ^ true);    // output: False
