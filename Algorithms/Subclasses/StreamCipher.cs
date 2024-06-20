@@ -10,19 +10,30 @@ namespace Algorithms.Subclasses
 {
     public class StreamCipher : Cipher, ICipher
     {
+        List<int> listOfBinaryDigits;
         string plaintext;
         string ciphertext;
         string trimmedText;
         string filteredText;
         string[] binaryOfASCII;
+        string[] plaintextBinary;
         string[] ciphertextBinary;
+        int[] plaintextInts;
+        int[] ciphertextInts;
         int[] randomBits;
         int[] arrayOfBinaryDigits;
         int[] encrypedBits;
         int[] keyArray;
         int intKey;
         int asciiBinarySize = 7;
+        int sixBits = 6;
         int lengthOfKey = 8;
+
+        // ASCII ; to z are the available ciphertext characters, 59 to 122
+        // That gives 63 characters, which is the highest 6 bit number 111111
+        // Since ; is the smallest character at 59, every 6 bit number will have to add 
+        // 59 to it as we encrypt to a character.
+        int characterShift = 122 - 63; 
 
         public string Encrypt(string plaintext, string key)
         {
@@ -43,7 +54,7 @@ namespace Algorithms.Subclasses
             // the keyArray will be the initial vector for the LSFR to find random bits that will be used to encrypt the plaintext
             keyArray = BuildKeyArray(intKey, lengthOfKey);
 
-            // These random bits will be used to encrypt the plaintext
+            // These random bits will be used to encrypt the plaintext and decrypt the ciphertext
             randomBits = LinearFeedbackShiftRegister(keyArray);
 
             // muiltipled by 7 since each element of binaryOfASCII is 7 bits
@@ -65,35 +76,33 @@ namespace Algorithms.Subclasses
             {
                 // The randomBits are added periodically by index mod randomBits.Length
                 encrypedBits[i] = (arrayOfBinaryDigits[i] + randomBits[i % randomBits.Length]) % 2;
-                ciphertext += encrypedBits[i];
             }
 
-            //ciphertextBinary = new string[(int)MathF.Ceiling(encrypedBits.Length / numberOfBitsInASCII)];
-            //int count = 0;
-            //for (int i = 0; i < ciphertextBinary.Length; i++)
-            //{
-            //    for (int j = 0 + count; j < numberOfBitsInASCII + count; j++)
-            //    {
-            //        ciphertextBinary[i] += encrypedBits[j];
-            //    }
-            //    Console.WriteLine(ciphertextBinary[i]);
-            //    count += numberOfBitsInASCII;
-            //}
 
-            //int[] ciphertextInts = new int[ciphertextBinary.Length];
-            //for (int i = 0; i < ciphertextBinary.Length; i++)
-            //{
-            //    ciphertextInts[i] = Convert.ToInt32(ciphertextBinary[i], 2);
-            //    ciphertext += (char)ciphertextInts[i];
-            //    //Console.WriteLine(i + " " + ciphertextInts[i]);// + " mod 94 = " + ciphertextInts[i] % 94);
-            //    //Console.WriteLine((char)ciphertextInts[i] + "  " + (char)((ciphertextInts[i] % 94) + 33));
-            //}
+            ciphertextBinary = new string[(int)MathF.Ceiling((float) encrypedBits.Length / sixBits)];
+            int count = 0;
+            for (int i = 0; i < ciphertextBinary.Length; i++)
+            {
+                for (int j = 0 + count; j < sixBits + count && j < encrypedBits.Length; j++)
+                {
+                    ciphertextBinary[i] += encrypedBits[j];
+                }
+                Console.WriteLine(ciphertextBinary[i]);
+                count += sixBits;
+            }
 
-            
+            ciphertextInts = new int[ciphertextBinary.Length];
+            for (int i = 0; i < ciphertextBinary.Length; i++)
+            {
+                ciphertextInts[i] = Convert.ToInt32(ciphertextBinary[i], 2);
+
+                // 122 is the highest ascii value for a letter and 63 is the decimal number for 111111 on binary, the largest 6 bit number.
+                // so the character values can range from 59 to 122 -> which is 122-63, to have 63, 6 bit characters available.
+                ciphertext += (char)(ciphertextInts[i] + characterShift);
+            }
+
             return ciphertext;
         }
-
-
 
         public string Decrypt(string ciphertext, string key)
         {
@@ -104,42 +113,46 @@ namespace Algorithms.Subclasses
 
             plaintext = String.Empty;
 
-            // Each element of binaryOfASCII is the ASCII byte of each character as a string
-            binaryOfASCII = Split(ciphertext, asciiBinarySize);
+            // The ciphertext has been encoded with 6 bits
+            ciphertextInts = new int[ciphertext.Length];
+            int index = 0;
+            foreach (char c in ciphertext)
+            {
+                ciphertextInts[index++] = (int) (c - characterShift);
+            }
 
+            // Each element of binaryOfASCII is the ASCII byte of each character as a string
+            binaryOfASCII = ConvertIntsToBinary(ciphertextInts);
+
+            // This adds leading 0's to numbers so they have 6 characters. The last digit is the size where the whole
+            // string of bits will be divisible by 7
+            binaryOfASCII = BuildSixBitNumbers(binaryOfASCII);
 
             // Build the key that will generate a stream of random bits
             // the keyArray will be the initial vector for the LSFR to find random bits that will be used to encrypt the plaintext
-            
             keyArray = BuildKeyArray(intKey, lengthOfKey);
 
-            // These random bits will be used to encrypt the plaintext
+            // These random bits will be used to encrypt the plaintext and decrypt the ciphertext
             randomBits = LinearFeedbackShiftRegister(keyArray);
-
-            // muiltipled by 7 since each element of binaryOfASCII is a byte which is 7 bits
             
-            arrayOfBinaryDigits = new int[binaryOfASCII.Length * asciiBinarySize];
-            int index = 0;
+            listOfBinaryDigits = new List<int>();
             for (int i = 0; i < binaryOfASCII.Length; i++)
             {
                 foreach (char c in binaryOfASCII[i])
                 {
-                    arrayOfBinaryDigits[index] = c - 48;
-                    Console.Write(arrayOfBinaryDigits[index]);
-                    index++;
+                    listOfBinaryDigits.Add(c - 48);
                 }
             }
 
-            // We have the plaintext as binary, and we have the random bit stream. We now add them together to get the ciphertext
-            encrypedBits = new int[arrayOfBinaryDigits.Length];
+            // We have the ciphertext as binary, and we have the random bit stream. We now add them together to get the plaintext
+            encrypedBits = new int[listOfBinaryDigits.Count];
             for (int i = 0; i < encrypedBits.Length; i++)
             {
                 // The randomBits are added periodically by index mod randomBits.Length
-                encrypedBits[i] = (arrayOfBinaryDigits[i] + randomBits[i % randomBits.Length]) % 2;
-                //plaintext += encrypedBits[i];
+                encrypedBits[i] = (listOfBinaryDigits[i] + randomBits[i % randomBits.Length]) % 2;
             }
 
-            string[] plaintextBinary = new string[(int)MathF.Ceiling(encrypedBits.Length / asciiBinarySize)];
+            plaintextBinary = new string[(int)MathF.Ceiling(encrypedBits.Length / asciiBinarySize)];
             int count = 0;
             for (int i = 0; i < plaintextBinary.Length; i++)
             {
@@ -151,20 +164,16 @@ namespace Algorithms.Subclasses
                 count += asciiBinarySize;
             }
 
-            int[] plaintextInts = new int[plaintextBinary.Length];
+            plaintextInts = new int[plaintextBinary.Length];
 
             for (int i = 0; i < plaintextBinary.Length; i++)
             {
                 plaintextInts[i] = Convert.ToInt32(plaintextBinary[i], 2);
-                //Console.WriteLine(i + " " + plaintextInts[i]);// + " mod 94 = " + ciphertextInts[i] % 94);
-                //Console.WriteLine((char)ciphertextInts[i] + "  " + (char)((ciphertextInts[i] % 94) + 33));
-                plaintext += (char)plaintextInts[i];
+                plaintext += (char)(plaintextInts[i]);
             }
 
             return plaintext;
         }
-
-        
 
         public bool KeyIsCorrect(string key)
         {
@@ -175,7 +184,7 @@ namespace Algorithms.Subclasses
             }
             else
             {
-                Console.WriteLine("Invalid key");
+                // throw exception
                 return false;
             }
         }
@@ -213,7 +222,7 @@ namespace Algorithms.Subclasses
 
                 for (int i = initialVector.Length - 1; i > 0; i--)
                 {
-                    // assign position last to 2, just shifting each value
+                    // assign last position to 2nd position, just shifting each value
                     if (i > 1)
                     {
                         initialVector[i] = initialVector[i - 1];
@@ -234,30 +243,6 @@ namespace Algorithms.Subclasses
 
         private int[] BuildKeyArray(int intKey, int lengthOfKey)
         {
-            //Random random = new Random(intKey);
-            //int countOf0 = 0;
-
-            //// the keyArray will be the initial vector for the LSFR to find random bits that will be used to encrypt the plaintext
-            //int[] keyArray = new int[lengthOfKey];
-
-            //for (int i = 0; i < keyArray.Length; i++)
-            //{
-
-            //    keyArray[i] = random.Next(0, 2);
-            //    //Console.WriteLine(keyArray[i]);
-            //    if (keyArray[i] == 0)
-            //    {
-            //        countOf0++;
-            //    }
-            //}
-
-            //if (countOf0 == lengthOfKey)
-            //{
-            //    // The key generated was all 0's and we need to regenerate the key
-            //    keyArray[0] = 1;
-            //    keyArray[keyArray.Length - 1] = 1;
-            //}
-
             Random random = new Random(intKey);
 
             // the keyArray will be the initial vector for the LSFR to find random bits that will be used to encrypt the plaintext
@@ -288,6 +273,38 @@ namespace Algorithms.Subclasses
             }
 
             return keyArray;
+        }
+
+        private string[] BuildSixBitNumbers(string[] binaryOfASCII)
+        {
+            // Every number except the last one should be a full six digits long
+            // The last number needs to make the whole string of numbers divisible by 7
+            for (int i = 0; i < binaryOfASCII.Length - 1; i++)
+            {
+
+                while (binaryOfASCII[i].Length < 6)
+                {
+                    binaryOfASCII[i] = "0" + binaryOfASCII[i];
+                }
+            }
+
+            // 6 * number of 6 bit numbers + the length of the last number need to be divisible by 7
+            while ((binaryOfASCII[binaryOfASCII.Length - 1].Length + 6 * (binaryOfASCII.Length - 1)) % 7 != 0)
+            {
+                binaryOfASCII[binaryOfASCII.Length - 1] = "0" + binaryOfASCII[binaryOfASCII.Length - 1];
+            }
+
+            return binaryOfASCII;
+        }
+
+        private string[] ConvertIntsToBinary(int[] ciphertextInts)
+        {
+            string[] binaryOfASCIICharacters = new string[ciphertextInts.Length];
+            for (int i = 0; i < ciphertextInts.Length; i++)
+            {
+                binaryOfASCIICharacters[i] = Convert.ToString(ciphertextInts[i], 2);
+            }
+            return binaryOfASCIICharacters;
         }
     }
 }
