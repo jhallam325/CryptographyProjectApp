@@ -177,7 +177,7 @@
             // methodComboBox
             // 
             methodComboBox.FormattingEnabled = true;
-            methodComboBox.Items.AddRange(new object[] { "Shift Cipher", "Substitution Cipher", "Affine Cipher", "Vigenere Cipher", "Hill Cipher", "Permutation Cipher", "Synchronous Stream Cipher", "Periodic Stream Cipher", "Autokey Cipher" });
+            methodComboBox.Items.AddRange(new object[] { "Shift Cipher", "Substitution Cipher", "Affine Cipher", "Vigenere Cipher", "Hill Cipher", "Permutation Cipher", "Stream Cipher", "Autokey Cipher" });
             methodComboBox.Location = new Point(74, 82);
             methodComboBox.Name = "methodComboBox";
             methodComboBox.Size = new Size(645, 23);

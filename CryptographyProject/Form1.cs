@@ -215,7 +215,7 @@ namespace CryptographyProject
             }
             else if (methodComboBox.SelectedIndex == 6)
             {
-                // Synchronous Stream Cipher
+                // Stream Cipher
                 StreamCipher streamCipher = new StreamCipher();
 
                 if (encryptRadioButton.Checked)
@@ -233,10 +233,6 @@ namespace CryptographyProject
                 }
             }
             else if (methodComboBox.SelectedIndex == 7)
-            {
-                // Periodic Stream Cipher
-            }
-            else if (methodComboBox.SelectedIndex == 8)
             {
                 // Autokey Cipher
             }
@@ -324,20 +320,13 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 6)
             {
                 // Synchronous Stream Cipher
-                methodSelectLabel.Text = "Key Information: Synchronous Stream Cipher";
+                methodSelectLabel.Text = "Key Information: Enter a whole number";
             }
             else if (methodComboBox.SelectedIndex == 7)
             {
-                // Periodic Stream Cipher
-                methodSelectLabel.Text = "Key Information: Periodic Stream Cipher";
-            }
-            else if (methodComboBox.SelectedIndex == 8)
-            {
                 // Autokey Cipher
-                methodSelectLabel.Text = "Key Information: Autokey Cipher";
+                methodSelectLabel.Text = "Key Information: Enter a letter";
             }
-
-
         }
 
         private void outputFileBrowseButton_Click(object sender, EventArgs e)
