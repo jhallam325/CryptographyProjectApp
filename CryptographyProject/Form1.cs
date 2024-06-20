@@ -235,6 +235,21 @@ namespace CryptographyProject
             else if (methodComboBox.SelectedIndex == 7)
             {
                 // Autokey Cipher
+                AutokeyCipher autokeyCipher = new AutokeyCipher();
+
+                if (encryptRadioButton.Checked)
+                {
+                    outputText = autokeyCipher.Encrypt(inputText, key);
+
+                }
+                else if (decryptRadioButton.Checked)
+                {
+                    outputText = autokeyCipher.Decrypt(inputText, key);
+                }
+                else
+                {
+                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                }
             }
             else
             {

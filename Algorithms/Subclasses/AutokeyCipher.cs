@@ -25,6 +25,8 @@ namespace Algorithms.Subclasses
                 return "Key is invalid.";
             }
 
+            key = key.ToUpper();
+
             ciphertext = string.Empty;
             trimmedText = TrimText(plaintext);
             filteredText = FilterText(trimmedText);
@@ -38,14 +40,41 @@ namespace Algorithms.Subclasses
                 ciphertext += (char) ReturnASCIINumberToOriginal(encryptedNumber);
             }
 
-
             return ciphertext;
-
         }
 
         public string Decrypt(string ciphertext, string key)
         {
-            throw new NotImplementedException();
+            if (!KeyIsCorrect(key))
+            {
+                return "Key is invalid.";
+            }
+
+            key = key.ToUpper();
+
+            plaintext = string.Empty;
+            trimmedText = TrimText(ciphertext);
+            filteredText = FilterText(trimmedText);
+
+            asciiValues = GetASCIIValuesOfString(filteredText);
+
+            keyStream = new int[asciiValues.Length];
+            keyStream[0] = BringASCIINumberToZero(key[0]);
+
+            for (int i = 0; i < keyStream.Length; i++)
+            {
+                int decryptedNumber = (asciiValues[i] - keyStream[i]) % Globals.modulus;
+                plaintext += ReturnASCIINumberToOriginal(decryptedNumber);
+
+                // We use the plaintext character as the next character in the key stream
+                if (i < keyStream.Length - 1)
+                {
+                    keyStream[i + 1] = decryptedNumber;
+                }
+            }
+
+
+            return plaintext;
         }
 
         public bool KeyIsCorrect(string key)
@@ -78,7 +107,7 @@ namespace Algorithms.Subclasses
         private int[] BuildKeyStream(char key, int[] asciiValues)
         {
             int[] keyStream = new int[asciiValues.Length];
-            keyStream[0] = (int)(key[0] - 65);
+            keyStream[0] = BringASCIINumberToZero(key);
             for (int i = 1; i < keyStream.Length; i++)
             {
                 keyStream[i] = asciiValues[i - 1];
