@@ -37,7 +37,7 @@ namespace Algorithms.Subclasses
             for (int i = 0; i < keyStream.Length; i++)
             {
                 int encryptedNumber = (asciiValues[i] + keyStream[i]) % Globals.modulus;
-                ciphertext += (char) ReturnASCIINumberToOriginal(encryptedNumber);
+                ciphertext += ReturnASCIINumberToOriginal(encryptedNumber);
             }
 
             return ciphertext;
