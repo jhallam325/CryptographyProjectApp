@@ -360,7 +360,7 @@ namespace CryptographyProject
                 string outputDirectory = Path.GetDirectoryName(outputFileTextBox.Text);
                 string pathOrFile = outputFileTextBox.Text;
                 string fileName = Path.GetFileName(pathOrFile);
-
+                bool temp = File.Exists(pathOrFile);
                 // The path given is a full path and we can continue
                 if (Path.IsPathRooted(pathOrFile) && !Path.GetPathRoot(pathOrFile).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
                 {
@@ -389,10 +389,9 @@ namespace CryptographyProject
                         MessageBox.Show($"{outputFileTextBox.Text} saved correctly");
                     }
                 }
-
-                else if (!File.Exists(pathOrFile))
+                else if (File.Exists(pathOrFile))
                 {
-
+                    File.Create(pathOrFile);
                 }
 
                 if (false)
