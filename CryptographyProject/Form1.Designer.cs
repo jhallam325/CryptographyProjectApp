@@ -108,6 +108,7 @@
             inputFileTextBox.Name = "inputFileTextBox";
             inputFileTextBox.Size = new Size(566, 23);
             inputFileTextBox.TabIndex = 1;
+            inputFileTextBox.TextChanged += inputFileTextBox_TextChanged;
             // 
             // inputFileRadioButton
             // 
@@ -267,6 +268,7 @@
             outputFileTextBox.Name = "outputFileTextBox";
             outputFileTextBox.Size = new Size(566, 23);
             outputFileTextBox.TabIndex = 1;
+            outputFileTextBox.TextChanged += outputFileTextBox_TextChanged;
             // 
             // outputFileRadioButton
             // 

@@ -1,5 +1,6 @@
 using Algorithms.GlobalVariables;
 using Algorithms.Subclasses;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -144,6 +145,13 @@ namespace CryptographyProject
             }
             else if (inputFileRadioButton.Checked)
             {
+                string extension = Path.GetExtension(inputTextBox.Text);
+                if (extension != ".txt")
+                {
+                    MessageBox.Show("You can only read from a .txt file");
+                    return;
+                }
+
                 // Open The file to read
                 StreamReader reader = null;
 
@@ -355,15 +363,34 @@ namespace CryptographyProject
             }
             else if (outputFileRadioButton.Checked)
             {
-
+                string path = inputFileTextBox.Text;
+                string inputPathWithoutFile = $"dirPath {path.Substring(0, path.Length - Path.GetFileName(path).Length)}";
                 string inputDirectory = Path.GetDirectoryName(inputFileTextBox.Text);
                 string outputDirectory = Path.GetDirectoryName(outputFileTextBox.Text);
+
                 string pathOrFile = outputFileTextBox.Text;
                 string fileName = Path.GetFileName(pathOrFile);
+                string extension = Path.GetExtension(pathOrFile);
+
                 bool temp = File.Exists(pathOrFile);
+
+
+                // First, make sure it's a text file.
+                if (extension != ".txt")
+                {
+                    MessageBox.Show("You can only save to a .txt file");
+                    return;
+                }
+
+
                 // The path given is a full path and we can continue
                 if (Path.IsPathRooted(pathOrFile) && !Path.GetPathRoot(pathOrFile).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
                 {
+                    if(!File.Exists(pathOrFile))
+                    {
+                        // We can create the file because we have the full path.
+                        File.Create(pathOrFile);
+                    }
                     // We can override the file
                     // Open The file to read
                     StreamWriter writer = null;
@@ -372,7 +399,7 @@ namespace CryptographyProject
                     {
                         // The top line is for debugging practice
                         //writer = new StreamWriter(Globals.CipherTextFullPath);
-                        writer = new StreamWriter(outputFileTextBox.Text);
+                        writer = new StreamWriter(pathOrFile);
 
                         // This line is what will really be in the app.
                         // Can I get open or create permission to create a new file if a new file is input?
@@ -389,9 +416,10 @@ namespace CryptographyProject
                         MessageBox.Show($"{outputFileTextBox.Text} saved correctly");
                     }
                 }
-                else if (File.Exists(pathOrFile))
+                else if (!File.Exists(pathOrFile))
                 {
-                    File.Create(pathOrFile);
+                    outputTextBox.Text = Path.GetPathRoot(pathOrFile);
+                    outputTextBox.Text += "\nFile Doesn't Exist and we are in the else if";
                 }
 
                 if (false)
@@ -409,6 +437,9 @@ namespace CryptographyProject
                 }
                 else
                 {
+                    outputTextBox.Text = Path.GetPathRoot(path);
+                    outputTextBox.Text += $"dirPath {path.Substring(0, path.Length - Path.GetFileName(path).Length)}";
+                    outputTextBox.Text += "\nFile Doesn't Exist";
                     outputFileTextBox.Text = $"{inputDirectory} adds {fileName}";
                 }
 
@@ -445,6 +476,16 @@ namespace CryptographyProject
                 MessageBox.Show("Hey, you need to choose an output method!");
             }
 
+        }
+
+        private void inputFileTextBox_TextChanged(object sender, EventArgs e)
+        {
+            inputFileRadioButton.Checked = true;
+        }
+
+        private void outputFileTextBox_TextChanged(object sender, EventArgs e)
+        {
+            outputFileRadioButton.Checked = true;
         }
     }
 }
