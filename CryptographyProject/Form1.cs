@@ -1,5 +1,6 @@
 using Algorithms.GlobalVariables;
 using Algorithms.Subclasses;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -30,11 +31,12 @@ namespace CryptographyProject
             */
             inputFileRadioButton.Checked = true;
             int size = -1;
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text|*.txt|All|*.*";
+            DialogResult result = openFileDialog.ShowDialog(); // Show the dialog.
             if (result == DialogResult.OK) // Test result.
             {
-                plaintextFullPath = openFileDialog1.FileName;
+                plaintextFullPath = openFileDialog.FileName;
                 try
                 {
                     string text = File.ReadAllText(plaintextFullPath);
@@ -53,11 +55,12 @@ namespace CryptographyProject
         {
             outputFileRadioButton.Checked = true;
             int size = -1;
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text|*.txt|All|*.*";
+            DialogResult result = openFileDialog.ShowDialog(); // Show the dialog.
             if (result == DialogResult.OK) // Test result.
             {
-                ciphertextFullPath = openFileDialog1.FileName;
+                ciphertextFullPath = openFileDialog.FileName;
                 try
                 {
                     string text = File.ReadAllText(ciphertextFullPath);
@@ -129,8 +132,11 @@ namespace CryptographyProject
 
         private void runButton_Click(object sender, EventArgs e)
         {
-            //**********************************************************************************************
-            // Find input method whether file or text
+            /*********************************************************************************************
+            *                                                                                            * 
+            *                           Find input method whether file or text                           *
+            *                                                                                            *
+            *********************************************************************************************/
             string inputText = string.Empty;
             string outputText = string.Empty;
             string key = keyTextBox.Text;
@@ -141,6 +147,12 @@ namespace CryptographyProject
             }
             else if (inputFileRadioButton.Checked)
             {
+                string extension = Path.GetExtension(inputFileTextBox.Text);
+                if (extension != ".txt")
+                {
+                    MessageBox.Show("You can only read from a .txt file");
+                    return;
+                }
 
                 // Open The file to read
                 StreamReader reader = null;
@@ -168,10 +180,14 @@ namespace CryptographyProject
             else
             {
                 MessageBox.Show("Hey, you need to choose an input method!");
+                return;
             }
 
-            //******************************************************************************
-            // Find encryption algorithm to use
+            /*********************************************************************************************
+            *                                                                                            * 
+            *                           Find encryption algorithm to use                                 *
+            *                                                                                            *
+            *********************************************************************************************/
             if (methodComboBox.SelectedIndex == 0)
             {
                 // Shift Cipher
@@ -335,47 +351,96 @@ namespace CryptographyProject
             else
             {
                 MessageBox.Show("Don't forget to choose an encryption/decryption algorithm!");
+                return;
             }
 
-            //**************************************************************************************************************
-            // Output the text to the screen or file
+            /*********************************************************************************************
+            *                                                                                            * 
+            *                           Output text to the screen or a file                              *
+            *                                                                                            *
+            *********************************************************************************************/
             if (outputTextRadioButton.Checked)
             {
                 outputTextBox.Text = outputText;
             }
-            else if (inputFileRadioButton.Checked)
+            else if (outputFileRadioButton.Checked)
             {
+                string inputPath = inputFileTextBox.Text;
+                string inputPathWithoutFile = inputPath.Substring(0, inputPath.Length - Path.GetFileName(inputPath).Length);
+                string pathOrFile = outputFileTextBox.Text;
+                string extension = Path.GetExtension(pathOrFile);
 
-                // Open The file to read
+                // So you can be lazy and type the file name you know or want, without the .txt
+                if (extension == string.Empty)
+                {
+                    pathOrFile += ".txt";
+                }
+
+                extension = Path.GetExtension(pathOrFile);
+                string fileName = Path.GetFileName(pathOrFile);
+                string outputFullPath = inputPathWithoutFile + fileName;
                 StreamWriter writer = null;
 
-                try
+                // First, make sure it's a text file.
+                if (extension != ".txt")
                 {
-                    // The top line is for debugging practice
-                    //writer = new StreamWriter(Globals.CipherTextFullPath);
-                    writer = new StreamWriter(outputFileTextBox.Text);
-
-                    // This line is what will really be in the app.
-                    // Can I get open or create permission to create a new file if a new file is input?
-                    //writer = new StreamReader(ciphertextFullPath);
-                    writer.WriteLine(outputText);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-                finally
-                {
-                    writer.Close();
-                    MessageBox.Show($"{outputFileTextBox.Text} saved correctly");
+                    MessageBox.Show("You can only save to a .txt file");
+                    return;
                 }
 
+                // The path given is a full path and we can continue
+                if (Path.IsPathRooted(pathOrFile) && !Path.GetPathRoot(pathOrFile).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
+                {
+                    if(!File.Exists(pathOrFile))
+                    {
+                        // Create the file because we have the full path.
+                        using (File.Create(pathOrFile))
+                        {
+
+                        }
+                    }
+
+                    // Write to the file
+                    using(writer = new StreamWriter(pathOrFile))
+                    {
+                        writer.WriteLine(outputText);
+                    }
+                }
+                else if (!File.Exists(outputFullPath))
+                {
+                    using (File.Create(outputFullPath))
+                    {
+                        
+                    }
+                    using (writer = new StreamWriter(outputFullPath))
+                    {
+                        writer.WriteLine(outputText);
+                    }
+                }
+                else
+                {
+                    using (writer = new StreamWriter(outputFullPath))
+                    {
+                        writer.WriteLine(outputText);
+                    }
+                }
+                MessageBox.Show($"Your file {outputFullPath} was successfully saved.");
             }
             else
             {
                 MessageBox.Show("Hey, you need to choose an output method!");
             }
 
+        }
+
+        private void inputFileTextBox_TextChanged(object sender, EventArgs e)
+        {
+            inputFileRadioButton.Checked = true;
+        }
+
+        private void outputFileTextBox_TextChanged(object sender, EventArgs e)
+        {
+            outputFileRadioButton.Checked = true;
         }
     }
 }
