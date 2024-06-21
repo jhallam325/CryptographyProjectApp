@@ -457,6 +457,9 @@ namespace CryptographyProject
             }
         }
 
+
+
+        // This came from stackoverflow https://stackoverflow.com/questions/3730968/how-to-disable-cursor-in-textbox
         [DllImport("user32.dll")]
         static extern bool HideCaret(IntPtr hWnd);
 
