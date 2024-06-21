@@ -23,7 +23,9 @@ namespace Algorithms.Subclasses
         {
             if (!KeyIsCorrect(key))
             {
-                throw new IncorrectKeyException("The key is invalid. Please choose a whole number as your key.");
+                throw new IncorrectKeyException("The key is invalid.\n" +
+                    "Please choose a whole number as your key.\n" +
+                    "Example: 10");
                 //return "The key is invalid. Please choose a whole number as your key.";
             }
 
@@ -44,9 +46,11 @@ namespace Algorithms.Subclasses
 
         public string Decrypt(string ciphertext, string key)
         {
-            if (KeyIsCorrect(key))
+            if (!KeyIsCorrect(key))
             {
-                return "The key is invalid. Please choose a whole number as your key.";
+                throw new IncorrectKeyException("The key is invalid.\n" +
+                    "Please choose a whole number as your key.\n" +
+                    "Example: 10");
             }
 
             trimmedText = TrimText(ciphertext);

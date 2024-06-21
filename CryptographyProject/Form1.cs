@@ -10,6 +10,8 @@ namespace CryptographyProject
     {
         string plaintextFullPath = string.Empty;
         string ciphertextFullPath = string.Empty;
+        // Add a modulus variable than can be changed from 26 to 127-special characters
+        // That would require a huge rewrite in the stream cipher. maybe others?
         public Form1()
         {
             InitializeComponent();
@@ -404,16 +406,18 @@ namespace CryptographyProject
                 else if (methodComboBox.SelectedIndex == 6)
                 {
                     // Stream Cipher
-                    StreamCipher streamCipher = new StreamCipher();
+                    methodSelectLabel.Text = "Key Information: Enter a whole number\n" +
+                        "Try using 18";
 
-                    
+
                 }
                 else if (methodComboBox.SelectedIndex == 7)
                 {
                     // Autokey Cipher
-                    AutokeyCipher autokeyCipher = new AutokeyCipher();
+                    methodSelectLabel.Text = "Key Information: Enter a letter\n" +
+                        "Try using C";
 
-                    
+
                 }
                 return;
             }

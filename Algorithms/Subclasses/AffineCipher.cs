@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Algorithms.GlobalVariables;
 using Algorithms.Interfaces;
 using Algorithms.MainClasses;
+using Algorithms.Exceptions;
 
 namespace Algorithms.Subclasses
 {
@@ -25,10 +26,19 @@ namespace Algorithms.Subclasses
             // Here I need to split key = 3,10 into a = 3 and b = 10
             keys = key.Split(',', 2);
 
+            if(keys.Length != 2 )
+            {
+                throw new IncorrectKeyException("The key is invalid\n" +
+                    "You must have two whole number keys seperated by a comma\n" +
+                    "Example: 3,10");
+            }
+
+
+
             // Check the GCD of teh two numbers in the key
             if (KeyIsCorrect(keys[0]) && int.TryParse(keys[1], out secondKey))
             {
-                // This ensures the second key is between 0-Global.modulus
+                // This ensures the second key is between 0-Globals.modulus
                 secondKey = secondKey % Globals.modulus;
 
                 // This takes out all of the spaces in the plaintext.
@@ -45,10 +55,9 @@ namespace Algorithms.Subclasses
             }
             else
             {
-               return $"Invalid key. GCD of 1st key and {Globals.modulus} must be 1.\n" +
-                        "Allowed keys are: 1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, & 25\n" +
+               throw new IncorrectKeyException($"Invalid key.\n" +
                         "The second key must be a number between 0 and 25\n" +
-                        "Please enter the keys with only a comma between them: 3,10";
+                        "Please enter the keys with only a comma between them: 3,10");
             }
         }
 
@@ -56,6 +65,13 @@ namespace Algorithms.Subclasses
         {
             // Here I need to split key = 3,10 into a = 3 and b = 10
             keys = key.Split(',', 2);
+
+            if (keys.Length != 2)
+            {
+                throw new IncorrectKeyException("The key is invalid\n" +
+                    "You must have two whole number keys seperated by a comma\n" +
+                    "Example: 3,10");
+            }
 
             // Check the GCD of the two numbers in the key
             if (KeyIsCorrect(keys[0]) && int.TryParse(keys[1], out secondKey))
@@ -77,10 +93,9 @@ namespace Algorithms.Subclasses
             }
             else
             {
-                return $"Invalid key. GCD of 1st key and {Globals.modulus} must be 1.\n" +
-                         "Allowed keys are: 1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, & 25\n" +
-                         "The second key must be a number between 0 and 25\n" +
-                         "Please enter the keys with only a comma between them: 3,10";
+                throw new IncorrectKeyException($"Invalid key.\n" +
+                        "The second key must be a number between 0 and 25\n" +
+                        "Please enter the keys with only a comma between them: 3,10");
             }
         }
 
@@ -129,16 +144,16 @@ namespace Algorithms.Subclasses
                 }
                 else
                 {
-                    Console.WriteLine($"Invalid key. GCD of key and {Globals.modulus} must be 1.\n" +
-                        $"Allowed keys are: 1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, & 25");
-                    return false;
+                    throw new IncorrectKeyException($"The key is invalid.\n" +
+                        $"GCD of the 1st key and {Globals.modulus} must be 1.\n" +
+                        $"Allowed 1st keys are: 1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, & 25");
                 }
                 
             }
             else
             {
-                Console.WriteLine("Invalid key.");
-                return false;
+                throw new IncorrectKeyException($"The key is invalid\n" +
+                        "Please enter whole number keys with only a comma between them: 3,10");
             }
         }
     }
