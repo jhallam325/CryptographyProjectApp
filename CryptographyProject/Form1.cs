@@ -162,11 +162,7 @@ namespace CryptographyProject
                 {
                     // The top line is for debugging practice
                     //reader = new StreamReader(Globals.PlainTextFullPath);
-                    reader = new StreamReader(inputFileTextBox.Text);
-
-                    // This line is what will really be in the app.
-                    //reader = new StreamReader(plaintextFullPath);
-                    inputText = reader.ReadToEnd();
+                   
                 }
                 catch (Exception ex)
                 {
@@ -189,169 +185,236 @@ namespace CryptographyProject
             *                           Find encryption algorithm to use                                 *
             *                                                                                            *
             *********************************************************************************************/
-            if (methodComboBox.SelectedIndex == 0)
+            try
             {
-                // Shift Cipher
-
-                // Can this be a generic method that does this for each cipher?
-                // Maybe I could put a requirement that it must implement ICipher?
-                ShiftCipher shiftCipher = new ShiftCipher();
-
-                if (encryptRadioButton.Checked)
+                if (methodComboBox.SelectedIndex == 0)
                 {
-                    // run Encrypt method
-                    outputText = shiftCipher.Encrypt(inputText, key);
+                    // Shift Cipher
+
+                    // Can this be a generic method that does this for each cipher?
+                    // Maybe I could put a requirement that it must implement ICipher?
+                    ShiftCipher shiftCipher = new ShiftCipher();
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        // run Encrypt method
+                        outputText = shiftCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        // run Decrypt method
+                        outputText = shiftCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
+                }
+                else if (methodComboBox.SelectedIndex == 1)
+                {
+                    // Substitution Cipher
+
+                    SubstitutionCipher substitutionCipher = new SubstitutionCipher();
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = substitutionCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = substitutionCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
+                }
+                else if (methodComboBox.SelectedIndex == 2)
+                {
+                    // Affine Cipher
+                    AffineCipher affineCipher = new AffineCipher();
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = affineCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = affineCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
+                }
+                else if (methodComboBox.SelectedIndex == 3)
+                {
+                    // Vigenere Cipher
+                    VigenereCipher vigenereCipher = new VigenereCipher();
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = vigenereCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = vigenereCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
+                }
+                else if (methodComboBox.SelectedIndex == 4)
+                {
+                    // Hill Cipher
+                    HillCipher hillCipher = new HillCipher();
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = hillCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = hillCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
+                }
+                else if (methodComboBox.SelectedIndex == 5)
+                {
+                    // Permutation Cipher
+                    PermutationCipher permutationCipher = new PermutationCipher();
+
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = permutationCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = permutationCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
 
                 }
-                else if (decryptRadioButton.Checked)
+                else if (methodComboBox.SelectedIndex == 6)
                 {
-                    // run Decrypt method
-                    outputText = shiftCipher.Decrypt(inputText, key);
+                    // Stream Cipher
+                    StreamCipher streamCipher = new StreamCipher();
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = streamCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = streamCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
+                }
+                else if (methodComboBox.SelectedIndex == 7)
+                {
+                    // Autokey Cipher
+                    AutokeyCipher autokeyCipher = new AutokeyCipher();
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = autokeyCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = autokeyCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    MessageBox.Show("Don't forget to choose an encryption/decryption algorithm!");
+                    return;
                 }
             }
-            else if (methodComboBox.SelectedIndex == 1)
+            catch (Exception ex)
             {
-                // Substitution Cipher
-
-                SubstitutionCipher substitutionCipher = new SubstitutionCipher();
-
-                if (encryptRadioButton.Checked)
+                MessageBox.Show(ex.Message);
+                if (methodComboBox.SelectedIndex == 0)
                 {
-                    outputText = substitutionCipher.Encrypt(inputText, key);
-
-                }
-                else if (decryptRadioButton.Checked)
-                {
-                    outputText = substitutionCipher.Decrypt(inputText, key);
-                }
-                else
-                {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
-            }
-            else if (methodComboBox.SelectedIndex == 2)
-            {
-                // Affine Cipher
-                AffineCipher affineCipher = new AffineCipher();
-
-                if (encryptRadioButton.Checked)
-                {
-                    outputText = affineCipher.Encrypt(inputText, key);
+                    // Shift Cipher
+                    methodSelectLabel.Text = "Key Information: Choose an integer, usually between 0 and 25\n" +
+                        "Try using 3";
 
                 }
-                else if (decryptRadioButton.Checked)
+                else if (methodComboBox.SelectedIndex == 1)
                 {
-                    outputText = affineCipher.Decrypt(inputText, key);
+                    // Substitution Cipher
+                    methodSelectLabel.Text = "Key Information: Choose each letter in the alphabet, only once, and A will be substituted with the\n" +
+                    "first letter, B with the second letter, ...\n" +
+                    "Try using: QWERTYUIOPASDFGHJKLZXCVBNM";
                 }
-                else
+                else if (methodComboBox.SelectedIndex == 2)
                 {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
-            }
-            else if (methodComboBox.SelectedIndex == 3)
-            {
-                // Vigenere Cipher
-                VigenereCipher vigenereCipher = new VigenereCipher();
-
-                if (encryptRadioButton.Checked)
-                {
-                    outputText = vigenereCipher.Encrypt(inputText, key);
-
-                }
-                else if (decryptRadioButton.Checked)
-                {
-                    outputText = vigenereCipher.Decrypt(inputText, key);
-                }
-                else
-                {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
-            }
-            else if (methodComboBox.SelectedIndex == 4)
-            {
-                // Hill Cipher
-                HillCipher hillCipher = new HillCipher();
-
-                if (encryptRadioButton.Checked)
-                {
-                    outputText = hillCipher.Encrypt(inputText, key);
-
-                }
-                else if (decryptRadioButton.Checked)
-                {
-                    outputText = hillCipher.Decrypt(inputText, key);
-                }
-                else
-                {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
-            }
-            else if (methodComboBox.SelectedIndex == 5)
-            {
-                // Permutation Cipher
-                PermutationCipher permutationCipher = new PermutationCipher();
+                    // Affine Cipher
+                    methodSelectLabel.Text = $"Key Information: Choose 2 integers \"a\" and \"b\" such that GCD(a, {Globals.modulus}) = 1 and a and b are between 0-25 inclusive.\n" +
+                   "\t\tEnter the numbers as a,b like 2,8\n" +
+                   "Try using 3,10";
 
 
-                if (encryptRadioButton.Checked)
+                }
+                else if (methodComboBox.SelectedIndex == 3)
                 {
-                    outputText = permutationCipher.Encrypt(inputText, key);
+                    // Vigenere Cipher
+                    methodSelectLabel.Text = "Key Information: Choose an string of letters, possibly a word\n" +
+                        "Try using WORD";
+                }
+                else if (methodComboBox.SelectedIndex == 4)
+                {
+                    // Hill Cipher
+                    methodSelectLabel.Text = "Key Information: Enter a square Matrix in the form: 1,2,3;4,5,6;7,8,9 where individual " +
+                "elements are seperated by commas and rows \n" +
+                "are seperated by semi-colons\n" +
+                "Finding an invertible matrix is tough.\n" +
+                "Try using 11,8;3,7";
+                }
+                else if (methodComboBox.SelectedIndex == 5)
+                {
+                    // Permutation Cipher
+                    methodSelectLabel.Text = "Key Information: Enter a list of numbers, seperated by a comma. If you chose 5 numbers, they need to be the numbers 1-5 but \n" +
+                    "rearranged however you like. ex: 3,2,5,4,1\n" +
+                    "Try using 3,2,5,4,1";
+                }
+                else if (methodComboBox.SelectedIndex == 6)
+                {
+                    // Stream Cipher
+                    StreamCipher streamCipher = new StreamCipher();
 
+                    
                 }
-                else if (decryptRadioButton.Checked)
+                else if (methodComboBox.SelectedIndex == 7)
                 {
-                    outputText = permutationCipher.Decrypt(inputText, key);
-                }
-                else
-                {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
+                    // Autokey Cipher
+                    AutokeyCipher autokeyCipher = new AutokeyCipher();
 
-            }
-            else if (methodComboBox.SelectedIndex == 6)
-            {
-                // Stream Cipher
-                StreamCipher streamCipher = new StreamCipher();
-
-                if (encryptRadioButton.Checked)
-                {
-                    outputText = streamCipher.Encrypt(inputText, key);
-
+                    
                 }
-                else if (decryptRadioButton.Checked)
-                {
-                    outputText = streamCipher.Decrypt(inputText, key);
-                }
-                else
-                {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
-            }
-            else if (methodComboBox.SelectedIndex == 7)
-            {
-                // Autokey Cipher
-                AutokeyCipher autokeyCipher = new AutokeyCipher();
-
-                if (encryptRadioButton.Checked)
-                {
-                    outputText = autokeyCipher.Encrypt(inputText, key);
-
-                }
-                else if (decryptRadioButton.Checked)
-                {
-                    outputText = autokeyCipher.Decrypt(inputText, key);
-                }
-                else
-                {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Don't forget to choose an encryption/decryption algorithm!");
                 return;
             }
 

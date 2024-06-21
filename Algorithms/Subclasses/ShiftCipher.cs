@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Algorithms.Exceptions;
 using Algorithms.GlobalVariables;
 using Algorithms.Interfaces;
 using Algorithms.MainClasses;
+using Algorithms.Exceptions;
 
 namespace Algorithms.Subclasses
 {
@@ -21,7 +23,8 @@ namespace Algorithms.Subclasses
         {
             if (!KeyIsCorrect(key))
             {
-                return "The key is invalid. Please choose a whole number as your key.";
+                throw new IncorrectKeyException("The key is invalid. Please choose a whole number as your key.");
+                //return "The key is invalid. Please choose a whole number as your key.";
             }
 
             // This takes out all of the spaces in the plaintext.
