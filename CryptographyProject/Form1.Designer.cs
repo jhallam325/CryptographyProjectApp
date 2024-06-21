@@ -157,6 +157,7 @@
             keyCheckBox.TabIndex = 3;
             keyCheckBox.Text = "Hide Characters";
             keyCheckBox.UseVisualStyleBackColor = true;
+            keyCheckBox.CheckedChanged += keyCheckBox_CheckedChanged;
             // 
             // keyTextBox
             // 
@@ -165,6 +166,7 @@
             keyTextBox.Name = "keyTextBox";
             keyTextBox.Size = new Size(645, 23);
             keyTextBox.TabIndex = 5;
+            keyTextBox.TextChanged += keyTextBox_TextChanged;
             // 
             // keyLabel
             // 

@@ -13,6 +13,7 @@ namespace CryptographyProject
         public Form1()
         {
             InitializeComponent();
+            keyCheckBox.Checked = true;
         }
 
         private void inputFileBrowseButton_Click(object sender, EventArgs e)
@@ -391,7 +392,7 @@ namespace CryptographyProject
                 // The path given is a full path and we can continue
                 if (Path.IsPathRooted(pathOrFile) && !Path.GetPathRoot(pathOrFile).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
                 {
-                    if(!File.Exists(pathOrFile))
+                    if (!File.Exists(pathOrFile))
                     {
                         // Create the file because we have the full path.
                         using (File.Create(pathOrFile))
@@ -401,7 +402,7 @@ namespace CryptographyProject
                     }
 
                     // Write to the file
-                    using(writer = new StreamWriter(pathOrFile))
+                    using (writer = new StreamWriter(pathOrFile))
                     {
                         writer.WriteLine(outputText);
                     }
@@ -410,7 +411,7 @@ namespace CryptographyProject
                 {
                     using (File.Create(outputFullPath))
                     {
-                        
+
                     }
                     using (writer = new StreamWriter(outputFullPath))
                     {
@@ -441,6 +442,33 @@ namespace CryptographyProject
         private void outputFileTextBox_TextChanged(object sender, EventArgs e)
         {
             outputFileRadioButton.Checked = true;
+        }
+
+        private void keyCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (keyCheckBox.Checked)
+            {
+                keyTextBox.PasswordChar = ' ';
+            }
+
+            if (!keyCheckBox.Checked)
+            {
+                keyTextBox.PasswordChar = '\0';
+            }
+        }
+
+
+
+        // This came from stackoverflow https://stackoverflow.com/questions/3730968/how-to-disable-cursor-in-textbox
+        [DllImport("user32.dll")]
+        static extern bool HideCaret(IntPtr hWnd);
+
+        private void keyTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (keyCheckBox.Checked)
+            {
+                HideCaret(keyTextBox.Handle);
+            }
         }
     }
 }
