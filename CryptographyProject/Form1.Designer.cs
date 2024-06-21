@@ -63,9 +63,9 @@
             inputGroupBox.Controls.Add(inputFileBrowseButton);
             inputGroupBox.Controls.Add(inputFileTextBox);
             inputGroupBox.Controls.Add(inputFileRadioButton);
-            inputGroupBox.Location = new Point(12, 12);
+            inputGroupBox.Location = new Point(12, 8);
             inputGroupBox.Name = "inputGroupBox";
-            inputGroupBox.Size = new Size(731, 203);
+            inputGroupBox.Size = new Size(731, 172);
             inputGroupBox.TabIndex = 1;
             inputGroupBox.TabStop = false;
             inputGroupBox.Text = "Input";
@@ -76,7 +76,8 @@
             inputTextBox.Location = new Point(6, 75);
             inputTextBox.Multiline = true;
             inputTextBox.Name = "inputTextBox";
-            inputTextBox.Size = new Size(719, 107);
+            inputTextBox.ScrollBars = ScrollBars.Vertical;
+            inputTextBox.Size = new Size(719, 82);
             inputTextBox.TabIndex = 4;
             inputTextBox.TextChanged += inputTextBox_TextChanged;
             // 
@@ -132,7 +133,7 @@
             selectorGroupBox.Controls.Add(methodLabel);
             selectorGroupBox.Controls.Add(decryptRadioButton);
             selectorGroupBox.Controls.Add(encryptRadioButton);
-            selectorGroupBox.Location = new Point(12, 222);
+            selectorGroupBox.Location = new Point(12, 186);
             selectorGroupBox.Name = "selectorGroupBox";
             selectorGroupBox.Size = new Size(731, 232);
             selectorGroupBox.TabIndex = 2;
@@ -226,9 +227,9 @@
             outputGroupBox.Controls.Add(outputFileBrowseButton);
             outputGroupBox.Controls.Add(outputFileTextBox);
             outputGroupBox.Controls.Add(outputFileRadioButton);
-            outputGroupBox.Location = new Point(12, 460);
+            outputGroupBox.Location = new Point(12, 427);
             outputGroupBox.Name = "outputGroupBox";
-            outputGroupBox.Size = new Size(731, 203);
+            outputGroupBox.Size = new Size(731, 166);
             outputGroupBox.TabIndex = 3;
             outputGroupBox.TabStop = false;
             outputGroupBox.Text = "Output";
@@ -239,7 +240,8 @@
             outputTextBox.Location = new Point(6, 75);
             outputTextBox.Multiline = true;
             outputTextBox.Name = "outputTextBox";
-            outputTextBox.Size = new Size(713, 107);
+            outputTextBox.ScrollBars = ScrollBars.Vertical;
+            outputTextBox.Size = new Size(713, 76);
             outputTextBox.TabIndex = 4;
             // 
             // outputTextRadioButton
@@ -286,7 +288,7 @@
             // runButton
             // 
             runButton.Anchor = AnchorStyles.None;
-            runButton.Location = new Point(347, 669);
+            runButton.Location = new Point(340, 599);
             runButton.Name = "runButton";
             runButton.Size = new Size(75, 23);
             runButton.TabIndex = 4;
@@ -299,13 +301,13 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(760, 701);
+            ClientSize = new Size(760, 646);
             Controls.Add(runButton);
             Controls.Add(outputGroupBox);
             Controls.Add(selectorGroupBox);
             Controls.Add(inputGroupBox);
             Name = "Form1";
-            Text = "Cryptography Project";
+            Text = "CryptoMessage";
             inputGroupBox.ResumeLayout(false);
             inputGroupBox.PerformLayout();
             selectorGroupBox.ResumeLayout(false);
