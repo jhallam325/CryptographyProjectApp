@@ -1,6 +1,7 @@
 ﻿using Algorithms.GlobalVariables;
 using Algorithms.Interfaces;
 using Algorithms.MainClasses;
+using Algorithms.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +18,18 @@ namespace Algorithms.Subclasses
         string ciphertext;
         string trimmedText;
         string filteredText;
+        string newText;
+        char charPlaceHolder;
+        int intPlaceHolder;
+        int count;
 
         public string Encrypt(string plaintext, string key)
         {
             if (!KeyIsCorrect(key))
             {
-                return "Your key is invalid";
+                throw new IncorrectKeyException("Key is invalid.\n" +
+                    "Your key should be a string of letters, maybe a word.\n" +
+                    "Try using WORD");
             }
 
             // This takes out all of the spaces in the plaintext.
@@ -45,7 +52,9 @@ namespace Algorithms.Subclasses
         {
             if (!KeyIsCorrect(key))
             {
-                return "Your key is invalid";
+                throw new IncorrectKeyException("Key is invalid.\n" +
+                    "Your key should be a string of letters, maybe a word.\n" +
+                    "Try using WORD");
             }
             
             // This takes out all of the spaces in the plaintext.
@@ -79,11 +88,8 @@ namespace Algorithms.Subclasses
 
         private string ShiftASCIIValuesByKeyEncrypt(string text, string key)
         {
-            Random random = new Random();
-            int intPlaceHolder;
-            char charPlaceHolder;
-            string newText = string.Empty;
-            int count = 0;
+            newText = string.Empty;
+            count = 0;
 
             while (count < text.Length)
             {
@@ -121,12 +127,8 @@ namespace Algorithms.Subclasses
 
         private string ShiftASCIIValuesByKeyDecrypt(string text, string key)
         {
-            Random random = new Random();
-            int intPlaceHolder;
-            char charPlaceHolder;
-            string newText = string.Empty;
-            int count = 0;
-
+            newText = string.Empty;
+            count = 0;
             while (count < text.Length)
             {
                 for (int i = 0; i < key.Length; i++)
