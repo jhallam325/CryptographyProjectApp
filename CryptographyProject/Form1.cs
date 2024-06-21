@@ -31,11 +31,12 @@ namespace CryptographyProject
             */
             inputFileRadioButton.Checked = true;
             int size = -1;
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text|*.txt|All|*.*";
+            DialogResult result = openFileDialog.ShowDialog(); // Show the dialog.
             if (result == DialogResult.OK) // Test result.
             {
-                plaintextFullPath = openFileDialog1.FileName;
+                plaintextFullPath = openFileDialog.FileName;
                 try
                 {
                     string text = File.ReadAllText(plaintextFullPath);
@@ -54,11 +55,12 @@ namespace CryptographyProject
         {
             outputFileRadioButton.Checked = true;
             int size = -1;
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text|*.txt|All|*.*";
+            DialogResult result = openFileDialog.ShowDialog(); // Show the dialog.
             if (result == DialogResult.OK) // Test result.
             {
-                ciphertextFullPath = openFileDialog1.FileName;
+                ciphertextFullPath = openFileDialog.FileName;
                 try
                 {
                     string text = File.ReadAllText(ciphertextFullPath);
@@ -145,7 +147,7 @@ namespace CryptographyProject
             }
             else if (inputFileRadioButton.Checked)
             {
-                string extension = Path.GetExtension(inputTextBox.Text);
+                string extension = Path.GetExtension(inputFileTextBox.Text);
                 if (extension != ".txt")
                 {
                     MessageBox.Show("You can only read from a .txt file");
@@ -363,17 +365,21 @@ namespace CryptographyProject
             }
             else if (outputFileRadioButton.Checked)
             {
-                string path = inputFileTextBox.Text;
-                string inputPathWithoutFile = $"dirPath {path.Substring(0, path.Length - Path.GetFileName(path).Length)}";
-                string inputDirectory = Path.GetDirectoryName(inputFileTextBox.Text);
-                string outputDirectory = Path.GetDirectoryName(outputFileTextBox.Text);
-
+                string inputPath = inputFileTextBox.Text;
+                string inputPathWithoutFile = inputPath.Substring(0, inputPath.Length - Path.GetFileName(inputPath).Length);
                 string pathOrFile = outputFileTextBox.Text;
-                string fileName = Path.GetFileName(pathOrFile);
                 string extension = Path.GetExtension(pathOrFile);
 
-                bool temp = File.Exists(pathOrFile);
+                // So you can be lazy and type the file name you know or want, without the .txt
+                if (extension == string.Empty)
+                {
+                    pathOrFile += ".txt";
+                }
 
+                extension = Path.GetExtension(pathOrFile);
+                string fileName = Path.GetFileName(pathOrFile);
+                string outputFullPath = inputPathWithoutFile + fileName;
+                StreamWriter writer = null;
 
                 // First, make sure it's a text file.
                 if (extension != ".txt")
@@ -382,94 +388,43 @@ namespace CryptographyProject
                     return;
                 }
 
-
                 // The path given is a full path and we can continue
                 if (Path.IsPathRooted(pathOrFile) && !Path.GetPathRoot(pathOrFile).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
                 {
                     if(!File.Exists(pathOrFile))
                     {
-                        // We can create the file because we have the full path.
-                        File.Create(pathOrFile);
+                        // Create the file because we have the full path.
+                        using (File.Create(pathOrFile))
+                        {
+
+                        }
                     }
-                    // We can override the file
-                    // Open The file to read
-                    StreamWriter writer = null;
 
-                    try
+                    // Write to the file
+                    using(writer = new StreamWriter(pathOrFile))
                     {
-                        // The top line is for debugging practice
-                        //writer = new StreamWriter(Globals.CipherTextFullPath);
-                        writer = new StreamWriter(pathOrFile);
-
-                        // This line is what will really be in the app.
-                        // Can I get open or create permission to create a new file if a new file is input?
-                        //writer = new StreamReader(ciphertextFullPath);
                         writer.WriteLine(outputText);
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                    finally
-                    {
-                        writer.Close();
-                        MessageBox.Show($"{outputFileTextBox.Text} saved correctly");
-                    }
                 }
-                else if (!File.Exists(pathOrFile))
+                else if (!File.Exists(outputFullPath))
                 {
-                    outputTextBox.Text = Path.GetPathRoot(pathOrFile);
-                    outputTextBox.Text += "\nFile Doesn't Exist and we are in the else if";
-                }
-
-                if (false)
-                {
-                    //try
-                    //{
-                    //    string text = File.ReadAllText(ciphertextFullPath);
-                    //    size = text.Length;
-                    //    outputFileTextBox.Text = ciphertextFullPath;
-
-                    //}
-                    //catch (IOException)
-                    //{
-                    //}
+                    using (File.Create(outputFullPath))
+                    {
+                        
+                    }
+                    using (writer = new StreamWriter(outputFullPath))
+                    {
+                        writer.WriteLine(outputText);
+                    }
                 }
                 else
                 {
-                    outputTextBox.Text = Path.GetPathRoot(path);
-                    outputTextBox.Text += $"dirPath {path.Substring(0, path.Length - Path.GetFileName(path).Length)}";
-                    outputTextBox.Text += "\nFile Doesn't Exist";
-                    outputFileTextBox.Text = $"{inputDirectory} adds {fileName}";
+                    using (writer = new StreamWriter(outputFullPath))
+                    {
+                        writer.WriteLine(outputText);
+                    }
                 }
-
-
-                /* Real code - break for debugging
-                // Open The file to read
-                StreamWriter writer = null;
-
-                try
-                {
-                    // The top line is for debugging practice
-                    //writer = new StreamWriter(Globals.CipherTextFullPath);
-                    writer = new StreamWriter(outputFileTextBox.Text);
-
-                    // This line is what will really be in the app.
-                    // Can I get open or create permission to create a new file if a new file is input?
-                    //writer = new StreamReader(ciphertextFullPath);
-                    writer.WriteLine(outputText);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-                finally
-                {
-                    writer.Close();
-                    MessageBox.Show($"{outputFileTextBox.Text} saved correctly");
-                }
-                */
-
+                MessageBox.Show($"Your file {outputFullPath} was successfully saved.");
             }
             else
             {
