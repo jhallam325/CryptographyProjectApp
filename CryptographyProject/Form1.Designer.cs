@@ -76,6 +76,7 @@
             inputTextBox.Location = new Point(6, 75);
             inputTextBox.Multiline = true;
             inputTextBox.Name = "inputTextBox";
+            inputTextBox.ScrollBars = ScrollBars.Vertical;
             inputTextBox.Size = new Size(719, 82);
             inputTextBox.TabIndex = 4;
             inputTextBox.TextChanged += inputTextBox_TextChanged;
@@ -239,6 +240,7 @@
             outputTextBox.Location = new Point(6, 75);
             outputTextBox.Multiline = true;
             outputTextBox.Name = "outputTextBox";
+            outputTextBox.ScrollBars = ScrollBars.Vertical;
             outputTextBox.Size = new Size(713, 76);
             outputTextBox.TabIndex = 4;
             // 
