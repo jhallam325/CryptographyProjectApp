@@ -144,11 +144,21 @@ namespace CryptographyProject
 
             if (inputTextRadioButton.Checked)
             {
+                if (inputTextBox.Text == null || inputTextBox.Text.Length == 0)
+                {
+                    MessageBox.Show("Um.... we have no text to encrypt/decrypt.");
+                    return;
+                }
                 inputText = inputTextBox.Text;
             }
             else if (inputFileRadioButton.Checked)
             {
                 string extension = Path.GetExtension(inputFileTextBox.Text);
+                if (inputFileTextBox.Text == null || inputFileTextBox.Text == string.Empty)
+                {
+                    MessageBox.Show("You need to input a file by typing its location or using the browse button");
+                    return;
+                }
                 if (extension != ".txt")
                 {
                     MessageBox.Show("You can only read from a .txt file");
@@ -184,6 +194,8 @@ namespace CryptographyProject
                 return;
             }
 
+            
+
             /*********************************************************************************************
             *                                                                                            * 
             *                           Find encryption algorithm to use                                 *
@@ -196,6 +208,11 @@ namespace CryptographyProject
                 // Can this be a generic method that does this for each cipher?
                 // Maybe I could put a requirement that it must implement ICipher?
                 ShiftCipher shiftCipher = new ShiftCipher();
+                if (!CheckForKey())
+                {
+                    MessageBox.Show("Don't forget to input a key!");
+                    return;
+                }
 
                 if (encryptRadioButton.Checked)
                 {
@@ -218,6 +235,12 @@ namespace CryptographyProject
                 // Substitution Cipher
 
                 SubstitutionCipher substitutionCipher = new SubstitutionCipher();
+                if (!CheckForKey())
+                {
+                    MessageBox.Show("Don't forget to input a key!");
+                    return;
+                }
+
 
                 if (encryptRadioButton.Checked)
                 {
@@ -237,6 +260,11 @@ namespace CryptographyProject
             {
                 // Affine Cipher
                 AffineCipher affineCipher = new AffineCipher();
+                if (!CheckForKey())
+                {
+                    MessageBox.Show("Don't forget to input a key!");
+                    return;
+                }
 
                 if (encryptRadioButton.Checked)
                 {
@@ -256,6 +284,11 @@ namespace CryptographyProject
             {
                 // Vigenere Cipher
                 VigenereCipher vigenereCipher = new VigenereCipher();
+                if (!CheckForKey())
+                {
+                    MessageBox.Show("Don't forget to input a key!");
+                    return;
+                }
 
                 if (encryptRadioButton.Checked)
                 {
@@ -275,6 +308,11 @@ namespace CryptographyProject
             {
                 // Hill Cipher
                 HillCipher hillCipher = new HillCipher();
+                if (!CheckForKey())
+                {
+                    MessageBox.Show("Don't forget to input a key!");
+                    return;
+                }
 
                 if (encryptRadioButton.Checked)
                 {
@@ -294,7 +332,11 @@ namespace CryptographyProject
             {
                 // Permutation Cipher
                 PermutationCipher permutationCipher = new PermutationCipher();
-
+                if (!CheckForKey())
+                {
+                    MessageBox.Show("Don't forget to input a key!");
+                    return;
+                }
 
                 if (encryptRadioButton.Checked)
                 {
@@ -315,6 +357,11 @@ namespace CryptographyProject
             {
                 // Stream Cipher
                 StreamCipher streamCipher = new StreamCipher();
+                if (!CheckForKey())
+                {
+                    MessageBox.Show("Don't forget to input a key!");
+                    return;
+                }
 
                 if (encryptRadioButton.Checked)
                 {
@@ -334,6 +381,11 @@ namespace CryptographyProject
             {
                 // Autokey Cipher
                 AutokeyCipher autokeyCipher = new AutokeyCipher();
+                if (!CheckForKey())
+                {
+                    MessageBox.Show("Don't forget to input a key!");
+                    return;
+                }
 
                 if (encryptRadioButton.Checked)
                 {
@@ -371,6 +423,14 @@ namespace CryptographyProject
                 string pathOrFile = outputFileTextBox.Text;
                 string extension = Path.GetExtension(pathOrFile);
 
+                if (pathOrFile == null || pathOrFile.Length == 0)
+                {
+                    MessageBox.Show("You need to input an output a file by typing its location or using the browse button\n" +
+                        "You can also type in the name of the file you want created and it will automatically\n" +
+                        "be created in the directory of the input file.");
+                    return;
+                }
+
                 // So you can be lazy and type the file name you know or want, without the .txt
                 if (extension == string.Empty)
                 {
@@ -379,6 +439,21 @@ namespace CryptographyProject
 
                 extension = Path.GetExtension(pathOrFile);
                 string fileName = Path.GetFileName(pathOrFile);
+
+                //========================================================================================================
+                //========================================================================================================
+                //                                  Check here!!!
+                //========================================================================================================
+                //========================================================================================================
+
+
+                if (inputPathWithoutFile == null || inputPathWithoutFile.Length == 0)
+                {
+                    // Automatically add into user's documents folder -> C:\users\[User1]\Documents
+                    // Make a flag for the output message that it was created in Documents
+                    inputPathWithoutFile = "C:/";
+                }
+
                 string outputFullPath = inputPathWithoutFile + fileName;
                 StreamWriter writer = null;
 
@@ -432,6 +507,20 @@ namespace CryptographyProject
                 MessageBox.Show("Hey, you need to choose an output method!");
             }
 
+        }
+
+        /*********************************************************************************************
+        *                                                                                            * 
+        *                                 Make sure a key is unput                                   *
+        *                                                                                            *
+        *********************************************************************************************/
+        private bool CheckForKey()
+        {
+            if (keyTextBox.Text == null || keyTextBox.Text.Length == 0)
+            {
+                return false;
+            }
+            return true;
         }
 
         private void inputFileTextBox_TextChanged(object sender, EventArgs e)
