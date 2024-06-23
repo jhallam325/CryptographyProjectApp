@@ -160,20 +160,31 @@ namespace CryptographyProject
                 // Open The file to read
                 StreamReader reader = null;
 
-                try
+                // Write to the file
+                using (reader = new StreamReader(inputFileTextBox.Text))
                 {
-                    // The top line is for debugging practice
-                    //reader = new StreamReader(Globals.PlainTextFullPath);
-                   
+                    inputText = reader.ReadToEnd();
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-                finally
-                {
-                    reader.Close();
-                }
+
+
+                //try
+                //{
+                //    // The top line is for debugging practice
+                //    //reader = new StreamReader(Globals.PlainTextFullPath);
+                //    reader = new StreamReader(inputFileTextBox.Text);
+
+                //    // This line is what will really be in the app.
+                //    //reader = new StreamReader(plaintextFullPath);
+                //    inputText = reader.ReadToEnd();
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show(ex.Message);
+                //}
+                //finally
+                //{
+                //    reader.Close();
+                //}
 
             }
             else
@@ -458,6 +469,13 @@ namespace CryptographyProject
 
                 extension = Path.GetExtension(pathOrFile);
                 string fileName = Path.GetFileName(pathOrFile);
+                
+                if (inputPathWithoutFile == null || inputPathWithoutFile.Length == 0)
+                {
+                    // Automatically add into user's documents folder -> C:\users\[User1]\Documents
+                    inputPathWithoutFile = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
+                }
+
                 string outputFullPath = inputPathWithoutFile + fileName;
                 StreamWriter writer = null;
 
