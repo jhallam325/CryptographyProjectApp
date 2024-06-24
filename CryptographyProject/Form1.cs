@@ -123,7 +123,7 @@ namespace CryptographyProject
             }
             else if (methodComboBox.SelectedIndex == 6)
             {
-                // Synchronous Stream Cipher
+                // Stream Cipher
                 methodSelectLabel.Text = "Key Information: Enter a whole number";
             }
             else if (methodComboBox.SelectedIndex == 7)
@@ -207,16 +207,7 @@ namespace CryptographyProject
                 return;
             }
 
-            /*********************************************************************************************
-            *                                                                                            * 
-            *                                       Check for key                                        *
-            *                                                                                            *
-            *********************************************************************************************/
-            if (keyTextBox.Text == string.Empty || keyTextBox.Text == null)
-            {
-                MessageBox.Show("You forgot to input the key!");
-                return;
-            }
+            
 
 
             /*********************************************************************************************
@@ -233,6 +224,12 @@ namespace CryptographyProject
                     // Can this be a generic method that does this for each cipher?
                     // Maybe I could put a requirement that it must implement ICipher?
                     ShiftCipher shiftCipher = new ShiftCipher();
+
+                    if (!KeyExists())
+                    {
+                        MessageBox.Show("You forgot to input the key!");
+                        return;
+                    }
 
                     if (encryptRadioButton.Checked)
                     {
@@ -256,6 +253,12 @@ namespace CryptographyProject
 
                     SubstitutionCipher substitutionCipher = new SubstitutionCipher();
 
+                    if (!KeyExists())
+                    {
+                        MessageBox.Show("You forgot to input the key!");
+                        return;
+                    }
+
                     if (encryptRadioButton.Checked)
                     {
                         outputText = substitutionCipher.Encrypt(inputText, key);
@@ -274,6 +277,12 @@ namespace CryptographyProject
                 {
                     // Affine Cipher
                     AffineCipher affineCipher = new AffineCipher();
+
+                    if (!KeyExists())
+                    {
+                        MessageBox.Show("You forgot to input the key!");
+                        return;
+                    }
 
                     if (encryptRadioButton.Checked)
                     {
@@ -475,6 +484,14 @@ namespace CryptographyProject
                 string pathOrFile = outputFileTextBox.Text;
                 string extension = Path.GetExtension(pathOrFile);
 
+                if (pathOrFile == null || pathOrFile.Length == 0)
+                {
+                    MessageBox.Show("You need to input an output a file by typing its location or using the browse button\n" +
+                        "You can also type in the name of the file you want created and it will automatically\n" +
+                        "be created in the directory of the input file.");
+                    return;
+                }
+
                 // So you can be lazy and type the file name you know or want, without the .txt
                 if (extension == string.Empty)
                 {
@@ -505,7 +522,7 @@ namespace CryptographyProject
                 {
                     if (!File.Exists(pathOrFile))
                     {
-                        // Create the file because we have the full path.
+                        // Create the file because we have the full path, then close the filestream so we can write to the file.
                         using (File.Create(pathOrFile))
                         {
 
@@ -520,6 +537,7 @@ namespace CryptographyProject
                 }
                 else if (!File.Exists(outputFullPath))
                 {
+                    // The given path wasn't a full path but we created a full path using the input file's directory
                     using (File.Create(outputFullPath))
                     {
 
@@ -541,6 +559,7 @@ namespace CryptographyProject
             else
             {
                 MessageBox.Show("Hey, you need to choose an output method!");
+                return;
             }
 
         }
@@ -568,10 +587,25 @@ namespace CryptographyProject
             }
         }
 
+        /*********************************************************************************************
+            *                                                                                            * 
+            *                                       Check for key                                        *
+            *                                                                                            *
+            *********************************************************************************************/
+        private bool KeyExists()
+        {
+            if (keyTextBox.Text == string.Empty || keyTextBox.Text == null)
+            {
+                return false;
+            }
+            return true;
+        }
+            
 
 
-        // This came from stackoverflow https://stackoverflow.com/questions/3730968/how-to-disable-cursor-in-textbox
-        [DllImport("user32.dll")]
+
+    // This came from stackoverflow https://stackoverflow.com/questions/3730968/how-to-disable-cursor-in-textbox
+    [DllImport("user32.dll")]
         static extern bool HideCaret(IntPtr hWnd);
 
         private void keyTextBox_TextChanged(object sender, EventArgs e)
