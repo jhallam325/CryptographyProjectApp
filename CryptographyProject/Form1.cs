@@ -250,7 +250,6 @@ namespace CryptographyProject
                 else if (methodComboBox.SelectedIndex == 1)
                 {
                     // Substitution Cipher
-
                     SubstitutionCipher substitutionCipher = new SubstitutionCipher();
 
                     if (!KeyExists())
@@ -425,7 +424,6 @@ namespace CryptographyProject
                    "\t\tEnter the numbers as a,b like 2,8\n" +
                    "Try using 3,10";
 
-
                 }
                 else if (methodComboBox.SelectedIndex == 3)
                 {
@@ -499,7 +497,6 @@ namespace CryptographyProject
 
                 extension = Path.GetExtension(pathOrFile);
                 string fileName = Path.GetFileName(pathOrFile);
-                
                 if (inputPathWithoutFile == null || inputPathWithoutFile.Length == 0)
                 {
                     // Automatically add into user's documents folder -> C:\users\[User1]\Documents
@@ -561,6 +558,20 @@ namespace CryptographyProject
                 return;
             }
 
+        }
+
+        /*********************************************************************************************
+        *                                                                                            * 
+        *                                 Make sure a key is unput                                   *
+        *                                                                                            *
+        *********************************************************************************************/
+        private bool CheckForKey()
+        {
+            if (keyTextBox.Text == null || keyTextBox.Text.Length == 0)
+            {
+                return false;
+            }
+            return true;
         }
 
         private void inputFileTextBox_TextChanged(object sender, EventArgs e)
