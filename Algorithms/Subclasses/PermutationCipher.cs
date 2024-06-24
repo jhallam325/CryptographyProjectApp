@@ -1,6 +1,7 @@
 ﻿using Algorithms.GlobalVariables;
 using Algorithms.Interfaces;
 using Algorithms.MainClasses;
+using Algorithms.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -121,6 +122,7 @@ namespace Algorithms.Subclasses
                 {
                     if (!char.IsDigit(c))
                     {
+                        throw new IncorrectKeyException("The key can only contain whole numbers");
                         return false;
                     }
                 }
@@ -132,7 +134,8 @@ namespace Algorithms.Subclasses
             {
                 if (!int.TryParse(keyValues[i], out intKeyValues[i]))
                 {
-                    return false;
+                    throw new IncorrectKeyException("The key can only contain whole numbers");
+                    //return false;
                 }
                 intKeyValues[i] = (intKeyValues[i] - 1) % Globals.modulus;
             }
@@ -146,7 +149,7 @@ namespace Algorithms.Subclasses
                 {
                     // throw exception
                     // The key doesn't contain every number between 1 and keySize, inclusive
-                    return false;
+                    throw new IncorrectKeyException("The key doesn't contain every number between 1 and keySize, inclusive");
                 }
             }
             return true;

@@ -75,7 +75,7 @@ namespace Algorithms.Subclasses
         {
             foreach (char c in key)
             {
-                if (Char.IsDigit(c) || Char.IsWhiteSpace(c) || Char.IsPunctuation(c) || Char.IsSymbol(c))
+                if (char.IsDigit(c) || char.IsWhiteSpace(c) || char.IsPunctuation(c) || char.IsSymbol(c))
                 {
                     Console.WriteLine("The key must be a string of letters, usually a word.");
                     return false;

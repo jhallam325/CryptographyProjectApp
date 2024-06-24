@@ -439,7 +439,6 @@ namespace CryptographyProject
                     methodSelectLabel.Text = "Key Information: Enter a square Matrix in the form: 1,2,3;4,5,6;7,8,9 where individual " +
                 "elements are seperated by commas and rows \n" +
                 "are seperated by semi-colons\n" +
-                "Finding an invertible matrix is tough.\n" +
                 "Try using 11,8;3,7";
                 }
                 else if (methodComboBox.SelectedIndex == 5)
@@ -587,11 +586,6 @@ namespace CryptographyProject
             }
         }
 
-        /*********************************************************************************************
-            *                                                                                            * 
-            *                                       Check for key                                        *
-            *                                                                                            *
-            *********************************************************************************************/
         private bool KeyExists()
         {
             if (keyTextBox.Text == string.Empty || keyTextBox.Text == null)
@@ -600,12 +594,9 @@ namespace CryptographyProject
             }
             return true;
         }
-            
 
-
-
-    // This came from stackoverflow https://stackoverflow.com/questions/3730968/how-to-disable-cursor-in-textbox
-    [DllImport("user32.dll")]
+        // This came from stackoverflow https://stackoverflow.com/questions/3730968/how-to-disable-cursor-in-textbox
+        [DllImport("user32.dll")]
         static extern bool HideCaret(IntPtr hWnd);
 
         private void keyTextBox_TextChanged(object sender, EventArgs e)
