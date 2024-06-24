@@ -1,6 +1,7 @@
 ﻿using Algorithms.GlobalVariables;
 using Algorithms.Interfaces;
 using Algorithms.MainClasses;
+using Algorithms.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Algorithms.Subclasses
         {
             if(!KeyIsCorrect(key))
             {
-                return "Key is invalid.";
+                throw new IncorrectKeyException();
             }
 
             key = key.ToUpper();
@@ -47,7 +48,7 @@ namespace Algorithms.Subclasses
         {
             if (!KeyIsCorrect(key))
             {
-                return "Key is invalid.";
+                throw new IncorrectKeyException();
             }
 
             key = key.ToUpper();
@@ -81,16 +82,16 @@ namespace Algorithms.Subclasses
         {
             if (key.Length != 1)
             {
-                return false;
+                throw new IncorrectKeyException("The key must be a single character only");
             }
 
             char temp = key[0];
-            if (char.IsLetter(temp))
+            if (!char.IsLetter(temp))
             {
-                return true;
+                throw new IncorrectKeyException("The key must be a single letter only");
             }
 
-            return false;
+            return true;
         }
 
         private int[] GetASCIIValuesOfString(string text)
