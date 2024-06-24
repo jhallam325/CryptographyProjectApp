@@ -302,6 +302,12 @@ namespace CryptographyProject
                     // Vigenere Cipher
                     VigenereCipher vigenereCipher = new VigenereCipher();
 
+                    if (!KeyExists())
+                    {
+                        MessageBox.Show("You forgot to input the key!");
+                        return;
+                    }
+
                     if (encryptRadioButton.Checked)
                     {
                         outputText = vigenereCipher.Encrypt(inputText, key);
@@ -320,6 +326,12 @@ namespace CryptographyProject
                 {
                     // Hill Cipher
                     HillCipher hillCipher = new HillCipher();
+
+                    if (!KeyExists())
+                    {
+                        MessageBox.Show("You forgot to input the key!");
+                        return;
+                    }
 
                     if (encryptRadioButton.Checked)
                     {
@@ -340,6 +352,11 @@ namespace CryptographyProject
                     // Permutation Cipher
                     PermutationCipher permutationCipher = new PermutationCipher();
 
+                    if (!KeyExists())
+                    {
+                        MessageBox.Show("You forgot to input the key!");
+                        return;
+                    }
 
                     if (encryptRadioButton.Checked)
                     {
@@ -361,6 +378,12 @@ namespace CryptographyProject
                     // Stream Cipher
                     StreamCipher streamCipher = new StreamCipher();
 
+                    if (!KeyExists())
+                    {
+                        MessageBox.Show("You forgot to input the key!");
+                        return;
+                    }
+
                     if (encryptRadioButton.Checked)
                     {
                         outputText = streamCipher.Encrypt(inputText, key);
@@ -379,6 +402,12 @@ namespace CryptographyProject
                 {
                     // Autokey Cipher
                     AutokeyCipher autokeyCipher = new AutokeyCipher();
+
+                    if (!KeyExists())
+                    {
+                        MessageBox.Show("You forgot to input the key!");
+                        return;
+                    }
 
                     if (encryptRadioButton.Checked)
                     {
