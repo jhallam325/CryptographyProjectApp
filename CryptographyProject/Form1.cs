@@ -146,16 +146,30 @@ namespace CryptographyProject
 
             if (inputTextRadioButton.Checked)
             {
+                if (inputTextBox.Text == null || inputTextBox.Text.Length == 0)
+                {
+                    MessageBox.Show("Um.... we have no text to encrypt/decrypt.");
+                    return;
+                }
                 inputText = inputTextBox.Text;
+
             }
             else if (inputFileRadioButton.Checked)
             {
                 string extension = Path.GetExtension(inputFileTextBox.Text);
+
+                if (inputFileTextBox.Text == null || inputFileTextBox.Text == string.Empty)
+                {
+                    MessageBox.Show("You need to input a file by typing its location or using the browse button");
+                    return;
+                }
+
                 if (extension != ".txt")
                 {
                     MessageBox.Show("You can only read from a .txt file");
                     return;
                 }
+
 
                 // Open The file to read
                 StreamReader reader = null;
