@@ -1,5 +1,6 @@
 ﻿using Algorithms.Interfaces;
 using Algorithms.MainClasses;
+using Algorithms.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace Algorithms.Subclasses
         {
             if (!KeyIsCorrect(key))
             {
-                return "Key is invalid";
+                throw new IncorrectKeyException("The key must be a whole number");
             }
 
             ciphertext = String.Empty;
@@ -108,7 +109,7 @@ namespace Algorithms.Subclasses
         {
             if(!KeyIsCorrect(key))
             {
-                return "Key is invalid";
+                throw new IncorrectKeyException("The key must be a whole number");
             }
 
             plaintext = String.Empty;

@@ -1,6 +1,7 @@
 ﻿using Algorithms.GlobalVariables;
 using Algorithms.Interfaces;
 using Algorithms.MainClasses;
+using Algorithms.Exceptions;
 using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace Algorithms.Subclasses
         {
             if (!KeyIsCorrect(key))
             {
-                return "Key is invalid";
+                throw new IncorrectKeyException("The matrix key is invalid.");
             }
 
             ciphertext = string.Empty;
@@ -72,7 +73,7 @@ namespace Algorithms.Subclasses
         {
             if (!KeyIsCorrect(key))
             {
-                return "Key is invalid";
+                throw new IncorrectKeyException("The matrix key is invalid.");
             }
 
             plaintext = string.Empty;
@@ -119,12 +120,23 @@ namespace Algorithms.Subclasses
             string[] rows = key.Split(';');
             string[] columns = rows[0].Split(",");
 
+            // Check to make sure each row is the same size
+            for (int i = 1; i < rows.Length; i++)
+            {
+                if (columns.Length != rows[i].Split(",").Length)
+                {
+                    throw new IncorrectKeyException("There is a row in your matrix that is not the same size as the rest.\n" +
+                        "Meaning, you input something like: 1,2,3;1,2;1,2,3 where the 2nd row is missing a 3rd element");
+                }
+            }
+            
+
             if (columns.Length != rows.Length)
             {
-                //throw an exception
-                Console.WriteLine("The matrix must be a square matrix, meaning the number of rows " +
-                    "must be equal to the number of columns.");
-                return false;
+                throw new IncorrectKeyException("The matrix must be a square matrix, meaning the number of rows must be equal to the number of columns.");
+                //Console.WriteLine("The matrix must be a square matrix, meaning the number of rows " +
+                //    "must be equal to the number of columns.");
+                //return false;
             }
 
             // I need an array to build the matrix
@@ -137,9 +149,9 @@ namespace Algorithms.Subclasses
                 {
                     if (!double.TryParse(temp[j], out doubleArray[i, j]))
                     {
-                        // throw an exception
-                        Console.WriteLine("Elements of the matrix must be whole numbers");
-                        return false;
+                        throw new IncorrectKeyException("Elements of the matrix must be whole numbers");
+                        //Console.WriteLine("Elements of the matrix must be whole numbers");
+                        //return false;
                     }
                 }
             }
@@ -151,10 +163,11 @@ namespace Algorithms.Subclasses
 
             if (numRows != numCols)
             {
-                // Throw exception
-                Console.WriteLine("The matrix must be a square matrix, meaning the number of rows " +
+                throw new IncorrectKeyException("The matrix must be a square matrix, meaning the number of rows " +
                     "must be equal to the number of columns.");
-                return false;
+                //Console.WriteLine("The matrix must be a square matrix, meaning the number of rows " +
+                //    "must be equal to the number of columns.");
+                //return false;
             }
 
             blockSize = numRows;
@@ -163,9 +176,9 @@ namespace Algorithms.Subclasses
 
             if (GCD(intDeterminant, Globals.modulus) != 1)
             {
-                // throw exception
-                Console.WriteLine($"The GCD of the determinant of the key and {Globals.modulus} must = 1");
-                return false;
+                throw new IncorrectKeyException($"The GCD of the determinant of the key and {Globals.modulus} must = 1");
+                //Console.WriteLine($"The GCD of the determinant of the key and {Globals.modulus} must = 1");
+                //return false;
             }
 
             // We passed all the checks and the key is good
@@ -180,9 +193,9 @@ namespace Algorithms.Subclasses
 
             if (numRows != numCols)
             {
-                // throw exception
-                Console.WriteLine("The input matrix must be a square matrix or you can't take an inverse");
-                return A;
+                throw new InvertibleMatrixException("The input matrix must be a square matrix or you can't take an inverse");
+                //Console.WriteLine("The input matrix must be a square matrix or you can't take an inverse");
+                //return A;
             }
 
             int determinant = (int)A.Determinant();
@@ -191,10 +204,11 @@ namespace Algorithms.Subclasses
 
             if (GCD(determinant, modulus) != 1)
             {
-                // throw exception
-                Console.WriteLine("GCD(A, modulus) must not equal 1 or the inverse doesn't exist\n" +
+                throw new InvertibleMatrixException("GCD(A, modulus) must not equal 1 or the inverse doesn't exist\n" +
                     "This means the determinant and the modulus must be coprime");
-                return A;
+                //Console.WriteLine("GCD(A, modulus) must not equal 1 or the inverse doesn't exist\n" +
+                //    "This means the determinant and the modulus must be coprime");
+                //return A;
             }
 
             int inverseOfDeterminant = MultiplicativeInverse(determinant, modulus);
@@ -314,9 +328,9 @@ namespace Algorithms.Subclasses
 
             if (numRows != numCols)
             {
-                // throw exception
-                Console.WriteLine("The input matrix must be a square matrix or you can't find a Minor Matrix");
-                return A;
+                throw new InvertibleMatrixException("The input matrix must be a square matrix or you can't find a minor matrix");
+                //Console.WriteLine("The input matrix must be a square matrix or you can't find a Minor Matrix");
+                //return A;
             }
 
             Matrix<double> M = CreateMatrix.Dense<double>(numRows, numCols);
@@ -344,9 +358,9 @@ namespace Algorithms.Subclasses
 
             if (numRows != numCols)
             {
-                // throw exception
-                Console.WriteLine("The input matrix must be a square matrix or you can't find a Cofactor Matrix");
-                return M;
+                throw new InvertibleMatrixException("The input matrix must be a square matrix or you can't find a cofactor matrix");
+                //Console.WriteLine("The input matrix must be a square matrix or you can't find a Cofactor Matrix");
+                //return M;
             }
 
             Matrix<double> C = CreateMatrix.Dense<double>(numRows, numCols);
@@ -371,9 +385,9 @@ namespace Algorithms.Subclasses
 
             if (numRows != numCols)
             {
-                // throw exception
-                Console.WriteLine("The input matrix must be a square matrix or you can't find an Adjoint Matrix");
-                return A;
+                throw new InvertibleMatrixException("The input matrix must be a square matrix or you can't find an adjoint matrix");
+                //Console.WriteLine("The input matrix must be a square matrix or you can't find an Adjoint Matrix");
+                //return A;
             }
 
             // Make the minor matrix

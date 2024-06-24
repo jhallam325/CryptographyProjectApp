@@ -10,6 +10,8 @@ namespace CryptographyProject
     {
         string plaintextFullPath = string.Empty;
         string ciphertextFullPath = string.Empty;
+        // Add a modulus variable than can be changed from 26 to 127-special characters
+        // That would require a huge rewrite in the stream cipher. maybe others?
         public Form1()
         {
             InitializeComponent();
@@ -121,7 +123,7 @@ namespace CryptographyProject
             }
             else if (methodComboBox.SelectedIndex == 6)
             {
-                // Synchronous Stream Cipher
+                // Stream Cipher
                 methodSelectLabel.Text = "Key Information: Enter a whole number";
             }
             else if (methodComboBox.SelectedIndex == 7)
@@ -150,42 +152,53 @@ namespace CryptographyProject
                     return;
                 }
                 inputText = inputTextBox.Text;
+
             }
             else if (inputFileRadioButton.Checked)
             {
                 string extension = Path.GetExtension(inputFileTextBox.Text);
+
                 if (inputFileTextBox.Text == null || inputFileTextBox.Text == string.Empty)
                 {
                     MessageBox.Show("You need to input a file by typing its location or using the browse button");
                     return;
                 }
+
                 if (extension != ".txt")
                 {
                     MessageBox.Show("You can only read from a .txt file");
                     return;
                 }
 
+
                 // Open The file to read
                 StreamReader reader = null;
 
-                try
+                // Write to the file
+                using (reader = new StreamReader(inputFileTextBox.Text))
                 {
-                    // The top line is for debugging practice
-                    //reader = new StreamReader(Globals.PlainTextFullPath);
-                    reader = new StreamReader(inputFileTextBox.Text);
-
-                    // This line is what will really be in the app.
-                    //reader = new StreamReader(plaintextFullPath);
                     inputText = reader.ReadToEnd();
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-                finally
-                {
-                    reader.Close();
-                }
+
+
+                //try
+                //{
+                //    // The top line is for debugging practice
+                //    //reader = new StreamReader(Globals.PlainTextFullPath);
+                //    reader = new StreamReader(inputFileTextBox.Text);
+
+                //    // This line is what will really be in the app.
+                //    //reader = new StreamReader(plaintextFullPath);
+                //    inputText = reader.ReadToEnd();
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show(ex.Message);
+                //}
+                //finally
+                //{
+                //    reader.Close();
+                //}
 
             }
             else
@@ -196,214 +209,259 @@ namespace CryptographyProject
 
             
 
+
             /*********************************************************************************************
             *                                                                                            * 
             *                           Find encryption algorithm to use                                 *
             *                                                                                            *
             *********************************************************************************************/
-            if (methodComboBox.SelectedIndex == 0)
+            try
             {
-                // Shift Cipher
-
-                // Can this be a generic method that does this for each cipher?
-                // Maybe I could put a requirement that it must implement ICipher?
-                ShiftCipher shiftCipher = new ShiftCipher();
-                if (!CheckForKey())
+                if (methodComboBox.SelectedIndex == 0)
                 {
-                    MessageBox.Show("Don't forget to input a key!");
-                    return;
+                    // Shift Cipher
+
+                    // Can this be a generic method that does this for each cipher?
+                    // Maybe I could put a requirement that it must implement ICipher?
+                    ShiftCipher shiftCipher = new ShiftCipher();
+
+                    if (!KeyExists())
+                    {
+                        MessageBox.Show("You forgot to input the key!");
+                        return;
+                    }
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        // run Encrypt method
+                        outputText = shiftCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        // run Decrypt method
+                        outputText = shiftCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
                 }
-
-                if (encryptRadioButton.Checked)
+                else if (methodComboBox.SelectedIndex == 1)
                 {
-                    // run Encrypt method
-                    outputText = shiftCipher.Encrypt(inputText, key);
+                    // Substitution Cipher
+                    SubstitutionCipher substitutionCipher = new SubstitutionCipher();
+
+                    if (!KeyExists())
+                    {
+                        MessageBox.Show("You forgot to input the key!");
+                        return;
+                    }
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = substitutionCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = substitutionCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
+                }
+                else if (methodComboBox.SelectedIndex == 2)
+                {
+                    // Affine Cipher
+                    AffineCipher affineCipher = new AffineCipher();
+
+                    if (!KeyExists())
+                    {
+                        MessageBox.Show("You forgot to input the key!");
+                        return;
+                    }
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = affineCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = affineCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
+                }
+                else if (methodComboBox.SelectedIndex == 3)
+                {
+                    // Vigenere Cipher
+                    VigenereCipher vigenereCipher = new VigenereCipher();
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = vigenereCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = vigenereCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
+                }
+                else if (methodComboBox.SelectedIndex == 4)
+                {
+                    // Hill Cipher
+                    HillCipher hillCipher = new HillCipher();
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = hillCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = hillCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
+                }
+                else if (methodComboBox.SelectedIndex == 5)
+                {
+                    // Permutation Cipher
+                    PermutationCipher permutationCipher = new PermutationCipher();
+
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = permutationCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = permutationCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
 
                 }
-                else if (decryptRadioButton.Checked)
+                else if (methodComboBox.SelectedIndex == 6)
                 {
-                    // run Decrypt method
-                    outputText = shiftCipher.Decrypt(inputText, key);
+                    // Stream Cipher
+                    StreamCipher streamCipher = new StreamCipher();
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = streamCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = streamCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
+                }
+                else if (methodComboBox.SelectedIndex == 7)
+                {
+                    // Autokey Cipher
+                    AutokeyCipher autokeyCipher = new AutokeyCipher();
+
+                    if (encryptRadioButton.Checked)
+                    {
+                        outputText = autokeyCipher.Encrypt(inputText, key);
+
+                    }
+                    else if (decryptRadioButton.Checked)
+                    {
+                        outputText = autokeyCipher.Decrypt(inputText, key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
-            }
-            else if (methodComboBox.SelectedIndex == 1)
-            {
-                // Substitution Cipher
-
-                SubstitutionCipher substitutionCipher = new SubstitutionCipher();
-                if (!CheckForKey())
-                {
-                    MessageBox.Show("Don't forget to input a key!");
+                    MessageBox.Show("Don't forget to choose an encryption/decryption algorithm!");
                     return;
                 }
-
-
-                if (encryptRadioButton.Checked)
-                {
-                    outputText = substitutionCipher.Encrypt(inputText, key);
-
-                }
-                else if (decryptRadioButton.Checked)
-                {
-                    outputText = substitutionCipher.Decrypt(inputText, key);
-                }
-                else
-                {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
             }
-            else if (methodComboBox.SelectedIndex == 2)
+            catch (Exception ex)
             {
-                // Affine Cipher
-                AffineCipher affineCipher = new AffineCipher();
-                if (!CheckForKey())
+                MessageBox.Show(ex.Message);
+                if (methodComboBox.SelectedIndex == 0)
                 {
-                    MessageBox.Show("Don't forget to input a key!");
-                    return;
-                }
-
-                if (encryptRadioButton.Checked)
-                {
-                    outputText = affineCipher.Encrypt(inputText, key);
+                    // Shift Cipher
+                    methodSelectLabel.Text = "Key Information: Choose an integer, usually between 0 and 25\n" +
+                        "Try using 3";
 
                 }
-                else if (decryptRadioButton.Checked)
+                else if (methodComboBox.SelectedIndex == 1)
                 {
-                    outputText = affineCipher.Decrypt(inputText, key);
+                    // Substitution Cipher
+                    methodSelectLabel.Text = "Key Information: Choose each letter in the alphabet, only once, and A will be substituted with the\n" +
+                    "first letter, B with the second letter, ...\n" +
+                    "Try using: QWERTYUIOPASDFGHJKLZXCVBNM";
                 }
-                else
+                else if (methodComboBox.SelectedIndex == 2)
                 {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
-            }
-            else if (methodComboBox.SelectedIndex == 3)
-            {
-                // Vigenere Cipher
-                VigenereCipher vigenereCipher = new VigenereCipher();
-                if (!CheckForKey())
-                {
-                    MessageBox.Show("Don't forget to input a key!");
-                    return;
-                }
-
-                if (encryptRadioButton.Checked)
-                {
-                    outputText = vigenereCipher.Encrypt(inputText, key);
+                    // Affine Cipher
+                    methodSelectLabel.Text = $"Key Information: Choose 2 integers \"a\" and \"b\" such that GCD(a, {Globals.modulus}) = 1 and a and b are between 0-25 inclusive.\n" +
+                   "\t\tEnter the numbers as a,b like 2,8\n" +
+                   "Try using 3,10";
 
                 }
-                else if (decryptRadioButton.Checked)
+                else if (methodComboBox.SelectedIndex == 3)
                 {
-                    outputText = vigenereCipher.Decrypt(inputText, key);
+                    // Vigenere Cipher
+                    methodSelectLabel.Text = "Key Information: Choose an string of letters, possibly a word\n" +
+                        "Try using WORD";
                 }
-                else
+                else if (methodComboBox.SelectedIndex == 4)
                 {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                    // Hill Cipher
+                    methodSelectLabel.Text = "Key Information: Enter a square Matrix in the form: 1,2,3;4,5,6;7,8,9 where individual " +
+                "elements are seperated by commas and rows \n" +
+                "are seperated by semi-colons\n" +
+                "Try using 11,8;3,7";
                 }
-            }
-            else if (methodComboBox.SelectedIndex == 4)
-            {
-                // Hill Cipher
-                HillCipher hillCipher = new HillCipher();
-                if (!CheckForKey())
+                else if (methodComboBox.SelectedIndex == 5)
                 {
-                    MessageBox.Show("Don't forget to input a key!");
-                    return;
+                    // Permutation Cipher
+                    methodSelectLabel.Text = "Key Information: Enter a list of numbers, seperated by a comma. If you chose 5 numbers, they need to be the numbers 1-5 but \n" +
+                    "rearranged however you like. ex: 3,2,5,4,1\n" +
+                    "Try using 3,2,5,4,1";
                 }
+                else if (methodComboBox.SelectedIndex == 6)
+                {
+                    // Stream Cipher
+                    methodSelectLabel.Text = "Key Information: Enter a whole number\n" +
+                        "Try using 18";
 
-                if (encryptRadioButton.Checked)
-                {
-                    outputText = hillCipher.Encrypt(inputText, key);
-
-                }
-                else if (decryptRadioButton.Checked)
-                {
-                    outputText = hillCipher.Decrypt(inputText, key);
-                }
-                else
-                {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
-            }
-            else if (methodComboBox.SelectedIndex == 5)
-            {
-                // Permutation Cipher
-                PermutationCipher permutationCipher = new PermutationCipher();
-                if (!CheckForKey())
-                {
-                    MessageBox.Show("Don't forget to input a key!");
-                    return;
-                }
-
-                if (encryptRadioButton.Checked)
-                {
-                    outputText = permutationCipher.Encrypt(inputText, key);
 
                 }
-                else if (decryptRadioButton.Checked)
+                else if (methodComboBox.SelectedIndex == 7)
                 {
-                    outputText = permutationCipher.Decrypt(inputText, key);
-                }
-                else
-                {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
+                    // Autokey Cipher
+                    methodSelectLabel.Text = "Key Information: Enter a letter\n" +
+                        "Try using C";
 
-            }
-            else if (methodComboBox.SelectedIndex == 6)
-            {
-                // Stream Cipher
-                StreamCipher streamCipher = new StreamCipher();
-                if (!CheckForKey())
-                {
-                    MessageBox.Show("Don't forget to input a key!");
-                    return;
-                }
-
-                if (encryptRadioButton.Checked)
-                {
-                    outputText = streamCipher.Encrypt(inputText, key);
 
                 }
-                else if (decryptRadioButton.Checked)
-                {
-                    outputText = streamCipher.Decrypt(inputText, key);
-                }
-                else
-                {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
-            }
-            else if (methodComboBox.SelectedIndex == 7)
-            {
-                // Autokey Cipher
-                AutokeyCipher autokeyCipher = new AutokeyCipher();
-                if (!CheckForKey())
-                {
-                    MessageBox.Show("Don't forget to input a key!");
-                    return;
-                }
-
-                if (encryptRadioButton.Checked)
-                {
-                    outputText = autokeyCipher.Encrypt(inputText, key);
-
-                }
-                else if (decryptRadioButton.Checked)
-                {
-                    outputText = autokeyCipher.Decrypt(inputText, key);
-                }
-                else
-                {
-                    MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Don't forget to choose an encryption/decryption algorithm!");
                 return;
             }
 
@@ -439,19 +497,10 @@ namespace CryptographyProject
 
                 extension = Path.GetExtension(pathOrFile);
                 string fileName = Path.GetFileName(pathOrFile);
-
-                //========================================================================================================
-                //========================================================================================================
-                //                                  Check here!!!
-                //========================================================================================================
-                //========================================================================================================
-
-
                 if (inputPathWithoutFile == null || inputPathWithoutFile.Length == 0)
                 {
                     // Automatically add into user's documents folder -> C:\users\[User1]\Documents
-                    // Make a flag for the output message that it was created in Documents
-                    inputPathWithoutFile = "C:/";
+                    inputPathWithoutFile = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\";
                 }
 
                 string outputFullPath = inputPathWithoutFile + fileName;
@@ -469,7 +518,7 @@ namespace CryptographyProject
                 {
                     if (!File.Exists(pathOrFile))
                     {
-                        // Create the file because we have the full path.
+                        // Create the file because we have the full path, then close the filestream so we can write to the file.
                         using (File.Create(pathOrFile))
                         {
 
@@ -484,6 +533,7 @@ namespace CryptographyProject
                 }
                 else if (!File.Exists(outputFullPath))
                 {
+                    // The given path wasn't a full path but we created a full path using the input file's directory
                     using (File.Create(outputFullPath))
                     {
 
@@ -505,6 +555,7 @@ namespace CryptographyProject
             else
             {
                 MessageBox.Show("Hey, you need to choose an output method!");
+                return;
             }
 
         }
@@ -546,7 +597,14 @@ namespace CryptographyProject
             }
         }
 
-
+        private bool KeyExists()
+        {
+            if (keyTextBox.Text == string.Empty || keyTextBox.Text == null)
+            {
+                return false;
+            }
+            return true;
+        }
 
         // This came from stackoverflow https://stackoverflow.com/questions/3730968/how-to-disable-cursor-in-textbox
         [DllImport("user32.dll")]

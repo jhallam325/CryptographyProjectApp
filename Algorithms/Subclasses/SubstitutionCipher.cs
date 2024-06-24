@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Algorithms.GlobalVariables;
 using Algorithms.Interfaces;
 using Algorithms.MainClasses;
+using Algorithms.Exceptions;
 
 namespace Algorithms.Subclasses
 {
@@ -25,8 +26,10 @@ namespace Algorithms.Subclasses
         {
             if (!KeyIsCorrect(key))
             {
-                // throw an exception
-                return "The key you used is invalid.";
+                throw new IncorrectKeyException("The key is invalid.\n" +
+                    "Every letter of the alphabet has to be used\n" +
+                    "only once, but in any order you want.\n" +
+                    "Example: QAZWSXEDCRFVTGBYHNUJMIKLOP");
             }
 
             upperKey = key.ToUpper();
@@ -54,8 +57,10 @@ namespace Algorithms.Subclasses
         {
             if (!KeyIsCorrect(key))
             {
-                // throw an exception
-                return "The key you used is invalid.";
+                throw new IncorrectKeyException("The key is invalid.\n" +
+                    "Every letter of the alphabet has to be used\n" +
+                    "only once, but in any order you want.\n" +
+                    "Example: QAZWSXEDCRFVTGBYHNUJMIKLOP");
             }
 
             upperKey = key.ToUpper();
@@ -81,21 +86,23 @@ namespace Algorithms.Subclasses
 
         public bool KeyIsCorrect(string key)
         {
-            // The key here has to chack for letters A-Z
-            if (key.Length != 26)
-            {
-                // Throw an exception
-                return false;
-            }
-
             // Check for symbols and numbers in the key
             for (int i = 0; i < key.Length; i++)
             {
-                if (Char.IsDigit(key[i]) || Char.IsSymbol(key[i]) || Char.IsWhiteSpace(key[i]))
+                if (Char.IsDigit(key[i]) || Char.IsSymbol(key[i]) || Char.IsWhiteSpace(key[i]) || Char.IsPunctuation(key[i]))
                 {
-                    // Throw an exception
-                    return false;
+                    throw new IncorrectKeyException("The key is invalid.\n" +
+                    "You cannot have any spaces, characters, or numbers in your key\n" +
+                    "Example: QAZWSXEDCRFVTGBYHNUJMIKLOP");
                 }
+            }
+
+            // The key here has to check for letters A-Z
+            if (key.Length != 26)
+            {
+                throw new IncorrectKeyException("The key is invalid.\n" +
+                    "Every letter of the alphabet must be used only once\n" +
+                    "Example: QAZWSXEDCRFVTGBYHNUJMIKLOP");
             }
 
             // Check for each letter in the alphabet is here only once.
@@ -216,8 +223,10 @@ namespace Algorithms.Subclasses
             {
                 if (counts[i] != 1)
                 {
-                    // throw exception
-                    return false;
+                    throw new IncorrectKeyException("The key is invalid.\n" +
+                    "Every letter of the alphabet has to be used\n" +
+                    "only once, but in any order you want.\n" +
+                    "Example: QAZWSXEDCRFVTGBYHNUJMIKLOP");
                 }
             }
             return true;
