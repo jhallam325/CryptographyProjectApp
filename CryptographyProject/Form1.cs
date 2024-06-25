@@ -71,7 +71,15 @@ namespace CryptographyProject
             rectInputTextRadioButton = new Rectangle(inputTextRadioButton.Location, inputTextRadioButton.Size);
             rectInputTextBox = new Rectangle(inputTextBox.Location, inputTextBox.Size);
 
-
+            // Selector Group
+            rectEncryptRadioButton = new Rectangle(encryptRadioButton.Location, encryptRadioButton.Size);
+            rectDecryptRadioButton = new Rectangle(decryptRadioButton.Location, decryptRadioButton.Size);
+            rectMethodLabel = new Rectangle(methodLabel.Location, methodLabel.Size); 
+            rectMethodComboBox = new Rectangle(methodComboBox.Location, methodComboBox.Size); 
+            rectMethodSelectLabel = new Rectangle(methodSelectLabel.Location, methodSelectLabel.Size);
+            rectKeyLabel = new Rectangle(keyLabel.Location, keyLabel.Size);
+            rectKeyTextBox = new Rectangle(keyTextBox.Location, keyTextBox.Size);
+            rectKeyCheckBox = new Rectangle(keyCheckBox.Location, keyCheckBox.Size);
 
             // Output Group Box
             rectOutputFileRadioButton = new Rectangle(outputFileRadioButton.Location, outputFileRadioButton.Size);
@@ -95,7 +103,15 @@ namespace CryptographyProject
             moveControl(inputTextRadioButton, rectInputTextRadioButton);
             resizeControlXAndY(inputTextBox, rectInputTextBox);
 
-
+            // Selector Group
+            moveControl(encryptRadioButton, rectEncryptRadioButton); // Don't Resize
+            moveControl(decryptRadioButton, rectDecryptRadioButton); // Don't Resize
+            moveControl(methodLabel, rectMethodLabel); // Don't Resize 
+            resizeControlX(methodComboBox, rectMethodComboBox); // Resize in X
+            resizeControlX(methodSelectLabel, rectMethodSelectLabel); // Resize in X
+            moveControl(keyLabel, rectKeyLabel); // Don't Resize
+            resizeControlX(keyTextBox, rectKeyTextBox); // Resize in X
+            moveControl(keyCheckBox, rectKeyCheckBox); // Don't Resize
 
             // Output Group Box
             moveControl(outputFileRadioButton, rectOutputFileRadioButton);
