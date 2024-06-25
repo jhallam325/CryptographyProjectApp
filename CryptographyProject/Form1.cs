@@ -397,6 +397,7 @@ namespace CryptographyProject
                     else
                     {
                         MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                        return;
                     }
                 }
                 else if (methodComboBox.SelectedIndex == 1)
@@ -422,6 +423,7 @@ namespace CryptographyProject
                     else
                     {
                         MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                        return;
                     }
                 }
                 else if (methodComboBox.SelectedIndex == 2)
@@ -447,6 +449,7 @@ namespace CryptographyProject
                     else
                     {
                         MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                        return;
                     }
                 }
                 else if (methodComboBox.SelectedIndex == 3)
@@ -472,6 +475,7 @@ namespace CryptographyProject
                     else
                     {
                         MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                        return;
                     }
                 }
                 else if (methodComboBox.SelectedIndex == 4)
@@ -497,6 +501,7 @@ namespace CryptographyProject
                     else
                     {
                         MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                        return;
                     }
                 }
                 else if (methodComboBox.SelectedIndex == 5)
@@ -522,6 +527,7 @@ namespace CryptographyProject
                     else
                     {
                         MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                        return;
                     }
 
                 }
@@ -548,6 +554,7 @@ namespace CryptographyProject
                     else
                     {
                         MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                        return;
                     }
                 }
                 else if (methodComboBox.SelectedIndex == 7)
@@ -573,6 +580,7 @@ namespace CryptographyProject
                     else
                     {
                         MessageBox.Show("Hey, you need to choose whether you want to encrypt or decrypt your message!");
+                        return;
                     }
                 }
                 else
@@ -732,6 +740,7 @@ namespace CryptographyProject
                     }
                 }
                 MessageBox.Show($"Your file {outputFullPath} was successfully saved.");
+                return;
             }
             else
             {
