@@ -14,10 +14,40 @@ namespace CryptographyProject
         // That would require a huge rewrite in the stream cipher. maybe others?
 
         private Size formOriginalSize;
+
+        // Group Boxes
         private Rectangle rectInputGroup;
         private Rectangle rectSelectorGroup;
         private Rectangle rectOutputGroup;
-        //inputGroupBox
+        //inputFileRadioButton
+
+        // Input Group Box
+        private Rectangle rectInputFileRadioButton; // Don't Resize
+        private Rectangle rectInputFileTextBox; // Resize in X
+        private Rectangle rectInputFileBrowseButton; // Don't Resize
+        private Rectangle rectInputTextRadioButton; // Don't resize
+        private Rectangle rectInputTextBox; // Resize in X and Y;
+
+        // Selector Group Box
+        private Rectangle rectEncryptRadioButton; // Don't Resize
+        private Rectangle rectDecryptRadioButton; // Don't Resize
+        private Rectangle rectMethodLabel; // Don't Resize 
+        private Rectangle rectMethodComboBox; // Resize in X
+        private Rectangle rectMethodSelectLabel; // Resize in X
+        private Rectangle rectKeyLabel; // Don't Resize
+        private Rectangle rectKeyTextBox; // Resize in X
+        private Rectangle rectKeyCheckBox; // Don't Resize
+
+        // Output Group Box
+        private Rectangle rectOutputFileRadioButton; // Don't Resize
+        private Rectangle rectOutputFileTextBox; // Resize in X
+        private Rectangle rectOutputFileBrowseButton; // Don't Resize
+        private Rectangle rectOutputTextRadioButton; // Don't resize
+        private Rectangle rectOutputTextBox; // Resize in X and Y;
+
+
+
+        
 
         public Form1()
         {
@@ -28,20 +58,56 @@ namespace CryptographyProject
             // Responsiveness
             this.Resize += MyResize;
             formOriginalSize = this.Size;
+
+            // Group Boxes
             rectInputGroup = new Rectangle(inputGroupBox.Location, inputGroupBox.Size);
             rectSelectorGroup = new Rectangle(selectorGroupBox.Location, selectorGroupBox.Size);
             rectOutputGroup = new Rectangle(outputGroupBox.Location, outputGroupBox.Size);
+
+            // Input Group Box
+            rectInputFileRadioButton = new Rectangle(inputFileRadioButton.Location, inputFileRadioButton.Size);
+            rectInputFileTextBox = new Rectangle(inputFileTextBox.Location, inputFileTextBox.Size);
+            rectInputFileBrowseButton = new Rectangle(inputFileBrowseButton.Location, inputFileBrowseButton.Size);
+            rectInputTextRadioButton = new Rectangle(inputTextRadioButton.Location, inputTextRadioButton.Size);
+            rectInputTextBox = new Rectangle(inputTextBox.Location, inputTextBox.Size);
+
+
+
+            // Output Group Box
+            rectOutputFileRadioButton = new Rectangle(outputFileRadioButton.Location, outputFileRadioButton.Size);
+            rectOutputFileTextBox = new Rectangle(outputFileTextBox.Location, outputFileTextBox.Size);
+            rectOutputFileBrowseButton = new Rectangle(outputFileBrowseButton.Location, outputFileBrowseButton.Size);
+            rectOutputTextRadioButton = new Rectangle(outputTextRadioButton.Location, outputTextRadioButton.Size);
+            rectOutputTextBox = new Rectangle(outputTextBox.Location, outputTextBox.Size);
         }
 
         private void MyResize(object sender, EventArgs e)
         {
-            resizeControl(inputGroupBox, rectInputGroup);
-            resizeControl(selectorGroupBox, rectSelectorGroup);
-            resizeControl(outputGroupBox, rectOutputGroup);
+            // Group Boxes
+            resizeControlXAndY(inputGroupBox, rectInputGroup);
+            resizeControlXAndY(selectorGroupBox, rectSelectorGroup);
+            resizeControlXAndY(outputGroupBox, rectOutputGroup);
+
+            // Input Group Box
+            moveControl(inputFileRadioButton, rectInputFileRadioButton);
+            resizeControlX(inputFileTextBox, rectInputFileTextBox);
+            moveControl(inputFileBrowseButton, rectInputFileBrowseButton);
+            moveControl(inputTextRadioButton, rectInputTextRadioButton);
+            resizeControlXAndY(inputTextBox, rectInputTextBox);
+
+
+
+            // Output Group Box
+            moveControl(outputFileRadioButton, rectOutputFileRadioButton);
+            resizeControlX(outputFileTextBox, rectOutputFileTextBox);
+            moveControl(outputFileBrowseButton, rectOutputFileBrowseButton);
+            moveControl(outputTextRadioButton, rectOutputTextRadioButton);
+            resizeControlXAndY(outputTextBox, rectOutputTextBox);
+
 
         }
 
-        private void resizeControl(Control control, Rectangle rectangle)
+        private void resizeControlXAndY(Control control, Rectangle rectangle)
         {
             float xRatio = (float)(this.Width) / (float)formOriginalSize.Width;
             float yRatio = (float)(this.Height) / (float)formOriginalSize.Height;
@@ -52,6 +118,20 @@ namespace CryptographyProject
 
             control.Location = new Point(newX, newY);
             control.Size = new Size(newWidth, newHeight);
+        }
+
+        private void resizeControlX(Control control, Rectangle rectangle)
+        {
+            // This will resize the control only in the X direction
+            float xRatio = (float)(this.Width) / (float)formOriginalSize.Width;
+            float yRatio = (float)(this.Height) / (float)formOriginalSize.Height;
+            int newX = (int)(rectangle.X * xRatio);
+            int newY = (int)(rectangle.Y * yRatio);
+            int newWidth = (int)(rectangle.Width * xRatio);
+            //int newHeight = (int)(rectangle.Height * yRatio);
+
+            control.Location = new Point(newX, newY);
+            control.Size = new Size(newWidth, rectangle.Height);
         }
 
         private void moveControl(Control control, Rectangle rectangle)
