@@ -12,10 +12,60 @@ namespace CryptographyProject
         string ciphertextFullPath = string.Empty;
         // Add a modulus variable than can be changed from 26 to 127-special characters
         // That would require a huge rewrite in the stream cipher. maybe others?
+
+        private Size formOriginalSize;
+        private Rectangle rectInputGroup;
+        private Rectangle rectSelectorGroup;
+        private Rectangle rectOutputGroup;
+        //inputGroupBox
+
         public Form1()
         {
             InitializeComponent();
             keyCheckBox.Checked = true;
+
+
+            // Responsiveness
+            this.Resize += MyResize;
+            formOriginalSize = this.Size;
+            rectInputGroup = new Rectangle(inputGroupBox.Location, inputGroupBox.Size);
+            rectSelectorGroup = new Rectangle(selectorGroupBox.Location, selectorGroupBox.Size);
+            rectOutputGroup = new Rectangle(outputGroupBox.Location, outputGroupBox.Size);
+        }
+
+        private void MyResize(object sender, EventArgs e)
+        {
+            resizeControl(inputGroupBox, rectInputGroup);
+            resizeControl(selectorGroupBox, rectSelectorGroup);
+            resizeControl(outputGroupBox, rectOutputGroup);
+
+        }
+
+        private void resizeControl(Control control, Rectangle rectangle)
+        {
+            float xRatio = (float)(this.Width) / (float)formOriginalSize.Width;
+            float yRatio = (float)(this.Height) / (float)formOriginalSize.Height;
+            int newX = (int) (rectangle.X * xRatio);
+            int newY = (int)(rectangle.Y * yRatio);
+            int newWidth = (int) (rectangle.Width * xRatio);
+            int newHeight = (int) (rectangle.Height * yRatio);
+
+            control.Location = new Point(newX, newY);
+            control.Size = new Size(newWidth, newHeight);
+        }
+
+        private void moveControl(Control control, Rectangle rectangle)
+        {
+            // This will move a control without resizing it
+            float xRatio = (float)(this.Width) / (float)formOriginalSize.Width;
+            float yRatio = (float)(this.Height) / (float)formOriginalSize.Height;
+            int newX = (int)(rectangle.X * xRatio);
+            int newY = (int)(rectangle.Y * yRatio);
+            //int newWidth = (int)(rectangle.Width * xRatio);
+            //int newHeight = (int)(rectangle.Height * yRatio);
+
+            control.Location = new Point(newX, newY);
+            //control.Size = new Size(newWidth, newHeight);
         }
 
         private void inputFileBrowseButton_Click(object sender, EventArgs e)
