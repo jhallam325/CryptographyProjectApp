@@ -12,10 +12,162 @@ namespace CryptographyProject
         string ciphertextFullPath = string.Empty;
         // Add a modulus variable than can be changed from 26 to 127-special characters
         // That would require a huge rewrite in the stream cipher. maybe others?
+
+        private Size formOriginalSize;
+
+        // Group Boxes
+        private Rectangle rectInputGroup;
+        private Rectangle rectSelectorGroup;
+        private Rectangle rectOutputGroup;
+        //inputFileRadioButton
+
+        // Input Group Box
+        private Rectangle rectInputFileRadioButton; // Don't Resize
+        private Rectangle rectInputFileTextBox; // Resize in X
+        private Rectangle rectInputFileBrowseButton; // Don't Resize
+        private Rectangle rectInputTextRadioButton; // Don't resize
+        private Rectangle rectInputTextBox; // Resize in X and Y;
+
+        // Selector Group Box
+        private Rectangle rectEncryptRadioButton; // Don't Resize
+        private Rectangle rectDecryptRadioButton; // Don't Resize
+        private Rectangle rectMethodLabel; // Don't Resize 
+        private Rectangle rectMethodComboBox; // Resize in X
+        private Rectangle rectMethodSelectLabel; // Resize in X
+        private Rectangle rectKeyLabel; // Don't Resize
+        private Rectangle rectKeyTextBox; // Resize in X
+        private Rectangle rectKeyCheckBox; // Don't Resize
+
+        // Output Group Box
+        private Rectangle rectOutputFileRadioButton; // Don't Resize
+        private Rectangle rectOutputFileTextBox; // Resize in X
+        private Rectangle rectOutputFileBrowseButton; // Don't Resize
+        private Rectangle rectOutputTextRadioButton; // Don't resize
+        private Rectangle rectOutputTextBox; // Resize in X and Y;
+
+        // Run Button
+        private Rectangle rectRunButton; // Don't Resize
+
+
+
+
         public Form1()
         {
             InitializeComponent();
             keyCheckBox.Checked = true;
+
+
+            // Responsiveness
+            this.Resize += MyResize;
+            formOriginalSize = this.Size;
+
+            // Group Boxes
+            rectInputGroup = new Rectangle(inputGroupBox.Location, inputGroupBox.Size);
+            rectSelectorGroup = new Rectangle(selectorGroupBox.Location, selectorGroupBox.Size);
+            rectOutputGroup = new Rectangle(outputGroupBox.Location, outputGroupBox.Size);
+
+            // Input Group Box
+            rectInputFileRadioButton = new Rectangle(inputFileRadioButton.Location, inputFileRadioButton.Size);
+            rectInputFileTextBox = new Rectangle(inputFileTextBox.Location, inputFileTextBox.Size);
+            rectInputFileBrowseButton = new Rectangle(inputFileBrowseButton.Location, inputFileBrowseButton.Size);
+            rectInputTextRadioButton = new Rectangle(inputTextRadioButton.Location, inputTextRadioButton.Size);
+            rectInputTextBox = new Rectangle(inputTextBox.Location, inputTextBox.Size);
+
+            // Selector Group
+            rectEncryptRadioButton = new Rectangle(encryptRadioButton.Location, encryptRadioButton.Size);
+            rectDecryptRadioButton = new Rectangle(decryptRadioButton.Location, decryptRadioButton.Size);
+            rectMethodLabel = new Rectangle(methodLabel.Location, methodLabel.Size); 
+            rectMethodComboBox = new Rectangle(methodComboBox.Location, methodComboBox.Size); 
+            rectMethodSelectLabel = new Rectangle(methodSelectLabel.Location, methodSelectLabel.Size);
+            rectKeyLabel = new Rectangle(keyLabel.Location, keyLabel.Size);
+            rectKeyTextBox = new Rectangle(keyTextBox.Location, keyTextBox.Size);
+            rectKeyCheckBox = new Rectangle(keyCheckBox.Location, keyCheckBox.Size);
+
+            // Output Group Box
+            rectOutputFileRadioButton = new Rectangle(outputFileRadioButton.Location, outputFileRadioButton.Size);
+            rectOutputFileTextBox = new Rectangle(outputFileTextBox.Location, outputFileTextBox.Size);
+            rectOutputFileBrowseButton = new Rectangle(outputFileBrowseButton.Location, outputFileBrowseButton.Size);
+            rectOutputTextRadioButton = new Rectangle(outputTextRadioButton.Location, outputTextRadioButton.Size);
+            rectOutputTextBox = new Rectangle(outputTextBox.Location, outputTextBox.Size);
+
+            // Run Button
+            rectRunButton = new Rectangle(runButton.Location, runButton.Size);
+    }
+
+        private void MyResize(object sender, EventArgs e)
+        {
+            // Group Boxes
+            resizeControlXAndY(inputGroupBox, rectInputGroup);
+            resizeControlXAndY(selectorGroupBox, rectSelectorGroup);
+            resizeControlXAndY(outputGroupBox, rectOutputGroup);
+
+            // Input Group Box
+            moveControl(inputFileRadioButton, rectInputFileRadioButton);
+            resizeControlX(inputFileTextBox, rectInputFileTextBox);
+            moveControl(inputFileBrowseButton, rectInputFileBrowseButton);
+            moveControl(inputTextRadioButton, rectInputTextRadioButton);
+            resizeControlXAndY(inputTextBox, rectInputTextBox);
+
+            // Selector Group
+            moveControl(encryptRadioButton, rectEncryptRadioButton); // Don't Resize
+            moveControl(decryptRadioButton, rectDecryptRadioButton); // Don't Resize
+            moveControl(methodLabel, rectMethodLabel); // Don't Resize 
+            resizeControlX(methodComboBox, rectMethodComboBox); // Resize in X
+            resizeControlX(methodSelectLabel, rectMethodSelectLabel); // Resize in X
+            moveControl(keyLabel, rectKeyLabel); // Don't Resize
+            resizeControlX(keyTextBox, rectKeyTextBox); // Resize in X
+            moveControl(keyCheckBox, rectKeyCheckBox); // Don't Resize
+
+            // Output Group Box
+            moveControl(outputFileRadioButton, rectOutputFileRadioButton);
+            resizeControlX(outputFileTextBox, rectOutputFileTextBox);
+            moveControl(outputFileBrowseButton, rectOutputFileBrowseButton);
+            moveControl(outputTextRadioButton, rectOutputTextRadioButton);
+            resizeControlXAndY(outputTextBox, rectOutputTextBox);
+
+            // Run Button
+            moveControl(runButton, rectRunButton);
+        }
+
+        private void resizeControlXAndY(Control control, Rectangle rectangle)
+        {
+            float xRatio = (float)(this.Width) / (float)formOriginalSize.Width;
+            float yRatio = (float)(this.Height) / (float)formOriginalSize.Height;
+            int newX = (int) (rectangle.X * xRatio);
+            int newY = (int)(rectangle.Y * yRatio);
+            int newWidth = (int) (rectangle.Width * xRatio);
+            int newHeight = (int) (rectangle.Height * yRatio);
+
+            control.Location = new Point(newX, newY);
+            control.Size = new Size(newWidth, newHeight);
+        }
+
+        private void resizeControlX(Control control, Rectangle rectangle)
+        {
+            // This will resize the control only in the X direction
+            float xRatio = (float)(this.Width) / (float)formOriginalSize.Width;
+            float yRatio = (float)(this.Height) / (float)formOriginalSize.Height;
+            int newX = (int)(rectangle.X * xRatio);
+            int newY = (int)(rectangle.Y * yRatio);
+            int newWidth = (int)(rectangle.Width * xRatio);
+            //int newHeight = (int)(rectangle.Height * yRatio);
+
+            control.Location = new Point(newX, newY);
+            control.Size = new Size(newWidth, rectangle.Height);
+        }
+
+        private void moveControl(Control control, Rectangle rectangle)
+        {
+            // This will move a control without resizing it
+            float xRatio = (float)(this.Width) / (float)formOriginalSize.Width;
+            float yRatio = (float)(this.Height) / (float)formOriginalSize.Height;
+            int newX = (int)(rectangle.X * xRatio);
+            int newY = (int)(rectangle.Y * yRatio);
+            //int newWidth = (int)(rectangle.Width * xRatio);
+            //int newHeight = (int)(rectangle.Height * yRatio);
+
+            control.Location = new Point(newX, newY);
+            //control.Size = new Size(newWidth, newHeight);
         }
 
         private void inputFileBrowseButton_Click(object sender, EventArgs e)
