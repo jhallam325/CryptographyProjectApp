@@ -63,9 +63,9 @@
             inputGroupBox.Controls.Add(inputFileBrowseButton);
             inputGroupBox.Controls.Add(inputFileTextBox);
             inputGroupBox.Controls.Add(inputFileRadioButton);
-            inputGroupBox.Location = new Point(12, 8);
+            inputGroupBox.Location = new Point(12, 14);
             inputGroupBox.Name = "inputGroupBox";
-            inputGroupBox.Size = new Size(731, 172);
+            inputGroupBox.Size = new Size(731, 142);
             inputGroupBox.TabIndex = 1;
             inputGroupBox.TabStop = false;
             inputGroupBox.Text = "Input";
@@ -77,7 +77,7 @@
             inputTextBox.Multiline = true;
             inputTextBox.Name = "inputTextBox";
             inputTextBox.ScrollBars = ScrollBars.Vertical;
-            inputTextBox.Size = new Size(719, 82);
+            inputTextBox.Size = new Size(719, 47);
             inputTextBox.TabIndex = 4;
             inputTextBox.TextChanged += inputTextBox_TextChanged;
             // 
@@ -133,9 +133,9 @@
             selectorGroupBox.Controls.Add(methodLabel);
             selectorGroupBox.Controls.Add(decryptRadioButton);
             selectorGroupBox.Controls.Add(encryptRadioButton);
-            selectorGroupBox.Location = new Point(12, 186);
+            selectorGroupBox.Location = new Point(12, 166);
             selectorGroupBox.Name = "selectorGroupBox";
-            selectorGroupBox.Size = new Size(731, 232);
+            selectorGroupBox.Size = new Size(731, 208);
             selectorGroupBox.TabIndex = 2;
             selectorGroupBox.TabStop = false;
             selectorGroupBox.Text = "Select a function:";
@@ -143,7 +143,7 @@
             // methodSelectLabel
             // 
             methodSelectLabel.AutoSize = true;
-            methodSelectLabel.Location = new Point(6, 119);
+            methodSelectLabel.Location = new Point(6, 106);
             methodSelectLabel.Name = "methodSelectLabel";
             methodSelectLabel.Size = new Size(95, 15);
             methodSelectLabel.TabIndex = 6;
@@ -152,7 +152,7 @@
             // keyCheckBox
             // 
             keyCheckBox.AutoSize = true;
-            keyCheckBox.Location = new Point(8, 198);
+            keyCheckBox.Location = new Point(8, 185);
             keyCheckBox.Name = "keyCheckBox";
             keyCheckBox.Size = new Size(110, 19);
             keyCheckBox.TabIndex = 3;
@@ -163,7 +163,7 @@
             // keyTextBox
             // 
             keyTextBox.BorderStyle = BorderStyle.FixedSingle;
-            keyTextBox.Location = new Point(74, 169);
+            keyTextBox.Location = new Point(74, 156);
             keyTextBox.Name = "keyTextBox";
             keyTextBox.Size = new Size(645, 23);
             keyTextBox.TabIndex = 5;
@@ -172,7 +172,7 @@
             // keyLabel
             // 
             keyLabel.AutoSize = true;
-            keyLabel.Location = new Point(8, 171);
+            keyLabel.Location = new Point(8, 158);
             keyLabel.Name = "keyLabel";
             keyLabel.Size = new Size(26, 15);
             keyLabel.TabIndex = 4;
@@ -182,7 +182,7 @@
             // 
             methodComboBox.FormattingEnabled = true;
             methodComboBox.Items.AddRange(new object[] { "Shift Cipher", "Substitution Cipher", "Affine Cipher", "Vigenere Cipher", "Hill Cipher", "Permutation Cipher", "Stream Cipher", "Autokey Cipher" });
-            methodComboBox.Location = new Point(74, 82);
+            methodComboBox.Location = new Point(74, 73);
             methodComboBox.Name = "methodComboBox";
             methodComboBox.Size = new Size(645, 23);
             methodComboBox.TabIndex = 3;
@@ -191,7 +191,7 @@
             // methodLabel
             // 
             methodLabel.AutoSize = true;
-            methodLabel.Location = new Point(8, 82);
+            methodLabel.Location = new Point(8, 73);
             methodLabel.Name = "methodLabel";
             methodLabel.Size = new Size(49, 15);
             methodLabel.TabIndex = 2;
@@ -227,9 +227,9 @@
             outputGroupBox.Controls.Add(outputFileBrowseButton);
             outputGroupBox.Controls.Add(outputFileTextBox);
             outputGroupBox.Controls.Add(outputFileRadioButton);
-            outputGroupBox.Location = new Point(12, 427);
+            outputGroupBox.Location = new Point(12, 385);
             outputGroupBox.Name = "outputGroupBox";
-            outputGroupBox.Size = new Size(731, 166);
+            outputGroupBox.Size = new Size(731, 141);
             outputGroupBox.TabIndex = 3;
             outputGroupBox.TabStop = false;
             outputGroupBox.Text = "Output";
@@ -241,7 +241,7 @@
             outputTextBox.Multiline = true;
             outputTextBox.Name = "outputTextBox";
             outputTextBox.ScrollBars = ScrollBars.Vertical;
-            outputTextBox.Size = new Size(713, 76);
+            outputTextBox.Size = new Size(713, 48);
             outputTextBox.TabIndex = 4;
             // 
             // outputTextRadioButton
@@ -288,7 +288,7 @@
             // runButton
             // 
             runButton.Anchor = AnchorStyles.None;
-            runButton.Location = new Point(340, 599);
+            runButton.Location = new Point(340, 543);
             runButton.Name = "runButton";
             runButton.Size = new Size(75, 23);
             runButton.TabIndex = 4;
@@ -301,7 +301,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(760, 646);
+            ClientSize = new Size(760, 579);
             Controls.Add(runButton);
             Controls.Add(outputGroupBox);
             Controls.Add(selectorGroupBox);

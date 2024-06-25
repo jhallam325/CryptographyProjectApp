@@ -45,9 +45,11 @@ namespace CryptographyProject
         private Rectangle rectOutputTextRadioButton; // Don't resize
         private Rectangle rectOutputTextBox; // Resize in X and Y;
 
+        // Run Button
+        private Rectangle rectRunButton; // Don't Resize
 
 
-        
+
 
         public Form1()
         {
@@ -87,7 +89,10 @@ namespace CryptographyProject
             rectOutputFileBrowseButton = new Rectangle(outputFileBrowseButton.Location, outputFileBrowseButton.Size);
             rectOutputTextRadioButton = new Rectangle(outputTextRadioButton.Location, outputTextRadioButton.Size);
             rectOutputTextBox = new Rectangle(outputTextBox.Location, outputTextBox.Size);
-        }
+
+            // Run Button
+            rectRunButton = new Rectangle(runButton.Location, runButton.Size);
+    }
 
         private void MyResize(object sender, EventArgs e)
         {
@@ -120,7 +125,8 @@ namespace CryptographyProject
             moveControl(outputTextRadioButton, rectOutputTextRadioButton);
             resizeControlXAndY(outputTextBox, rectOutputTextBox);
 
-
+            // Run Button
+            moveControl(runButton, rectRunButton);
         }
 
         private void resizeControlXAndY(Control control, Rectangle rectangle)
