@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptographyProject", "Cryp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Algorithms", "Algorithms\Algorithms.csproj", "{B7E70989-EF82-4AEF-A886-53908AE67E13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{201F8351-A884-4BAA-9307-3BCF86003090}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{201F8351-A884-4BAA-9307-3BCF86003090}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

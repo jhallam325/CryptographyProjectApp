@@ -1,5 +1,5 @@
 ﻿@page "/"
-
+@inject NavigationManager NavManager
 <PageTitle>Index</PageTitle>
 
 <h1>CryptoMessage</h1>
@@ -14,13 +14,15 @@ CryptoMessage will encrypt/decrypt a message using one of several algorithms fro
 <input type="radio" id="inputFileRadioButton" name="inputRadioButton" value="File" />
 <label for="inputRadioButton">File</label>
 <input type="text" name="input_file_name" />
-<button type="button" OnClickCallback="@*https://blog.stevensanderson.com/2019/09/13/blazor-inputfile/*@">Browse</button>
+<InputFile @onclick="inputFileBrowseButton_Click"></InputFile>
 <br />
 <!--Input Text-->
 <input type="radio" id="inputTextRadioButton" name="inputRadioButton" value="Text" />
 <label for="inputRadioButton">Text</label>
 <br />
 <textarea id="inputTextBox" name="inputTextBox" rows="5" cols="200"></textarea>
+<br />
+@*<InputTextArea id="inputTextBox2" placeholder="Enter text here...."></InputTextArea>*@
 <hr />
 
 <!--Selector Area-->
@@ -73,7 +75,7 @@ CryptoMessage will encrypt/decrypt a message using one of several algorithms fro
 <br />
 <textarea id="outputTextBox" name="outputTextBox" rows="5" cols="200"></textarea>
 <br />
-<button type="button" OnClickCallback="@*https://blog.stevensanderson.com/2019/09/13/blazor-inputfile/*@">Run</button>
+<button type="button" @onclick="Run">Run</button>
 
 
 
@@ -81,5 +83,13 @@ CryptoMessage will encrypt/decrypt a message using one of several algorithms fro
 
 
 @code {
-    @*https://blog.stevensanderson.com/2019/09/13/blazor-inputfile/*@
+    private void inputFileBrowseButton_Click() 
+    {
+        string plaintextFullPath = string.Empty;
+    }
+
+    private void Run() 
+    {
+        NavManager.NavigateTo("/file-upload");
+    }
 }
