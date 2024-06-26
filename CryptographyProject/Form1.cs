@@ -19,8 +19,7 @@ namespace CryptographyProject
         private Rectangle rectInputGroup;
         private Rectangle rectSelectorGroup;
         private Rectangle rectOutputGroup;
-        //inputFileRadioButton
-
+        
         // Input Group Box
         private Rectangle rectInputFileRadioButton; // Don't Resize
         private Rectangle rectInputFileTextBox; // Resize in X
@@ -48,14 +47,10 @@ namespace CryptographyProject
         // Run Button
         private Rectangle rectRunButton; // Don't Resize
 
-
-
-
         public Form1()
         {
             InitializeComponent();
             keyCheckBox.Checked = true;
-
 
             // Responsiveness
             this.Resize += MyResize;
@@ -92,7 +87,7 @@ namespace CryptographyProject
 
             // Run Button
             rectRunButton = new Rectangle(runButton.Location, runButton.Size);
-    }
+        }
 
         private void MyResize(object sender, EventArgs e)
         {
@@ -109,14 +104,14 @@ namespace CryptographyProject
             resizeControlXAndY(inputTextBox, rectInputTextBox);
 
             // Selector Group
-            moveControl(encryptRadioButton, rectEncryptRadioButton); // Don't Resize
-            moveControl(decryptRadioButton, rectDecryptRadioButton); // Don't Resize
-            moveControl(methodLabel, rectMethodLabel); // Don't Resize 
-            resizeControlX(methodComboBox, rectMethodComboBox); // Resize in X
-            resizeControlX(methodSelectLabel, rectMethodSelectLabel); // Resize in X
-            moveControl(keyLabel, rectKeyLabel); // Don't Resize
-            resizeControlX(keyTextBox, rectKeyTextBox); // Resize in X
-            moveControl(keyCheckBox, rectKeyCheckBox); // Don't Resize
+            moveControl(encryptRadioButton, rectEncryptRadioButton);
+            moveControl(decryptRadioButton, rectDecryptRadioButton);
+            moveControl(methodLabel, rectMethodLabel); 
+            resizeControlX(methodComboBox, rectMethodComboBox);
+            resizeControlX(methodSelectLabel, rectMethodSelectLabel);
+            moveControl(keyLabel, rectKeyLabel);
+            resizeControlX(keyTextBox, rectKeyTextBox);
+            moveControl(keyCheckBox, rectKeyCheckBox);
 
             // Output Group Box
             moveControl(outputFileRadioButton, rectOutputFileRadioButton);
@@ -150,7 +145,6 @@ namespace CryptographyProject
             int newX = (int)(rectangle.X * xRatio);
             int newY = (int)(rectangle.Y * yRatio);
             int newWidth = (int)(rectangle.Width * xRatio);
-            //int newHeight = (int)(rectangle.Height * yRatio);
 
             control.Location = new Point(newX, newY);
             control.Size = new Size(newWidth, rectangle.Height);
@@ -163,11 +157,8 @@ namespace CryptographyProject
             float yRatio = (float)(this.Height) / (float)formOriginalSize.Height;
             int newX = (int)(rectangle.X * xRatio);
             int newY = (int)(rectangle.Y * yRatio);
-            //int newWidth = (int)(rectangle.Width * xRatio);
-            //int newHeight = (int)(rectangle.Height * yRatio);
 
             control.Location = new Point(newX, newY);
-            //control.Size = new Size(newWidth, newHeight);
         }
 
         private void inputFileBrowseButton_Click(object sender, EventArgs e)

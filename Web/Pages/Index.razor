@@ -1,0 +1,66 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<h1>CryptoMessage</h1>
+
+CryptoMessage will encrypt/decrypt a message using one of several algorithms from classical cryptography. These messages will not protect you from a government agency who could use cryptanalysis and break your code immediately. 
+
+<br />
+<br />
+
+<!--Input area-->
+<!--Input File-->
+<input type="radio" id="inputFileRadioButton" name="inputRadioButton" value="File" />
+<label for="inputRadioButton">File</label>
+<input type="text" name="input_file_name" />
+<button type="button" OnClickCallback="@*https://blog.stevensanderson.com/2019/09/13/blazor-inputfile/*@">Browse</button>
+<br />
+<!--Input Text-->
+<input type="radio" id="inputTextRadioButton" name="inputRadioButton" value="Text" />
+<label for="inputRadioButton">Text</label>
+<br />
+<textarea id="inputTextBox" name="inputTextBox" rows="5" cols="200"></textarea>
+
+
+<!--Selector Area-->
+<!--Algorithm Direction Radio Buttons-->
+<input type="radio" id="encryptRadioButton" name="algorithmDirection" value="Encrypt" />
+<label for="algorithmDirection">Encrypt</label>
+<br />
+<input type="radio" id="decryptRadioButton" name="algorithmDirection" value="Decrypt" />
+<label for="algorithmDirection">Decrypt</label>
+<br>
+
+<!--Algorithm Choice-->
+<label for="encryptionAlgorithm">Method:  </label>
+<select name="encryptionAlgorithm" id="encryptionAlgorithm">
+    <optgroup label="Monoalphabetic">
+        <option value="shift">Shift Cipher</option>
+        <option value="substitution">Substitution Cipher</option>
+        <option value="permutation">Permutation Cipher</option>
+    </optgroup>
+    <optgroup label="Polyalphabetic">
+        <option value="affine">Affine Cipher</option>
+        <option value="vigenere">Vigenere Cipher</option>
+        <option value="hill">Hill Cipher</option>
+        <option value="autokey">Autokey Cipher</option>
+        <option value="stream">Stream Cipher</option>
+    </optgroup>
+</select>
+<br />
+<span id="keyInformation">Key Information: </span>
+<br />
+<label for="key">Key:  </label>
+<input type="text" name="key" />
+
+
+
+
+
+
+
+
+@code {
+    @*https://blog.stevensanderson.com/2019/09/13/blazor-inputfile/*@
+}

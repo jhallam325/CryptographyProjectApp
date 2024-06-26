@@ -5,7 +5,9 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptographyProject", "CryptographyProject\CryptographyProject.csproj", "{A52C5273-F641-4D0D-A71A-7C7436DD4BCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algorithms", "Algorithms\Algorithms.csproj", "{B7E70989-EF82-4AEF-A886-53908AE67E13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Algorithms", "Algorithms\Algorithms.csproj", "{B7E70989-EF82-4AEF-A886-53908AE67E13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{201F8351-A884-4BAA-9307-3BCF86003090}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{B7E70989-EF82-4AEF-A886-53908AE67E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7E70989-EF82-4AEF-A886-53908AE67E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7E70989-EF82-4AEF-A886-53908AE67E13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{201F8351-A884-4BAA-9307-3BCF86003090}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{201F8351-A884-4BAA-9307-3BCF86003090}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{201F8351-A884-4BAA-9307-3BCF86003090}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{201F8351-A884-4BAA-9307-3BCF86003090}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
