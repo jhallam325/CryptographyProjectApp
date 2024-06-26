@@ -1,6 +1,7 @@
 ﻿@page "/"
 
 <PageTitle>Index</PageTitle>
+@inject NavigationManager NavManager
 
 <h1>CryptoMessage</h1>
 
@@ -73,13 +74,42 @@ CryptoMessage will encrypt/decrypt a message using one of several algorithms fro
 <br />
 <textarea id="outputTextBox" name="outputTextBox" rows="5" cols="200"></textarea>
 <br />
-<button type="button" OnClickCallback="@*https://blog.stevensanderson.com/2019/09/13/blazor-inputfile/*@">Run</button>
+<button type="button" @onclick="Run">Run</button>
+
+<br /><br /><br />
+@*<BlazorInputFile.InputFile OnChange="HandleFileSelected"/>*@
 
 
 
-
-
+@*This needs to be inside index.html*@
+@*<script src="inputfile.js"></script>*@
 
 @code {
-    @*https://blog.stevensanderson.com/2019/09/13/blazor-inputfile/*@
+    void HandleFileSelected(IFileListEntry[] files)
+    {
+        NavManager.NavigateTo("/file-upload-1");
+        //inputFileRadioButton.Checked = true;
+        //int size = -1;
+        //OpenFileDialog openFileDialog = new OpenFileDialog();
+        //openFileDialog.Filter = "Text|*.txt|All|*.*";
+        //DialogResult result = openFileDialog.ShowDialog(); // Show the dialog.
+        //if (result == DialogResult.OK) // Test result.
+        //{
+        //    plaintextFullPath = openFileDialog.FileName;
+        //    try
+        //    {
+        //        string text = File.ReadAllText(plaintextFullPath);
+        //        size = text.Length;
+        //        inputFileTextBox.Text = plaintextFullPath;
+        //    }
+        //    catch (IOException)
+        //    {
+        //    }
+        //}
+    }
+
+    void Run() 
+    {
+        NavManager.NavigateTo("/file-upload-1");
+    }
 }
