@@ -21,7 +21,7 @@ CryptoMessage will encrypt/decrypt a message using one of several algorithms fro
 <label for="inputRadioButton">Text</label>
 <br />
 <textarea id="inputTextBox" name="inputTextBox" rows="5" cols="200"></textarea>
-
+<hr />
 
 <!--Selector Area-->
 <!--Algorithm Direction Radio Buttons-->
@@ -49,12 +49,31 @@ CryptoMessage will encrypt/decrypt a message using one of several algorithms fro
     </optgroup>
 </select>
 <br />
+<!--Key Information-->
 <span id="keyInformation">Key Information: </span>
 <br />
 <label for="key">Key:  </label>
 <input type="text" name="key" />
+<br />
+<input type="checkbox" id="hideCharacters" name="hideCharacters" value="hideCharacters">
+<label for="hideCharacters">Hide Characters</label>
+<br>
+<hr />
 
-
+<!--Output Group-->
+<!--Output File-->
+<input type="radio" id="outputFileRadioButton" name="outputRadioButton" value="File" />
+<label for="outputRadioButton">File</label>
+<input type="text" name="output_file_name" />
+<button type="button" OnClickCallback="@*https://blog.stevensanderson.com/2019/09/13/blazor-inputfile/*@">Browse</button>
+<br />
+<!--Output Text-->
+<input type="radio" id="outputTextRadioButton" name="outputRadioButton" value="Text" />
+<label for="outputRadioButton">Text</label>
+<br />
+<textarea id="outputTextBox" name="outputTextBox" rows="5" cols="200"></textarea>
+<br />
+<button type="button" OnClickCallback="@*https://blog.stevensanderson.com/2019/09/13/blazor-inputfile/*@">Run</button>
 
 
 
