@@ -13,16 +13,17 @@ CryptoMessage will encrypt/decrypt a message using one of several algorithms fro
 <!--Input File-->
 <input type="radio" id="inputFileRadioButton" name="inputRadioButton" value="File" />
 <label for="inputRadioButton">File</label>
-<input type="text" name="input_file_name" />
-<InputFile @onclick="inputFileBrowseButton_Click"></InputFile>
+<input type="text" name="input_file_name" @bind-value="filePath" />
+
+<InputFile OnChange="LoadFiles" multiple />
 <br />
 <!--Input Text-->
 <input type="radio" id="inputTextRadioButton" name="inputRadioButton" value="Text" />
 <label for="inputRadioButton">Text</label>
 <br />
-<textarea id="inputTextBox" name="inputTextBox" rows="5" cols="200"></textarea>
+@* <textarea id="inputTextBox" name="inputTextBox" rows="5" cols="200" @bind-Value="inputText"></textarea> *@
 <br />
-@*<InputTextArea id="inputTextBox2" placeholder="Enter text here...."></InputTextArea>*@
+<InputTextArea @bind-Value="inputText"></InputTextArea>
 <hr />
 
 <!--Selector Area-->
@@ -83,9 +84,27 @@ CryptoMessage will encrypt/decrypt a message using one of several algorithms fro
 
 
 @code {
-    private void inputFileBrowseButton_Click() 
+    private string filePath = string.Empty;
+    private string fileContent = string.Empty;
+    private string inputText = string.Empty;
+    private List<IBrowserFile> loadedFiles = new();
+    private long maxFileSize = 1024 * 15;
+    private int maxAllowedFiles = 3;
+    private bool isLoading;
+
+    // private void inputFileBrowseButton_Click()
+    // {
+
+    // }
+    private void LoadFiles(InputFileChangeEventArgs e)
     {
-        string plaintextFullPath = string.Empty;
+        IBrowserFile file = e.File;
+        filePath = file.Name;
+        using(var fileContent = new StreamReader(file.OpenReadStream(maxFileSize)))
+        {
+            inputText = fileContent.ReadToEnd();
+        }
+
     }
 
     private void Run() 
