@@ -83,25 +83,17 @@ CryptoMessage will encrypt/decrypt a message using one of several algorithms fro
 
 
 @code {
-    private string filePath = string.Empty;
-    private string fileContent = string.Empty;
     private string inputText = string.Empty;
+    private string outputText = string.Empty;
     private long maxFileSize = 1024 * 1000;
 
-    // private void inputFileBrowseButton_Click()
-    // {
-
-    // }
-    private void LoadFiles(InputFileChangeEventArgs e)
+    private async Task LoadFiles(InputFileChangeEventArgs e)
     {
         IBrowserFile file = e.File;
-        filePath = file.Name;
         using(var fileContent = new StreamReader(file.OpenReadStream(maxFileSize)))
         {
-            //inputText = fileContent.ReadToEndAsync();
-            var dummy = fileContent.ReadToEndAsync();
+            inputText = await fileContent.ReadToEndAsync();
         }
-
     }
 
     private void Run() 
