@@ -17,13 +17,17 @@ CryptoMessage will encrypt/decrypt a message using one of several algorithms fro
 <InputFile OnChange="LoadFiles"  />
 <br />
 <!--Input Text-->
+
 <input type="radio" id="inputTextRadioButton" name="inputRadioButton" value="Text" />
 <label for="inputRadioButton">Text</label>
 <br />
-<textarea id="inputTextBox" name="inputTextBox" rows="5" cols="200" @bind="inputText"></textarea>
+<textarea id="inputTextBox" name="inputTextBox" rows="5" cols="150" @bind="inputText"></textarea>
 <br />
 @* <InputTextArea @bind-Value="inputText"></InputTextArea> *@
-<hr />
+@* <EditForm> <-- I need a Model and/or EditContext here
+    <InputTextArea @bind-Value="inputText"></InputTextArea>
+</EditForm>
+ *@<hr />
 
 <!--Selector Area-->
 <!--Algorithm Direction Radio Buttons-->
