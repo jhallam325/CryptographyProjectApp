@@ -15,6 +15,8 @@ namespace CryptographyProject
 
         private Size formOriginalSize;
 
+
+        // Responsiveness taken from https://www.youtube.com/watch?v=Em7rva4tghE
         // Group Boxes
         private Rectangle rectInputGroup;
         private Rectangle rectSelectorGroup;
