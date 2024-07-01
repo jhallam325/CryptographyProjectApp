@@ -21,7 +21,7 @@ namespace CryptographyProject
         private Rectangle rectInputGroup;
         private Rectangle rectSelectorGroup;
         private Rectangle rectOutputGroup;
-        
+
         // Input Group Box
         private Rectangle rectInputFileRadioButton; // Don't Resize
         private Rectangle rectInputFileTextBox; // Resize in X
@@ -73,8 +73,8 @@ namespace CryptographyProject
             // Selector Group
             rectEncryptRadioButton = new Rectangle(encryptRadioButton.Location, encryptRadioButton.Size);
             rectDecryptRadioButton = new Rectangle(decryptRadioButton.Location, decryptRadioButton.Size);
-            rectMethodLabel = new Rectangle(methodLabel.Location, methodLabel.Size); 
-            rectMethodComboBox = new Rectangle(methodComboBox.Location, methodComboBox.Size); 
+            rectMethodLabel = new Rectangle(methodLabel.Location, methodLabel.Size);
+            rectMethodComboBox = new Rectangle(methodComboBox.Location, methodComboBox.Size);
             rectMethodSelectLabel = new Rectangle(methodSelectLabel.Location, methodSelectLabel.Size);
             rectKeyLabel = new Rectangle(keyLabel.Location, keyLabel.Size);
             rectKeyTextBox = new Rectangle(keyTextBox.Location, keyTextBox.Size);
@@ -108,7 +108,7 @@ namespace CryptographyProject
             // Selector Group
             moveControl(encryptRadioButton, rectEncryptRadioButton);
             moveControl(decryptRadioButton, rectDecryptRadioButton);
-            moveControl(methodLabel, rectMethodLabel); 
+            moveControl(methodLabel, rectMethodLabel);
             resizeControlX(methodComboBox, rectMethodComboBox);
             resizeControlX(methodSelectLabel, rectMethodSelectLabel);
             moveControl(keyLabel, rectKeyLabel);
@@ -130,10 +130,10 @@ namespace CryptographyProject
         {
             float xRatio = (float)(this.Width) / (float)formOriginalSize.Width;
             float yRatio = (float)(this.Height) / (float)formOriginalSize.Height;
-            int newX = (int) (rectangle.X * xRatio);
+            int newX = (int)(rectangle.X * xRatio);
             int newY = (int)(rectangle.Y * yRatio);
-            int newWidth = (int) (rectangle.Width * xRatio);
-            int newHeight = (int) (rectangle.Height * yRatio);
+            int newWidth = (int)(rectangle.Width * xRatio);
+            int newHeight = (int)(rectangle.Height * yRatio);
 
             control.Location = new Point(newX, newY);
             control.Size = new Size(newWidth, newHeight);
@@ -352,7 +352,7 @@ namespace CryptographyProject
                 return;
             }
 
-            
+
 
 
             /*********************************************************************************************

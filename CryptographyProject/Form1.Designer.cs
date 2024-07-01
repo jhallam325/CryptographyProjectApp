@@ -193,9 +193,9 @@
             methodLabel.AutoSize = true;
             methodLabel.Location = new Point(8, 73);
             methodLabel.Name = "methodLabel";
-            methodLabel.Size = new Size(49, 15);
+            methodLabel.Size = new Size(45, 15);
             methodLabel.TabIndex = 2;
-            methodLabel.Text = "Method";
+            methodLabel.Text = "Cipher:";
             // 
             // decryptRadioButton
             // 
